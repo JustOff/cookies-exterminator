@@ -1,0 +1,58 @@
+let EXPORTED_SYMBOLS = ["Windows"];
+
+Components.utils.import("resource://gre/modules/Services.jsm");
+
+let Windows = function(Tabs, Buttons) {
+    this.windowListener = {
+        onOpenWindow: function(nsIObj) {
+            let domWindow = nsIObj.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                                  .getInterface(Components.interfaces.nsIDOMWindow);
+            
+            domWindow.addEventListener("load", function() {
+                domWindow.removeEventListener("load", arguments.callee, false);
+                domWindow.setTimeout(function() {
+                    if (domWindow.document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+                        Tabs.init(domWindow);
+                        Buttons.init(domWindow);
+                    }
+                }, 0, domWindow);
+            }, false);
+        },
+        
+        onCloseWindow: function(nsIObj) {
+            let domWindow = nsIObj.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                                  .getInterface(Components.interfaces.nsIDOMWindow);
+            
+            if (domWindow.document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+                Tabs.clear(domWindow);
+                Buttons.clear(domWindow);
+            }
+        }
+    };
+
+    this.init = function(firstRun) {          
+        let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
+        
+        while (windowsEnumerator.hasMoreElements()) {
+            let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
+            
+            Tabs.init(window);
+            Buttons.init(window, firstRun);
+        }
+        
+        Services.wm.addListener(this.windowListener);
+    };
+    
+    this.clear = function() {
+        Services.wm.removeListener(this.windowListener);
+        
+        let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
+        
+        while (windowsEnumerator.hasMoreElements()) {
+            let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
+            
+            Tabs.clear(window);
+            Buttons.clear(window);
+        }
+    }
+};

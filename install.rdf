@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+     
+  <Description about="urn:mozilla:install-manifest">
+    <!-- Core Data -->
+    <em:id>crush-those-cookies@wsdfhjxc</em:id>
+    <em:version>0.0.1</em:version>
+    <em:type>2</em:type>
+    <em:bootstrap>true</em:bootstrap>
+    <em:optionsURL>chrome://crush-those-cookies/content/prefs.xul</em:optionsURL>
+    <em:iconURL>chrome://crush-those-cookies/content/icon.png</em:iconURL>
+    
+    <!-- Pale Moon -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
+        <em:minVersion>25.0</em:minVersion>
+        <em:maxVersion>27.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <!-- Front End MetaData -->
+    <em:name>Crush Those Cookies</em:name>
+    <em:description>Crushes those cookies which are no longer desirable.</em:description>
+  </Description>
+  
+</RDF>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        id="ctcLog"
+        title="Crush Those Cookies activity log" 
+        style="min-width: 600px; max-width: 600px; min-height: 300px;">
+        
+  <script type="application/x-javascript">
+    <![CDATA[
+        Components.utils.import("resource://gre/modules/Services.jsm");
+      
+        function onWindowLoad() {
+            Services.obs.notifyObservers(window, "ctcLogOpen", null);
+        }
+      
+        function onClearLog() {
+            Services.obs.notifyObservers(window, "ctcLogClear", null);
+        
+            let logTextbox = window.document.getElementById("logTextbox");
+            logTextbox.value = "";
+            logTextbox.selectionStart = 0;
+        }
+      
+        window.onload = onWindowLoad;
+    ]]>
+  </script>
+  
+  <vbox flex="1" style="padding: 5px">
+    <textbox id="logTextbox" height="280" multiline="true" readonly="true"></textbox>
+  </vbox>
+  
+  <hbox style="padding: 0px 0px 5px 0px">
+    <button label="Clear log" oncommand="onClearLog();" width="500"/>
+    <spacer flex="1"/>
+    <button label="Close" onclick="window.close();"/>
+  </hbox>
+  
+</window>

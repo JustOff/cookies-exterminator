@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        id="ctcPrefs"
+        title="Crush Those Cookies preferences" 
+        style="min-width: 350px; min-height: 250px;">
+  
+  <script type="application/x-javascript">
+    <![CDATA[
+        Components.utils.import("resource://gre/modules/Services.jsm");
+      
+        function onWindowLoad() {
+            Services.obs.notifyObservers(window, "ctcPrefsOpen", null);
+        
+            updateDomainsListbox();
+        
+            let tabbox = window.document.getElementById("tabbox");
+        
+            if (window.arguments && window.arguments[0] == "whitelist") {
+                let tab = window.document.getElementById("whitelistTab");
+                let tabpanel = window.document.getElementById("whitelistTabpanel");
+                
+                tabbox.selectedTab = tab;
+                tabbox.selectedPanel = tabpanel;
+            } else {
+                let tab = window.document.getElementById("generalTab");
+                let tabpanel = window.document.getElementById("generalTabpanel");
+                
+                tabbox.selectedTab = tab;
+                tabbox.selectedPanel = tabpanel;
+            }
+        }
+      
+        function onReset() {
+            Services.obs.notifyObservers(window, "ctcPrefsReset", null);
+            
+            updateDomainsListbox();
+        } 
+      
+        function onApply() {
+            Services.obs.notifyObservers(window, "ctcPrefsApply", null);
+        }
+      
+        function onAddDomain() {
+            let domainsListbox = window.document.getElementById("domainsListbox");
+            let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+        
+            if (newDomainTextbox.value != "") {
+                domainsListbox.appendItem(newDomainTextbox.value, newDomainTextbox.value);
+                newDomainTextbox.value = "";
+            
+                updateWhitelistedDomains();
+            }
+        }
+      
+        function onRemoveDomain() {
+            let domainsListbox = window.document.getElementById("domainsListbox");
+            let selectedDomain = domainsListbox.getSelectedItem(0);
+            let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
+            
+            domainsListbox.removeItemAt(selectedDomainIndex);
+            domainsListbox.clearSelection();
+        
+            updateWhitelistedDomains();
+        }
+      
+        function updateWhitelistedDomains() {
+            let whitelistedDomains = window.document.getElementById("whitelistedDomains");
+            whitelistedDomains.value = "";
+            
+            let domainsListbox = window.document.getElementById("domainsListbox");
+            let rows = domainsListbox.getRowCount();
+            
+            for (let i = 0; i < rows; i++) {
+                let item = domainsListbox.getItemAtIndex(i);
+                whitelistedDomains.value += item.value + ";";
+            }
+        
+            whitelistedDomains.value = whitelistedDomains.value.slice(0, -1);
+        }
+      
+        function updateDomainsListbox() {
+            let domainsListbox = window.document.getElementById("domainsListbox");
+            let rows = domainsListbox.getRowCount();
+            
+            for (let i = 0; i < rows; i++) {
+                domainsListbox.removeItemAt(0);
+            }
+        
+            let whitelistedDomains = window.document.getElementById("whitelistedDomains");
+        
+            if (whitelistedDomains.value != "") {
+                let separatedDomains = whitelistedDomains.value.split(';');
+            
+                for (let domain of separatedDomains) {
+                    domainsListbox.appendItem(domain, domain);
+                }
+            }
+        }
+      
+        window.onload = onWindowLoad;
+    ]]>
+  </script>
+  
+  <tabbox id="tabbox" flex="1" style="padding: 5px">
+    <tabs>
+      <tab id="generalTab" label="General"/>
+      <tab id="whitelistTab" label="Whitelisted domains"/>
+    </tabs>
+    
+    <tabpanels flex="1">
+    
+      <tabpanel id="generalTabpanel">
+        <vbox flex="1">
+          <hbox flex="0" align="center">
+           <checkbox id="suspendCrushing" label="Suspend crushing cookies"/>
+          </hbox>
+          
+          <spacer flex="0" height="15"/>
+          
+          <hbox flex="0" align="center">
+           <checkbox id="enableLogging" label="Enable activity logging"/>
+          </hbox>
+          
+          <spacer flex="0" height="15"/>
+          
+          <hbox flex="0" align="center">
+            <checkbox id="keepCrushingThirdPartyCookies" label="Keep crushing third-party cookies"/>
+          </hbox>
+          
+          <hbox flex="0" align="center">
+            <checkbox id="keepCrushingSessionCookies" label="Keep crushing cookies marked as session cookies"/>
+          </hbox>
+          
+          <hbox flex="0" align="center">
+            <checkbox id="keepCrushingLocalStorage" label="Keep crushing LocalStorage data along with cookies"/>
+          </hbox>
+        
+          <spacer flex="0" height="15"/>
+        
+          <hbox flex="0" align="center">
+            <label value="Cookie crushing delay in seconds"/>
+            <spacer flex="1"/>
+            <textbox id="crushingDelay" type="number" width="40" min="0" max="600"/>
+            <spacer flex="10"/>
+          </hbox>
+        </vbox>
+      </tabpanel>
+      
+      <tabpanel id="whitelistTabpanel">
+        <vbox flex="1">
+          <listbox id="domainsListbox" height="160"></listbox>
+        
+          <hbox flex="1" align="center">
+            <textbox id="newDomainTextbox" width="150"/>
+            <button label="Add" oncommand="onAddDomain();"/>
+            <spacer flex="1"/>
+            <button label="Remove" oncommand="onRemoveDomain();"/>
+          </hbox>
+        </vbox>
+        
+        <textbox id="whitelistedDomains" hidden="true"/>
+      </tabpanel>
+      
+    </tabpanels>
+  </tabbox>
+  
+  <hbox style="padding: 0px 0px 5px 0px">
+    <button label="Reset values to default" oncommand="onReset();"/>
+    <spacer flex="1"/>
+    <button label="Apply changes" oncommand="onApply();"/>
+    <button label="Close" onclick="window.close();"/>
+  </hbox>
+  
+</window>
