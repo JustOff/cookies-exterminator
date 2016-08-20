@@ -12,13 +12,23 @@ let Tabs = function(Crusher) {
     };
     
     this.onProgress = {       
-        onLocationChange: function(aWebProgress, aRequest, aURI, aFlag) {
-            let window = aWebProgress.DOMWindow;
-            let domain = window.document.domain;
-            
-            if (domain) {
-                Crusher.prepare(domain);
+        onLocationChange: function(aBrowser, aWebProgress, aRequest, aURI, aFlag) {
+            if (aFlag & Components.interfaces.LOCATION_CHANGE_SAME_DOCUMENT) {
+                return;
             }
+            
+            let domain = aBrowser.contentDocument.domain;
+            let previousDomain = aBrowser.previousDomain;
+            
+            if (previousDomain == undefined) {
+                aBrowser["previousDomain"] = previousDomain = domain;
+            }
+            
+            if (domain && previousDomain != domain) {
+                Crusher.prepare(previousDomain);
+            }
+            
+            aBrowser.previousDomain = domain;
         }
     };
     
@@ -26,13 +36,13 @@ let Tabs = function(Crusher) {
         let tabBrowser = window.gBrowser;
         
         tabBrowser.tabContainer.addEventListener("TabClose", this.onClose, false);
-        tabBrowser.addProgressListener(this.onProgress);
+        tabBrowser.addTabsProgressListener(this.onProgress);
     };
     
     this.clear = function(window) {
         let tabBrowser = window.gBrowser;
         
         tabBrowser.tabContainer.removeEventListener("TabClose", this.onClose, false);
-        tabBrowser.removeProgressListener(this.onProgress);
+        tabBrowser.removeTabsProgressListener(this.onProgress);
     };
 };
