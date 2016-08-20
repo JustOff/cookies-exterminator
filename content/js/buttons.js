@@ -300,7 +300,11 @@ let Buttons = function(extName, Prefs, Whitelist) {
         Buttons: this,
         setIconAndTooltip: this.setIconAndTooltip,
         observe: function(aSubject, aTopic, aData) {
-            this.setIconAndTooltip.call(this.Buttons, true);
+            let that = this;
+            
+            setTimeout(function() {
+                that.setIconAndTooltip.call(that.Buttons, true);
+            }, 150);
         }
     };
 };
