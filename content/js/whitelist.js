@@ -1,5 +1,7 @@
 let EXPORTED_SYMBOLS = ["Whitelist"];
 
+Components.utils.import("resource://gre/modules/Timer.jsm");
+
 let Whitelist = function(Prefs) {
     this.domains = {};
     
@@ -54,7 +56,11 @@ let Whitelist = function(Prefs) {
         Whitelist: this,
         loadFromPrefs: this.loadFromPrefs,
         observe: function(aSubject, aTopic, aData) {
-            this.loadFromPrefs.call(this.Whitelist, true);
+            let that = this;
+            
+            setTimeout(function() {
+                that.loadFromPrefs.call(that.Whitelist, true);
+            }, 500);
         }
     };
 };
