@@ -6,6 +6,7 @@ let Prefs = function(extName) {
     this.defaultPrefs = {
         suspendCrushing: false,
         enableLogging: true,
+        enableNotifications: true,
         keepCrushingThirdPartyCookies: true,
         keepCrushingSessionCookies: true,
         keepCrushingLocalStorage: true,

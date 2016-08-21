@@ -5,7 +5,7 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         id="ctcPrefs"
         title="Crush Those Cookies preferences" 
-        style="min-width: 350px; min-height: 250px;">
+        style="min-width: 350px; min-height: 270px;">
   
   <script type="application/x-javascript">
     <![CDATA[
@@ -124,6 +124,10 @@
            <checkbox id="enableLogging" label="Enable activity logging"/>
           </hbox>
           
+          <hbox flex="0" align="center">
+           <checkbox id="enableNotifications" label="Enable pop-up notifications"/>
+          </hbox>
+          
           <spacer flex="0" height="15"/>
           
           <hbox flex="0" align="center">
@@ -151,7 +155,7 @@
       
       <tabpanel id="whitelistTabpanel">
         <vbox flex="1">
-          <listbox id="domainsListbox" height="160"></listbox>
+          <listbox id="domainsListbox" height="180"></listbox>
         
           <hbox flex="1" align="center">
             <textbox id="newDomainTextbox" width="150"/>

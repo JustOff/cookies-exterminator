@@ -3,7 +3,7 @@ let EXPORTED_SYMBOLS = ["Crusher"];
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://gre/modules/Timer.jsm");
 
-let Crusher = function(Prefs, Buttons, Whitelist, Log) {
+let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
     this.prepare = function(domain) {
         if (!Prefs.getValue("suspendCrushing")) {
             let timestamp = Date.now();
@@ -42,6 +42,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log) {
             crushedCookiesDomainsString = crushedCookiesDomainsString.slice(0, -2);
             
             Buttons.notify(crushedCookiesDomainsString);
+            Notifications.notify(crushedCookiesDomainsString);
             Log.log(crushedCookiesDomainsString); 
         } else {
             Buttons.notify();
