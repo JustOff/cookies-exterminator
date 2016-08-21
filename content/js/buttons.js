@@ -66,8 +66,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
         button.setAttribute("label", "Crush Those Cookies");
         button.setAttribute("type", "menu");
         button.setAttribute("class", "toolbarbutton-1");
-        //button.setAttribute("tooltiptext", this.tooltipTexts.initial);
-        //button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
+        button.setAttribute("tooltiptext", this.tooltipTexts.initial);
         
         let Buttons = this;
         
