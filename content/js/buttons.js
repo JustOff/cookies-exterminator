@@ -51,7 +51,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
         
     this.menupopupId = "ctcMenupopup";
     
-    this.notificationIconTimeout = 10;
+    this.notificationIconTimeout = 5;
     
     this.init = function(window, firstRun) {
         let document = window.document;
