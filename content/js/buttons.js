@@ -67,6 +67,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
         button.setAttribute("type", "menu");
         button.setAttribute("class", "toolbarbutton-1");
         button.setAttribute("tooltiptext", this.tooltipTexts.initial);
+        button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
         
         let Buttons = this;
         
@@ -77,13 +78,12 @@ let Buttons = function(extName, Prefs, Whitelist) {
         menuitemSuspendResume.addEventListener("command", function(event) {
             if (Prefs.getValue("suspendCrushing")) {
                 Prefs.setValue("suspendCrushing", false);
-                Buttons.unsetIconAndTooltipSuspended();
             } else {
                 Prefs.setValue("suspendCrushing", true);
-                Buttons.setIconAndTooltipSuspended();
             }
             
             Prefs.save();
+            Buttons.refresh();
         }, false);
         
         let menuitemWhitelistAddRemove = document.createElement("menuitem");
@@ -100,7 +100,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
                     Whitelist.addDomain(domain);
                 }
                 
-                Buttons.refresh(domain);
+                Buttons.refresh();
             }
         }, false);
         
@@ -204,11 +204,8 @@ let Buttons = function(extName, Prefs, Whitelist) {
         this.afterCustomization = this.afterCustomization.bind(this);
         
         window.addEventListener("aftercustomization", this.afterCustomization, false);
-        
-        let domain = window.document.domain;
-        domain = domain === undefined ? null : domain;
-        
-        this.refresh(domain);
+
+        this.refresh();
     };
     
     this.afterCustomization = function(event) {
@@ -241,9 +238,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.crushed + ")";
                 
                 setTimeout(function() {
-                    let domain = window.document.domain;
-                    domain = domain === undefined ? null : domain;
-                    Buttons.refresh(domain)
+                    Buttons.refresh(window);
                 }, Buttons.notificationIconTimeout * 1000);
             } else {
                 let buttonOldTooltipText = button.getAttribute("tooltiptext");
@@ -259,70 +254,41 @@ let Buttons = function(extName, Prefs, Whitelist) {
         }
     };
     
-    this.refresh = function(domain) {
-        if (!Prefs.getValue("suspendCrushing")) {
-            if (domain === null || Whitelist.isWhitelisted(domain)) {
-                this.setIconWhitelisted();
-            } else {
-                this.unsetIconWhitelisted();
-            }
-        } else if (domain === undefined) {
-            this.unsetIconAndTooltipSuspended();
+    this.refresh = function(window) {
+        if (window) {
+            this.refreshForWindow(window);
         } else {
-            this.setIconAndTooltipSuspended();
+            let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
+            
+            while (windowsEnumerator.hasMoreElements()) {
+                let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
+                
+                this.refreshForWindow(window);
+            }
         }
     };
     
-    this.setIconAndTooltipSuspended = function() {
-        let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
+    this.refreshForWindow = function(window) {
+        let button = window.document.getElementById(this.buttonId);        
         
-        while (windowsEnumerator.hasMoreElements()) {
-            let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-            let button = window.document.getElementById(this.buttonId);
+        if (button) {
+            let domain = window.gBrowser.contentDocument.domain;
             
-            if (button) {
+            if (Prefs.getValue("suspendCrushing")) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.suspended + ")";
-            }
-        }
-    };
-    
-    this.unsetIconAndTooltipSuspended = function() {
-        let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
+            } else {
+                if (!domain || Whitelist.isWhitelisted(domain)) {
+                    button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
+                } else {
+                    button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
+                }
+                
+                let buttonOldTooltipText = button.getAttribute("tooltiptext");
         
-        while (windowsEnumerator.hasMoreElements()) {
-            let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-            let button = window.document.getElementById(this.buttonId);
-            
-            if (button) {
-                button.setAttribute("tooltiptext", this.tooltipTexts.initial);
-                button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
-            }
-        }  
-    };
-    
-    this.setIconWhitelisted = function() {
-        let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
-        
-        while (windowsEnumerator.hasMoreElements()) {
-            let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-            let button = window.document.getElementById(this.buttonId);
-            
-            if (button) {
-                button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
-            }
-        }
-    };
-    
-    this.unsetIconWhitelisted = function() {
-        let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
-        
-        while (windowsEnumerator.hasMoreElements()) {
-            let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-            let button = window.document.getElementById(this.buttonId);
-            
-            if (button) {
-                button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
+                if (buttonOldTooltipText.substr(0, 1) == "S") {
+                    button.setAttribute("tooltiptext", this.tooltipTexts.initial);
+                }
             }
         }
     };

@@ -38,11 +38,7 @@ let Tabs = function(Crusher, Buttons) {
                 return;
             }
             
-            let window = aWebProgress.DOMWindow;
-            let domain = window.document.domain;
-            domain = domain === undefined ? null : domain;
-            
-            Buttons.refresh(domain);
+            Buttons.refresh();
         }
     };
     
