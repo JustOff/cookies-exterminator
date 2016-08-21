@@ -24,7 +24,7 @@ let Tabs = function(Crusher) {
                 aBrowser["previousDomain"] = previousDomain = domain;
             }
             
-            if (domain && previousDomain != domain) {
+            if (previousDomain && previousDomain != domain) {
                 Crusher.prepare(previousDomain);
             }
             
