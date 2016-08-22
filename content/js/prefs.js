@@ -18,6 +18,7 @@ let Prefs = function(extName) {
     this.currentPrefs = {};
     
     this.prefsBranch = Services.prefs.getBranch("extensions." + extName + ".");
+    this.syncBranch = Services.prefs.getBranch("services.sync.prefs.sync.extensions." + extName + ".");
     
     this.init = function() {
         for (let prefName in this.defaultPrefs) {
@@ -45,6 +46,8 @@ let Prefs = function(extName) {
                     this.currentPrefs[prefName] = this.prefsBranch.getBoolPref(prefName);
                 } break;
             }
+            
+            this.syncBranch.setBoolPref(prefName, true);
         }
     };
     
