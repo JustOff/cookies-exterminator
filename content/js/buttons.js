@@ -329,7 +329,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
             
             setTimeout(function() {
                 that.refresh.call(that.Buttons);
-            }, 150);
+            }, 750);
         }
     };
 };
