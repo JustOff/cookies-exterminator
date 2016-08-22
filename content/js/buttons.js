@@ -94,10 +94,14 @@ let Buttons = function(extName, Prefs, Whitelist) {
             let domain = window.gBrowser.contentDocument.domain;
             
             if (domain) {
-                if (Whitelist.isWhitelisted(domain)) {
-                    Whitelist.removeDomain(domain);
+                let rawHost = domain.substr(0, 4) == "www." ?
+                              domain.substr(4, domain.length) :
+                              domain;
+                
+                if (Whitelist.isWhitelisted(rawHost)) {
+                    Whitelist.removeDomain(rawHost);
                 } else {
-                    Whitelist.addDomain(domain);
+                    Whitelist.addDomain(rawHost);
                 }
                 
                 Buttons.refresh();
@@ -139,15 +143,25 @@ let Buttons = function(extName, Prefs, Whitelist) {
             let domain = window.gBrowser.contentDocument.domain;
             
             if (domain) {
-                if (Whitelist.isWhitelisted(domain)) {
+                let rawHost = domain.substr(0, 4) == "www." ?
+                              domain.substr(4, domain.length) :
+                              domain;
+                              
+                let whitelisted = Whitelist.isWhitelisted(rawHost);
+                
+                if (whitelisted) {
+                    if (typeof whitelisted === "string") {
+                        rawHost = whitelisted;
+                    }
+                    
                     menuitemWhitelistAddRemove.setAttribute("disabled", "false");
                     menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
-                                                                     domain +
+                                                                     rawHost +
                                                                      Buttons.menuitemLabels.removeEnding);
                 } else {
                     menuitemWhitelistAddRemove.setAttribute("disabled", "false");
                     menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.add +
-                                                                     domain +
+                                                                     rawHost +
                                                                      Buttons.menuitemLabels.addEnding);
                 }
             } else {
@@ -274,11 +288,15 @@ let Buttons = function(extName, Prefs, Whitelist) {
         if (button) {
             let domain = window.gBrowser.contentDocument.domain;
             
+            let rawHost = (domain && domain.substr(0, 4) == "www.") ?
+                          domain.substr(4, domain.length) :
+                          domain;
+            
             if (Prefs.getValue("suspendCrushing")) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.suspended + ")";
             } else {
-                if (!domain || Whitelist.isWhitelisted(domain)) {
+                if (!rawHost || Whitelist.isWhitelisted(rawHost)) {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
                 } else {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
@@ -310,7 +328,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
             let that = this;
             
             setTimeout(function() {
-                that.refresh.call(that.Buttons, true);
+                that.refresh.call(that.Buttons);
             }, 150);
         }
     };

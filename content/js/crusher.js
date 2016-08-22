@@ -51,9 +51,12 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
     
     this.mayBeCrushed = function(cookie, timestamp) {
         let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
+        let newCookieRawHost = cookie.rawHost.substr(0, 4) == "www." ?
+                               cookie.rawHost.substr(4, cookie.rawHost.length) :
+                               cookie.rawHost;
         
         if (cookieLastAccessTimestamp > timestamp ||
-            Whitelist.isWhitelisted(cookie.rawHost) ||
+            Whitelist.isWhitelisted(newCookieRawHost) ||
             (!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
             return false;
         }
@@ -71,8 +74,10 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
                     let rawHost = domain.substr(0, 4) == "www." ?
                                   domain.substr(4, domain.length) :
                                   domain;
+                    
+                    
                                   
-                    if (cookie.rawHost == domain || cookie.rawHost == rawHost) {
+                    if (rawHost == newCookieRawHost) {
                         return false;
                     }
                     

@@ -46,11 +46,41 @@ let Whitelist = function(Prefs) {
     this.removeDomain = function(domain) {
         this.domains[domain] = undefined;
         this.saveToPrefs();
-    }
+    };
     
     this.isWhitelisted = function(domain) {
-        return this.domains[domain];
-    }
+        return this.domains[domain] || this.checkForWildcard(domain);
+    };
+    
+    this.checkForWildcard = function(domain) {
+        if (typeof domain === "string") {
+            let domainParts = domain.split('.');
+            let domainPartsAmount = domainParts.length;
+
+            let domainEnding = domainParts[domainPartsAmount - 1];
+            let partialDomain = domainEnding;
+
+            for (let i = domainPartsAmount - 2; i >= 0; i--) {
+                partialDomain = domainParts[i] + '.' + partialDomain;
+                
+                let dottedDomain = '.' + partialDomain;
+                
+                if (this.domains[dottedDomain]) {
+                    return dottedDomain;
+                }
+                
+                if (i > 0) {
+                    let wildcardDomain = '*' + dottedDomain;
+                    
+                    if (this.domains[wildcardDomain]) {
+                        return wildcardDomain;
+                    }
+                }
+            }
+        }
+        
+        return null;
+    };
     
     this.onPrefsApply = {
         Whitelist: this,
@@ -59,7 +89,7 @@ let Whitelist = function(Prefs) {
             let that = this;
             
             setTimeout(function() {
-                that.loadFromPrefs.call(that.Whitelist, true);
+                that.loadFromPrefs.call(that.Whitelist);
             }, 500);
         }
     };
