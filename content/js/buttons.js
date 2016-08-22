@@ -65,9 +65,10 @@ let Buttons = function(extName, Prefs, Whitelist) {
         button.setAttribute("id", this.buttonId);
         button.setAttribute("label", "Crush Those Cookies");
         button.setAttribute("type", "menu");
-        button.setAttribute("class", "toolbarbutton-1");
+        button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
         button.setAttribute("tooltiptext", this.tooltipTexts.initial);
         button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
+        button.style.MozBoxOrient = "inherit";
         
         let Buttons = this;
         
