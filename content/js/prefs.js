@@ -137,7 +137,7 @@ let Prefs = function(extName) {
         Prefs: this,
         saveFromPrefWindow: this.saveFromPrefWindow,
         observe: function(aSubject, aTopic, aData) {
-            this.saveFromPrefWindow.call(this.Prefs, aSubject, true);
+            this.saveFromPrefWindow.call(this.Prefs, aSubject);
         }
     };
 };
