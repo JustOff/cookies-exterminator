@@ -10,7 +10,7 @@
   <Description about="urn:mozilla:install-manifest">
     <!-- Core Data -->
     <em:id>crush-those-cookies@wsdfhjxc</em:id>
-    <em:version>0.1.0</em:version>
+    <em:version>0.1.1</em:version>
     <em:type>2</em:type>
     <em:bootstrap>true</em:bootstrap>
     <em:optionsURL>chrome://crush-those-cookies/content/prefs.xul</em:optionsURL>
