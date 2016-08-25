@@ -160,7 +160,7 @@
       
       <tabpanel id="whitelistTabpanel">
         <vbox flex="1">
-          <listbox id="domainsListbox" height="180"></listbox>
+          <listbox id="domainsListbox" height="210"></listbox>
         
           <hbox flex="1" align="center">
             <textbox id="newDomainTextbox" width="150"/>
