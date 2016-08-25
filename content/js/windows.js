@@ -2,7 +2,7 @@ let EXPORTED_SYMBOLS = ["Windows"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 
-let Windows = function(Tabs, Buttons, Crusher) {
+let Windows = function(Tabs, Buttons, Crusher, Prefs) {
     this.windowListener = {
         onOpenWindow: function(nsIObj) {
             let domWindow = nsIObj.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
@@ -32,7 +32,7 @@ let Windows = function(Tabs, Buttons, Crusher) {
                     windowsCounter++;
                 }
                 
-                if (windowsCounter > 1) {
+                if (windowsCounter > 1 || Prefs.getValue("crushOnLastWindowClose")) {
                     let tabBrowser = domWindow.gBrowser;
                     
                     let domains = [];
@@ -44,7 +44,9 @@ let Windows = function(Tabs, Buttons, Crusher) {
                         domains.push(domain);
                     }
                     
-                    Crusher.prepare(domains);
+                    let immediatelyForLastWindow = windowsCounter == 1;
+                    
+                    Crusher.prepare(domains, immediatelyForLastWindow);
                 }
                 
                 Tabs.clear(domWindow);

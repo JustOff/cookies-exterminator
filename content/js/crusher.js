@@ -4,35 +4,39 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://gre/modules/Timer.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
-    this.prepare = function(domain) {
+    this.prepare = function(domain, immediately) {
         if (!Prefs.getValue("suspendCrushing")) {
             let timestamp = Date.now();
             
-            setTimeout(this.execute.bind(this, domain, timestamp),
-                       Prefs.getValue("crushingDelay") * 1000);
-        }
-    };
-    
-    this.execute = function(domain, timestamp) {
-        if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
-            this.executeForCookies(Services.cookies.enumerator, timestamp);
-        } else if (typeof domain === "string") {
-            this.executeForCookies(Services.cookies.getCookiesFromHost(domain), timestamp);
-        } else if (domain.constructor === Array) {
-            for (let currentDomain of domain) {
-                this.executeForCookies(Services.cookies.getCookiesFromHost(currentDomain), timestamp);
+            if (immediately) {
+                this.execute(domain, timestamp, immediately);
+            } else {
+                setTimeout(this.execute.bind(this, domain, timestamp),
+                           Prefs.getValue("crushingDelay") * 1000);
             }
         }
     };
     
-    this.executeForCookies = function(cookiesEnumerator, timestamp) {
+    this.execute = function(domain, timestamp, ignoreBrowsersCheck) {
+        if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
+            this.executeForCookies(Services.cookies.enumerator, timestamp, ignoreBrowsersCheck);
+        } else if (typeof domain === "string") {
+            this.executeForCookies(Services.cookies.getCookiesFromHost(domain), timestamp, ignoreBrowsersCheck);
+        } else if (domain.constructor === Array) {
+            for (let currentDomain of domain) {
+                this.executeForCookies(Services.cookies.getCookiesFromHost(currentDomain), timestamp, ignoreBrowsersCheck);
+            }
+        }
+    };
+    
+    this.executeForCookies = function(cookiesEnumerator, timestamp, ignoreBrowsersCheck) {
         let crushedSomething = false;
         let crushedCookiesDomains = {};
         
         while (cookiesEnumerator.hasMoreElements()) {
             let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
 
-            if (this.mayBeCrushed(cookie, timestamp)) {
+            if (this.mayBeCrushed(cookie, timestamp, ignoreBrowsersCheck)) {
                 Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
                 
                 crushedSomething = true;
@@ -57,7 +61,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
         }
     };
     
-    this.mayBeCrushed = function(cookie, timestamp) {
+    this.mayBeCrushed = function(cookie, timestamp, ignoreBrowsersCheck) {
         let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
         let newCookieRawHost = cookie.rawHost.substr(0, 4) == "www." ?
                                cookie.rawHost.substr(4, cookie.rawHost.length) :
@@ -67,6 +71,10 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
             Whitelist.isWhitelisted(newCookieRawHost) ||
             (!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
             return false;
+        }
+        
+        if (ignoreBrowsersCheck) {
+            return true;
         }
         
         let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");

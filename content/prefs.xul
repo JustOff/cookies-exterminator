@@ -5,7 +5,7 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         id="ctcPrefs"
         title="Crush Those Cookies preferences" 
-        style="min-width: 350px; min-height: 270px;">
+        style="min-width: 350px; min-height: 285px;">
   
   <script type="application/x-javascript">
     <![CDATA[
@@ -150,6 +150,11 @@
             <textbox id="crushingDelay" type="number" width="40" min="0" max="600"/>
             <spacer flex="10"/>
           </hbox>
+          
+          <hbox flex="0" align="center">
+            <checkbox id="crushOnLastWindowClose" label="Crush cookies on browser's last window close"/>
+          </hbox>
+          
         </vbox>
       </tabpanel>
       

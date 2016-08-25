@@ -11,6 +11,7 @@ let Prefs = function(extName) {
         keepCrushingSessionCookies: true,
         keepCrushingLocalStorage: true,
         crushingDelay: 10,
+        crushOnLastWindowClose: false,
         whitelistedDomains: "",
         toolbarButtonPosition: -1
     };
