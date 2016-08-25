@@ -34,7 +34,7 @@ function startup(data, reason) {
     let Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications);
     
     Tabs = new Imports.Tabs(Crusher, Buttons);
-    Windows = new Imports.Windows(Tabs, Buttons);
+    Windows = new Imports.Windows(Tabs, Buttons, Crusher);
     
     // initialize
     Prefs.init();

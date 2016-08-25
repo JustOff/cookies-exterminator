@@ -14,13 +14,21 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
     };
     
     this.execute = function(domain, timestamp) {
+        if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
+            this.executeForCookies(Services.cookies.enumerator, timestamp);
+        } else if (typeof domain === "string") {
+            this.executeForCookies(Services.cookies.getCookiesFromHost(domain), timestamp);
+        } else if (domain.constructor === Array) {
+            for (let currentDomain of domain) {
+                this.executeForCookies(Services.cookies.getCookiesFromHost(currentDomain), timestamp);
+            }
+        }
+    };
+    
+    this.executeForCookies = function(cookiesEnumerator, timestamp) {
         let crushedSomething = false;
         let crushedCookiesDomains = {};
         
-        let cookiesEnumerator = Prefs.getValue("keepCrushingThirdPartyCookies") ?
-                                Services.cookies.enumerator :
-                                Services.cookies.getCookiesFromHost(domain);
-                
         while (cookiesEnumerator.hasMoreElements()) {
             let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
 

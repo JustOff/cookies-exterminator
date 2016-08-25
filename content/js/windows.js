@@ -2,7 +2,7 @@ let EXPORTED_SYMBOLS = ["Windows"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 
-let Windows = function(Tabs, Buttons) {
+let Windows = function(Tabs, Buttons, Crusher) {
     this.windowListener = {
         onOpenWindow: function(nsIObj) {
             let domWindow = nsIObj.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
@@ -24,6 +24,29 @@ let Windows = function(Tabs, Buttons) {
                                   .getInterface(Components.interfaces.nsIDOMWindow);
             
             if (domWindow.document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+                let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
+                let windowsCounter = 0;
+                
+                while (windowsEnumerator.hasMoreElements()) {
+                    windowsEnumerator.getNext();
+                    windowsCounter++;
+                }
+                
+                if (windowsCounter > 1) {
+                    let tabBrowser = domWindow.gBrowser;
+                    
+                    let domains = [];
+                    
+                    for (let tab of tabBrowser.tabs) {
+                        let browser = tab.linkedBrowser;
+                        let domain = browser.contentDocument.domain;
+                        
+                        domains.push(domain);
+                    }
+                    
+                    Crusher.prepare(domains);
+                }
+                
                 Tabs.clear(domWindow);
                 Buttons.clear(domWindow);
             }
