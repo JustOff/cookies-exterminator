@@ -85,12 +85,18 @@
         function onRemoveDomain() {
             let domainsListbox = window.document.getElementById("domainsListbox");
             let selectedDomain = domainsListbox.getSelectedItem(0);
-            let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
             
-            domainsListbox.removeItemAt(selectedDomainIndex);
-            domainsListbox.clearSelection();
-        
-            updateWhitelistedDomains();
+            if (selectedDomain) {
+                let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
+                let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+                
+                domainsListbox.removeItemAt(selectedDomainIndex);
+                domainsListbox.clearSelection();
+                
+                newDomainTextbox.value = "";
+            
+                updateWhitelistedDomains();
+            }
         }
       
         function updateWhitelistedDomains() {
