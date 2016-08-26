@@ -114,8 +114,13 @@ let Buttons = function(extName, Prefs, Whitelist) {
         menuitemManageWhitelist.setAttribute("label", this.menuitemLabels.manageWhitelist);
         menuitemManageWhitelist.setAttribute("class", this.menuitemClass);
         menuitemManageWhitelist.addEventListener("command", function(event) {
-            let window = Services.wm.getMostRecentWindow("navigator:browser");
-            window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "minimizable,centerscreen", "whitelist");
+            let existingWindow = Services.wm.getMostRecentWindow("ctcPrefsWindow");
+            if (existingWindow) {
+                existingWindow.focus();
+            } else {
+                let window = Services.wm.getMostRecentWindow("navigator:browser");
+                window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "minimizable,centerscreen", "whitelist");
+            }
         }, false);
         
         let menuitemViewLog = document.createElement("menuitem");
@@ -123,8 +128,13 @@ let Buttons = function(extName, Prefs, Whitelist) {
         menuitemViewLog.setAttribute("label", this.menuitemLabels.log);
         menuitemViewLog.setAttribute("class", this.menuitemClass);
         menuitemViewLog.addEventListener("command", function(event) {
-            let window = Services.wm.getMostRecentWindow("navigator:browser");
-            window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "minimizable,centerscreen");
+            let existingWindow = Services.wm.getMostRecentWindow("ctcLogWindow");
+            if (existingWindow) {
+                existingWindow.focus();
+            } else {
+                let window = Services.wm.getMostRecentWindow("navigator:browser");
+                window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "minimizable,centerscreen");
+            }
         }, false);
         
         // create menupopup element

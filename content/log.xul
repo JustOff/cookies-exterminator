@@ -5,7 +5,8 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         id="ctcLog"
         title="Crush Those Cookies activity log" 
-        style="min-width: 600px; max-width: 600px; min-height: 300px;">
+        style="min-width: 600px; max-width: 600px; min-height: 300px;"
+        windowtype="ctcLogWindow">
         
   <script type="application/x-javascript">
     <![CDATA[

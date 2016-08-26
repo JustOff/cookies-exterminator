@@ -5,7 +5,8 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         id="ctcPrefs"
         title="Crush Those Cookies preferences" 
-        style="min-width: 385px; min-height: 290px;">
+        style="min-width: 385px; min-height: 290px;"
+        windowtype="ctcPrefsWindow">
   
   <script type="application/x-javascript">
     <![CDATA[
