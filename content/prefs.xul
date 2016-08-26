@@ -5,7 +5,7 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         id="ctcPrefs"
         title="Crush Those Cookies preferences" 
-        style="min-width: 350px; min-height: 285px;">
+        style="min-width: 385px; min-height: 285px;">
   
   <script type="application/x-javascript">
     <![CDATA[
@@ -42,6 +42,16 @@
         function onApply() {
             Services.obs.notifyObservers(window, "ctcPrefsApply", null);
         }
+        
+        function onSelect(domainsListbox) {
+            let selectedDomain = domainsListbox.getSelectedItem(0);
+            
+            if (selectedDomain) {
+                let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+                
+                newDomainTextbox.value = selectedDomain.value;
+            }
+        }
       
         function onAddDomain() {
             let domainsListbox = window.document.getElementById("domainsListbox");
@@ -51,6 +61,22 @@
                 domainsListbox.appendItem(newDomainTextbox.value, newDomainTextbox.value);
                 newDomainTextbox.value = "";
             
+                updateWhitelistedDomains();
+            }
+        }
+      
+        function onEditDomain() {
+            let domainsListbox = window.document.getElementById("domainsListbox");
+            let selectedDomain = domainsListbox.getSelectedItem(0);
+            let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+            
+            if (selectedDomain && newDomainTextbox.value != "") {
+                selectedDomain.value = newDomainTextbox.value;
+                selectedDomain.label = newDomainTextbox.value;
+                
+                newDomainTextbox.value = "";
+                domainsListbox.clearSelection();
+                
                 updateWhitelistedDomains();
             }
         }
@@ -160,12 +186,13 @@
       
       <tabpanel id="whitelistTabpanel">
         <vbox flex="1">
-          <listbox id="domainsListbox" height="210"></listbox>
+          <listbox id="domainsListbox" height="210" onselect="onSelect(this);"></listbox>
         
           <hbox flex="1" align="center">
             <textbox id="newDomainTextbox" width="150"/>
             <button label="Add" oncommand="onAddDomain();"/>
             <spacer flex="1"/>
+            <button label="Edit" oncommand="onEditDomain();"/>
             <button label="Remove" oncommand="onRemoveDomain();"/>
           </hbox>
         </vbox>
