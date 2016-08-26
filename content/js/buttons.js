@@ -115,8 +115,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
         menuitemManageWhitelist.setAttribute("class", this.menuitemClass);
         menuitemManageWhitelist.addEventListener("command", function(event) {
             let window = Services.wm.getMostRecentWindow("navigator:browser");
-            window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "modal,centerscreen",
-                                                                             "whitelist");
+            window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "centerscreen", "whitelist");
         }, false);
         
         let menuitemViewLog = document.createElement("menuitem");
@@ -125,7 +124,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
         menuitemViewLog.setAttribute("class", this.menuitemClass);
         menuitemViewLog.addEventListener("command", function(event) {
             let window = Services.wm.getMostRecentWindow("navigator:browser");
-            window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "modal,centerscreen");
+            window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "centerscreen");
         }, false);
         
         // create menupopup element
