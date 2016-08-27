@@ -99,7 +99,13 @@ let Buttons = function(extName, Prefs, Whitelist) {
                               domain.substr(4, domain.length) :
                               domain;
                 
-                if (Whitelist.isWhitelisted(rawHost)) {
+                let whitelisted = Whitelist.isWhitelisted(rawHost);
+                
+                if (whitelisted) {
+                    if (typeof whitelisted === "string") {
+                        rawHost = whitelisted;
+                    }
+                    
                     Whitelist.removeDomain(rawHost);
                 } else {
                     Whitelist.addDomain(rawHost);
