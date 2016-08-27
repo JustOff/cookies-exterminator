@@ -197,9 +197,9 @@
         
           <hbox flex="1" align="center">
             <textbox id="newDomainTextbox" width="150"/>
-            <button label="Add" oncommand="onAddDomain();"/>
+            <button label="Add" oncommand="onAddDomain();" style="min-width: 50px"/>
             <spacer flex="1"/>
-            <button label="Edit" oncommand="onEditDomain();"/>
+            <button label="Edit" oncommand="onEditDomain();" style="min-width: 50px"/>
             <button label="Remove" oncommand="onRemoveDomain();"/>
           </hbox>
         </vbox>
