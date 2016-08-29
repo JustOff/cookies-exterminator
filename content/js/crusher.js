@@ -48,6 +48,10 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
             let crushedCookiesDomainsString = "";
             
             for (let domain in crushedCookiesDomains) {
+                domain = domain.substr(0, 4) == "www." ?
+                         domain.substr(4, domain.length) :
+                         domain;
+                
                 crushedCookiesDomainsString += domain + ", ";
             }
             
