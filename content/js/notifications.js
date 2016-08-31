@@ -9,15 +9,12 @@ let Notifications = function(extName, Prefs) {
     this.iconFileName = "icon.png";
     
     this.alertName = "ctcNotification";
-    
-    this.alertTitle = "Crush Those Cookies";
-    this.alertText = "Crushed cookies from ";
+    this.alertTitle = "Crushed cookies from";
     
     this.notify = function(crushedDomainsString) {
         if (Prefs.getValue("enableNotifications") && crushedDomainsString) {
             AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-                                                this.alertTitle,
-                                                this.alertText + crushedDomainsString, 
+                                                this.alertTitle, crushedDomainsString, 
                                                 false, "", null, this.alertName);
         }
     };
