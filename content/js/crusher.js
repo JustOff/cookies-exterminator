@@ -35,12 +35,16 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
         
         while (cookiesEnumerator.hasMoreElements()) {
             let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
+            
+            let cookieDomain = cookie.rawHost.substr(0, 4) == "www." ?
+                               cookie.rawHost.substr(4, cookie.rawHost.length) :
+                               cookie.rawHost;
 
-            if (this.mayBeCrushed(cookie, timestamp, ignoreBrowsersCheck)) {
+            if (this.mayBeCrushed(cookie, cookieDomain, timestamp, ignoreBrowsersCheck)) {
                 Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
                 
                 crushedSomething = true;
-                crushedCookiesDomains[cookie.rawHost] = true;
+                crushedCookiesDomains[cookieDomain] = true;
             }
         }
         
@@ -48,10 +52,6 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
             let crushedCookiesDomainsString = "";
             
             for (let domain in crushedCookiesDomains) {
-                domain = domain.substr(0, 4) == "www." ?
-                         domain.substr(4, domain.length) :
-                         domain;
-                
                 crushedCookiesDomainsString += domain + ", ";
             }
             
@@ -65,14 +65,11 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
         }
     };
     
-    this.mayBeCrushed = function(cookie, timestamp, ignoreBrowsersCheck) {
+    this.mayBeCrushed = function(cookie, cookieDomain, timestamp, ignoreBrowsersCheck) {
         let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
-        let newCookieRawHost = cookie.rawHost.substr(0, 4) == "www." ?
-                               cookie.rawHost.substr(4, cookie.rawHost.length) :
-                               cookie.rawHost;
         
         if (cookieLastAccessTimestamp > timestamp ||
-            Whitelist.isWhitelisted(newCookieRawHost) ||
+            Whitelist.isWhitelisted(cookieDomain) ||
             (!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
             return false;
         }
@@ -91,13 +88,11 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
                 let domain = browser.contentDocument.domain;
                 
                 if (domain) {
-                    let rawHost = domain.substr(0, 4) == "www." ?
-                                  domain.substr(4, domain.length) :
-                                  domain;
-                    
-                    
-                                  
-                    if (rawHost == newCookieRawHost) {
+                    domain = domain.substr(0, 4) == "www." ?
+                             domain.substr(4, domain.length) :
+                             domain;
+                             
+                    if (domain == cookieDomain) {
                         return false;
                     }
                     
