@@ -15,6 +15,7 @@
     <em:bootstrap>true</em:bootstrap>
     <em:optionsURL>chrome://crush-those-cookies/content/prefs.xul</em:optionsURL>
     <em:iconURL>chrome://crush-those-cookies/content/icon.png</em:iconURL>
+    <em:updateURL>https://raw.githubusercontent.com/wsdfhjxc/crush-those-cookies/master/update.rdf</em:updateURL>
     
     <!-- Pale Moon -->
     <em:targetApplication>
