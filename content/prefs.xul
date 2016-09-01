@@ -199,7 +199,7 @@
       
       <tabpanel id="whitelistTabpanel">
         <vbox flex="1">
-          <listbox id="domainsListbox" height="210" onselect="onSelect(this);"></listbox>
+          <listbox id="domainsListbox" height="250" onselect="onSelect(this);"></listbox>
         
           <hbox flex="1" align="center">
             <textbox id="newDomainTextbox" width="150"/>
