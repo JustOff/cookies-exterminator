@@ -10,6 +10,8 @@ let Buttons = null;
 let Log = null;
 let Windows = null;
 
+let onPrefsApply = null;
+
 function startup(data, reason) {
     // object as a scope for imports
     let Imports = {};
@@ -44,9 +46,16 @@ function startup(data, reason) {
     // add preferences and log windows event observers
     Services.obs.addObserver(Prefs.onOpen, "ctcPrefsOpen", false);
     Services.obs.addObserver(Prefs.onReset, "ctcPrefsReset", false);
-    Services.obs.addObserver(Prefs.onApply, "ctcPrefsApply", false);
-    Services.obs.addObserver(Whitelist.onPrefsApply, "ctcPrefsApply", false);
-    Services.obs.addObserver(Buttons.onPrefsApply, "ctcPrefsApply", false);
+    
+    onPrefsApply = {
+        observe: function(aSubject, aTopic, aData) {
+            Prefs.onApply.observe(aSubject, aTopic, aData);
+            Whitelist.onPrefsApply();
+            Buttons.onPrefsApply();
+        }
+    };
+    
+    Services.obs.addObserver(onPrefsApply, "ctcPrefsApply", false);
     Services.obs.addObserver(Log.onOpen, "ctcLogOpen", false);
     Services.obs.addObserver(Log.onClear, "ctcLogClear", false);
 }
@@ -55,9 +64,7 @@ function shutdown(data, reason) {
     // remove preferences and log windows event observers
     Services.obs.removeObserver(Prefs.onOpen, "ctcPrefsOpen");
     Services.obs.removeObserver(Prefs.onReset, "ctcPrefsReset");
-    Services.obs.removeObserver(Prefs.onApply, "ctcPrefsApply");
-    Services.obs.removeObserver(Whitelist.onPrefsApply, "ctcPrefsApply");
-    Services.obs.removeObserver(Buttons.onPrefsApply, "ctcPrefsApply");
+    Services.obs.removeObserver(onPrefsApply, "ctcPrefsApply");
     Services.obs.removeObserver(Log.onOpen, "ctcLogOpen");
     Services.obs.removeObserver(Log.onClear, "ctcLogClear");
     

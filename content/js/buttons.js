@@ -337,15 +337,7 @@ let Buttons = function(extName, Prefs, Whitelist) {
         window.removeEventListener("aftercustomization", this.afterCustomization, false);
     };
     
-    this.onPrefsApply = {
-        Buttons: this,
-        refresh: this.refresh,
-        observe: function(aSubject, aTopic, aData) {
-            let that = this;
-            
-            setTimeout(function() {
-                that.refresh.call(that.Buttons);
-            }, 750);
-        }
+    this.onPrefsApply = function() {
+        this.refresh();
     };
 };
