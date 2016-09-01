@@ -88,10 +88,28 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
                 let domain = browser.contentDocument.domain;
                 
                 if (domain) {
-                    domain = domain.substr(0, 4) == "www." ?
-                             domain.substr(4, domain.length) :
-                             domain;
-                             
+                    if (Prefs.getValue("enableStrictDomainChecking")) {
+                        domain = domain.substr(0, 4) == "www." ?
+                                 domain.substr(4, domain.length) :
+                                 domain;
+                    } else {
+                        let domainParts = domain.split('.');
+                        let domainPartsAmount = domainParts.length;
+                        
+                        if (domainPartsAmount > 1) {
+                            domain = domainParts[domainPartsAmount - 2] + '.' +
+                                     domainParts[domainPartsAmount - 1];
+                        }
+                        
+                        let cookieDomainParts = cookieDomain.split('.');
+                        let cookieDomainPartsAmount = cookieDomainParts.length;
+                        
+                        if (cookieDomainPartsAmount > 1) {
+                            cookieDomain = cookieDomainParts[cookieDomainPartsAmount - 2] + '.' +
+                                           cookieDomainParts[cookieDomainPartsAmount - 1];
+                        }
+                    }
+                    
                     if (domain == cookieDomain) {
                         return false;
                     }
