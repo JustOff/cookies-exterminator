@@ -198,33 +198,59 @@ let Buttons = function(extName, Prefs, Whitelist) {
         // append menupopup to the button
         button.appendChild(menupopup);
         
-        let navigatorToolbox = document.getElementById("navigator-toolbox");
-        
-        // append the button to customization palette
-        navigatorToolbox.palette.appendChild(button);
-        
-        // place (or not) the button into the navigation bar
-        let navBar = document.getElementById("nav-bar");
-        let buttonsArray = navBar.currentSet.split(",");
         let toolbarButtonPosition = Prefs.getValue("toolbarButtonPosition");
         
-        if (toolbarButtonPosition < 0 && firstRun) {
-            navBar.insertItem(this.buttonId);
-            buttonsArray = navBar.currentSet.split(",");
-            Prefs.setValue("toolbarButtonPosition", buttonsArray.indexOf(this.buttonId));
-            Prefs.save();
-        } else if (toolbarButtonPosition >= 0) {
-            let before = null;
-            
-            for (let i = toolbarButtonPosition; i < buttonsArray.length; i++) {
-                before = document.getElementById(buttonsArray[i]);
+        // append the button to customization palette
+        // this seems to be required even if the button will be placed elsewhere
+        let navigatorToolbox = document.getElementById("navigator-toolbox");
+        navigatorToolbox.palette.appendChild(button);
+        
+        // place the button into the navigation bar or addon bar or nowhere
+        if (toolbarButtonPosition == 0) {
+            // zero means unknown position
+            if (firstRun) {
+                // it it's the first run then just append the button to the navigation bar
+                let navBar = document.getElementById("nav-bar");
                 
-                if (before) {
-                    break;
-                }
+                navBar.insertItem(this.buttonId);
+                
+                let buttonsArray = navBar.currentSet.split(",");
+                
+                // update button's position in preferences and save it
+                Prefs.setValue("toolbarButtonPosition", buttonsArray.indexOf(this.buttonId) + 1);
+                Prefs.save();
+            }
+        } else {
+            let someBar = null;
+            
+            if (toolbarButtonPosition > 0) {
+                // positive value means navigation bar position
+                someBar = document.getElementById("nav-bar");
+            } else {
+                // negative value means addon bar position
+                someBar = document.getElementById("addon-bar");
+                toolbarButtonPosition = -toolbarButtonPosition; // make this positive again
             }
             
-            navBar.insertItem(this.buttonId, before);
+            if (someBar) {
+                let buttonsArray = someBar.currentSet.split(",");
+                let before = null;
+                
+                for (let i = toolbarButtonPosition - 1; i < buttonsArray.length; i++) {
+                    before = document.getElementById(buttonsArray[i]);
+                    
+                    if (before) {
+                        break;
+                    }
+                }
+                
+                someBar.insertItem(this.buttonId, before);
+            } else {
+                // failed to place the button inside browser's UI
+                // set zero value for unknown position
+                Prefs.setValue("toolbarButtonPosition", 0);
+                Prefs.save();
+            }
         }
         
         if (Prefs.getValue("suspendCrushing")) {
@@ -242,11 +268,27 @@ let Buttons = function(extName, Prefs, Whitelist) {
         let navigatorToolbox = event.target;
         let window = navigatorToolbox.ownerDocument.defaultView;
         
-        let navBar = window.document.getElementById("nav-bar");
-        let buttonsArray = navBar.currentSet.split(",");
+        let button = window.document.getElementById(this.buttonId);
+        
+        // zero value for unknown position by default
+        let newPositionValue = 0;
+        
+        if (button) {
+            if (button.parentNode == window.document.getElementById("nav-bar")) {
+                let buttonsArray = button.parentNode.currentSet.split(",");
                 
-        // update button's navigation bar position in preferences and save it
-        Prefs.setValue("toolbarButtonPosition", buttonsArray.indexOf(this.buttonId));
+                // positive value for navigation bar position
+                newPositionValue = buttonsArray.indexOf(this.buttonId) + 1;
+            } else if (button.parentNode == window.document.getElementById("addon-bar")) {
+                let buttonsArray = button.parentNode.currentSet.split(",");
+                
+                // negative value for addon bar position
+                newPositionValue = -(buttonsArray.indexOf(this.buttonId) + 1);
+            }
+        }
+        
+        // update button's position in preferences and save it
+        Prefs.setValue("toolbarButtonPosition", newPositionValue);
         Prefs.save();
     };
     
@@ -332,6 +374,18 @@ let Buttons = function(extName, Prefs, Whitelist) {
         
         if (button) {
             button.parentNode.removeChild(button);
+        }
+        
+        let navigatorToolbox = window.document.getElementById("navigator-toolbox");
+        
+        // customization palette seems to be beyond DOM document
+        // so just try to remove it the hard way
+        for (let nodeIndex in navigatorToolbox.palette.childNodes) {
+            let childNode = navigatorToolbox.palette.childNodes[nodeIndex];
+            
+            if (childNode && childNode.id == this.buttonId) {
+                navigatorToolbox.palette.removeChild(childNode);
+            }
         }
         
         window.removeEventListener("aftercustomization", this.afterCustomization, false);
