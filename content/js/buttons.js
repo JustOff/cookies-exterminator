@@ -293,6 +293,10 @@ let Buttons = function(extName, Prefs, Whitelist) {
     };
     
     this.notify = function(crushedDomainsString) {
+        if (Prefs.getValue("toolbarButtonPosition") == 0) {
+            return;
+        }
+        
         let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
         
         while (windowsEnumerator.hasMoreElements()) {
@@ -327,6 +331,10 @@ let Buttons = function(extName, Prefs, Whitelist) {
     };
     
     this.refresh = function(window) {
+        if (Prefs.getValue("toolbarButtonPosition") == 0) {
+            return;
+        }
+        
         if (window) {
             this.refreshForWindow(window);
         } else {
