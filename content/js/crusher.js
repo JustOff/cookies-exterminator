@@ -1,9 +1,8 @@
 let EXPORTED_SYMBOLS = ["Crusher"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
-Components.utils.import("resource://gre/modules/Timer.jsm");
 
-let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
+let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
     this.prepare = function(domain, immediately) {
         if (!Prefs.getValue("suspendCrushing")) {
             let timestamp = Date.now();
@@ -11,8 +10,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
             if (immediately) {
                 this.execute(domain, timestamp, immediately);
             } else {
-                setTimeout(this.execute.bind(this, domain, timestamp),
-                           Prefs.getValue("crushingDelay") * 1000);
+                Utils.setTimeout(this.execute.bind(this, domain, timestamp),
+                                 Prefs.getValue("crushingDelay"));
             }
         }
     };
@@ -36,15 +35,13 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
         while (cookiesEnumerator.hasMoreElements()) {
             let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
             
-            let cookieDomain = cookie.rawHost.substr(0, 4) == "www." ?
-                               cookie.rawHost.substr(4, cookie.rawHost.length) :
-                               cookie.rawHost;
+            let cookieRawDomain = Utils.getRawDomain(cookie.rawHost);
 
-            if (this.mayBeCrushed(cookie, cookieDomain, timestamp, ignoreBrowsersCheck)) {
+            if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, ignoreBrowsersCheck)) {
                 Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
                 
                 crushedSomething = true;
-                crushedCookiesDomains[cookieDomain] = true;
+                crushedCookiesDomains[cookieRawDomain] = true;
             }
         }
         
@@ -65,11 +62,11 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
         }
     };
     
-    this.mayBeCrushed = function(cookie, cookieDomain, timestamp, ignoreBrowsersCheck) {
+    this.mayBeCrushed = function(cookie, cookieRawDomain, timestamp, ignoreBrowsersCheck) {
         let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
         
         if (cookieLastAccessTimestamp > timestamp ||
-            Whitelist.isWhitelisted(cookieDomain) ||
+            Whitelist.isWhitelisted(cookieRawDomain) ||
             (!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
             return false;
         }
@@ -88,29 +85,29 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications) {
                 let domain = browser.contentDocument.domain;
                 
                 if (domain) {
+                    let rawDomain = domain;
+                    
                     if (Prefs.getValue("enableStrictDomainChecking")) {
-                        domain = domain.substr(0, 4) == "www." ?
-                                 domain.substr(4, domain.length) :
-                                 domain;
+                        rawDomain = Utils.getRawDomain(domain);
                     } else {
-                        let domainParts = domain.split('.');
-                        let domainPartsAmount = domainParts.length;
+                        let rawDomainParts = rawDomain.split('.');
+                        let rawDomainPartsAmount = rawDomainParts.length;
                         
-                        if (domainPartsAmount > 1) {
-                            domain = domainParts[domainPartsAmount - 2] + '.' +
-                                     domainParts[domainPartsAmount - 1];
+                        if (rawDomainPartsAmount > 1) {
+                            rawDomain = rawDomainParts[rawDomainPartsAmount - 2] + '.' +
+                                        rawDomainParts[rawDomainPartsAmount - 1];
                         }
                         
-                        let cookieDomainParts = cookieDomain.split('.');
-                        let cookieDomainPartsAmount = cookieDomainParts.length;
+                        let cookieRawDomainParts = cookieRawDomain.split('.');
+                        let cookieRawDomainPartsAmount = cookieRawDomainParts.length;
                         
-                        if (cookieDomainPartsAmount > 1) {
-                            cookieDomain = cookieDomainParts[cookieDomainPartsAmount - 2] + '.' +
-                                           cookieDomainParts[cookieDomainPartsAmount - 1];
+                        if (cookieRawDomainPartsAmount > 1) {
+                            cookieRawDomain = cookieRawDomainParts[cookieRawDomainPartsAmount - 2] + '.' +
+                                              cookieRawDomainParts[cookieRawDomainPartsAmount - 1];
                         }
                     }
                     
-                    if (domain == cookieDomain) {
+                    if (rawDomain == cookieRawDomain) {
                         return false;
                     }
                     

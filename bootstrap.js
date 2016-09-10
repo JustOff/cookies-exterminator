@@ -25,15 +25,18 @@ function startup(data, reason) {
     Components.utils.import(extJSPath + "tabs.js", Imports);
     Components.utils.import(extJSPath + "windows.js", Imports);
     Components.utils.import(extJSPath + "notifications.js", Imports);
+    Components.utils.import(extJSPath + "utils.js", Imports);
+    
+    let Utils = new Imports.Utils();
     
     // create new objects from module symbols with passed dependencies
     Prefs = new Imports.Prefs(extName);
     Whitelist = new Imports.Whitelist(Prefs);
-    Buttons = new Imports.Buttons(extName, Prefs, Whitelist);
+    Buttons = new Imports.Buttons(extName, Prefs, Whitelist, Utils);
     Log = new Imports.Log(Prefs);
     
     let Notifications = new Imports.Notifications(extName, Prefs);
-    let Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications);
+    let Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
     
     Tabs = new Imports.Tabs(Crusher, Buttons);
     Windows = new Imports.Windows(Tabs, Buttons, Crusher, Prefs);
@@ -80,6 +83,7 @@ function shutdown(data, reason) {
     Components.utils.unload(extJSPath + "tabs.js");
     Components.utils.unload(extJSPath + "windows.js");
     Components.utils.unload(extJSPath + "notifications.js");
+    Components.utils.unload(extJSPath + "utils.js");
 }
 
 function install(data, reason) {} // dummy

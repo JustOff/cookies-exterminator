@@ -1,9 +1,8 @@
 let EXPORTED_SYMBOLS = ["Buttons"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
-Components.utils.import("resource://gre/modules/Timer.jsm");
 
-let Buttons = function(extName, Prefs, Whitelist) {
+let Buttons = function(extName, Prefs, Whitelist, Utils) {
     this.contentURL = "chrome://" + extName + "/content/";
     
     this.iconFileNames = {
@@ -95,20 +94,18 @@ let Buttons = function(extName, Prefs, Whitelist) {
             let domain = window.gBrowser.contentDocument.domain;
             
             if (domain) {
-                let rawHost = domain.substr(0, 4) == "www." ?
-                              domain.substr(4, domain.length) :
-                              domain;
+                let rawDomain = Utils.getRawDomain(domain);
                 
-                let whitelisted = Whitelist.isWhitelisted(rawHost);
+                let whitelisted = Whitelist.isWhitelisted(rawDomain);
                 
                 if (whitelisted) {
                     if (typeof whitelisted === "string") {
-                        rawHost = whitelisted;
+                        rawDomain = whitelisted;
                     }
                     
-                    Whitelist.removeDomain(rawHost);
+                    Whitelist.removeDomain(rawDomain);
                 } else {
-                    Whitelist.addDomain(rawHost);
+                    Whitelist.addDomain(rawDomain);
                 }
                 
                 Buttons.refresh();
@@ -159,25 +156,23 @@ let Buttons = function(extName, Prefs, Whitelist) {
             let domain = window.gBrowser.contentDocument.domain;
             
             if (domain) {
-                let rawHost = domain.substr(0, 4) == "www." ?
-                              domain.substr(4, domain.length) :
-                              domain;
-                              
-                let whitelisted = Whitelist.isWhitelisted(rawHost);
+                let rawDomain = Utils.getRawDomain(domain);
+                
+                let whitelisted = Whitelist.isWhitelisted(rawDomain);
                 
                 if (whitelisted) {
                     if (typeof whitelisted === "string") {
-                        rawHost = whitelisted;
+                        rawDomain = whitelisted;
                     }
                     
                     menuitemWhitelistAddRemove.setAttribute("disabled", "false");
                     menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
-                                                                     rawHost +
+                                                                     rawDomain +
                                                                      Buttons.menuitemLabels.removeEnding);
                 } else {
                     menuitemWhitelistAddRemove.setAttribute("disabled", "false");
                     menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.add +
-                                                                     rawHost +
+                                                                     rawDomain +
                                                                      Buttons.menuitemLabels.addEnding);
                 }
             } else {
@@ -313,9 +308,9 @@ let Buttons = function(extName, Prefs, Whitelist) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.crushed + crushedDomainsString);
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.crushed + ")";
                 
-                setTimeout(function() {
+                Utils.setTimeout(function() {
                     Buttons.refresh(window);
-                }, Buttons.notificationIconTimeout * 1000);
+                }, Buttons.notificationIconTimeout);
             } else {
                 let buttonOldTooltipText = button.getAttribute("tooltiptext");
                 
@@ -354,15 +349,13 @@ let Buttons = function(extName, Prefs, Whitelist) {
         if (button) {
             let domain = window.gBrowser.contentDocument.domain;
             
-            let rawHost = (domain && domain.substr(0, 4) == "www.") ?
-                          domain.substr(4, domain.length) :
-                          domain;
+            let rawDomain = Utils.getRawDomain(domain);
             
             if (Prefs.getValue("suspendCrushing")) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.suspended + ")";
             } else {
-                if (!rawHost || Whitelist.isWhitelisted(rawHost)) {
+                if (!rawDomain || Whitelist.isWhitelisted(rawDomain)) {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
                 } else {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";

@@ -5,16 +5,16 @@ Components.utils.import("resource://gre/modules/Timer.jsm");
 
 let Utils = function() {
     this.getRawDomain = function(fullDomain) {
-        return fullDomain.substr(0, 4) == "www." ?
+        return (fullDomain && fullDomain.substr(0, 4) == "www.") ?
                fullDomain.substr(4, fullDomain.length) :
                fullDomain;
     };
     
-    this.setTimeout = function(method, delay) {
+    this.setTimeout = function(method, delayInSeconds) {
         setTimeout(function() {
             if (Services) {
                 method();
             }
-        }, delay);
+        }, delayInSeconds * 1000);
     };
 };

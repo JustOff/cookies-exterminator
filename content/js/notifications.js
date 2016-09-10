@@ -1,6 +1,5 @@
 let EXPORTED_SYMBOLS = ["Notifications"];
 
-Components.utils.import("resource://gre/modules/Timer.jsm");
 let AlertsService = Components.classes["@mozilla.org/alerts-service;1"]
                               .getService(Components.interfaces.nsIAlertsService);
 
