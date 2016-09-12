@@ -198,51 +198,51 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let navigatorToolbox = document.getElementById("navigator-toolbox");
         navigatorToolbox.palette.appendChild(button);
         
-		let toolbarButtonPlaceId = Prefs.getValue("toolbarButtonPlaceId");
-		let toolbarButtonPosition = Prefs.getValue("toolbarButtonPosition");
-		
-		if (toolbarButtonPlaceId != "") {
-			if (firstRun) {
-				// if it's the first run then just append the button at the end of the nav-bar
-				let navBar = document.getElementById("nav-bar");
-				navBar.insertItem(this.buttonId);
-				
-				// get button's position
-				let buttonsArray = navBar.currentSet.split(",");
-				let buttonPosition = buttonsArray.indexOf(this.buttonId) + 1;
-				
-				// update button's position in preferences and save it
-				Prefs.setValue("toolbarButtonPosition", buttonPosition);
-				Prefs.save();
-			} else {
-				// temporary check for compatibility with previous version
-				if (toolbarButtonPosition < 0) {
-					toolbarButtonPlaceId = "addon-bar";
-					toolbarButtonPosition = -toolbarButtonPosition;
-					
-					// update button's place id and position in preferences and save it
-					Prefs.setValue("toolbarButtonPlaceId", toolbarButtonPlaceId);
-					Prefs.setValue("toolbarButtonPosition", toolbarButtonPosition);
-					Prefs.save();
-				}
-				
-				let someBar = document.getElementById(toolbarButtonPlaceId);
-				if (someBar) {
-					let buttonsArray = someBar.currentSet.split(",");
-					let before = null;
-					
-					for (let i = toolbarButtonPosition - 1; i < buttonsArray.length; i++) {
-						before = document.getElementById(buttonsArray[i]);
-						if (before) {
-							break;
-						}
-					}
-					
-					someBar.insertItem(this.buttonId, before);
-				}
-			}
-		}
-		
+        let toolbarButtonPlaceId = Prefs.getValue("toolbarButtonPlaceId");
+        let toolbarButtonPosition = Prefs.getValue("toolbarButtonPosition");
+        
+        if (toolbarButtonPlaceId != "") {
+            if (firstRun) {
+                // if it's the first run then just append the button at the end of the nav-bar
+                let navBar = document.getElementById("nav-bar");
+                navBar.insertItem(this.buttonId);
+                
+                // get button's position
+                let buttonsArray = navBar.currentSet.split(",");
+                let buttonPosition = buttonsArray.indexOf(this.buttonId) + 1;
+                
+                // update button's position in preferences and save it
+                Prefs.setValue("toolbarButtonPosition", buttonPosition);
+                Prefs.save();
+            } else {
+                // temporary check for compatibility with previous version
+                if (toolbarButtonPosition < 0) {
+                    toolbarButtonPlaceId = "addon-bar";
+                    toolbarButtonPosition = -toolbarButtonPosition;
+                    
+                    // update button's place id and position in preferences and save it
+                    Prefs.setValue("toolbarButtonPlaceId", toolbarButtonPlaceId);
+                    Prefs.setValue("toolbarButtonPosition", toolbarButtonPosition);
+                    Prefs.save();
+                }
+                
+                let someBar = document.getElementById(toolbarButtonPlaceId);
+                if (someBar) {
+                    let buttonsArray = someBar.currentSet.split(",");
+                    let before = null;
+                    
+                    for (let i = toolbarButtonPosition - 1; i < buttonsArray.length; i++) {
+                        before = document.getElementById(buttonsArray[i]);
+                        if (before) {
+                            break;
+                        }
+                    }
+                    
+                    someBar.insertItem(this.buttonId, before);
+                }
+            }
+        }
+        
         if (Prefs.getValue("suspendCrushing")) {
             this.setIconAndTooltipSuspended();
         }
@@ -260,23 +260,23 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         
         let button = window.document.getElementById(this.buttonId);
         
-		let newToolbarButtonPlaceId = "";
-		let newToolbarButtonPosition = 0;
-		
-		if (button) {
-			let buttonParent = button.parentNode;
-			if (buttonParent.currentSet && buttonParent.id) {
-				// get new button's place id
-				newToolbarButtonPlaceId = buttonParent.id;
-				
-				// get new button's position
-				let buttonsArray = buttonParent.currentSet.split(",");
-				newToolbarButtonPosition = buttonsArray.indexOf(this.buttonId) + 1;
-			}
-		}
-		
-		// update button's place id and position in preferences and save them
-		Prefs.setValue("toolbarButtonPlaceId", newToolbarButtonPlaceId);
+        let newToolbarButtonPlaceId = "";
+        let newToolbarButtonPosition = 0;
+        
+        if (button) {
+            let buttonParent = button.parentNode;
+            if (buttonParent.currentSet && buttonParent.id) {
+                // get new button's place id
+                newToolbarButtonPlaceId = buttonParent.id;
+                
+                // get new button's position
+                let buttonsArray = buttonParent.currentSet.split(",");
+                newToolbarButtonPosition = buttonsArray.indexOf(this.buttonId) + 1;
+            }
+        }
+        
+        // update button's place id and position in preferences and save them
+        Prefs.setValue("toolbarButtonPlaceId", newToolbarButtonPlaceId);
         Prefs.setValue("toolbarButtonPosition", newToolbarButtonPosition);
         Prefs.save();
     };
