@@ -10,7 +10,7 @@
         <li>
           <Description>
             <!-- Add-on version -->
-            <em:version>1.0.0</em:version>
+            <em:version>1.0.1</em:version>
             
             <!-- Pale Moon -->
             <em:targetApplication>
@@ -20,7 +20,7 @@
                 <em:maxVersion>27.*</em:maxVersion>
                 
                 <!-- New .xpi location -->
-                <em:updateLink>https://github.com/wsdfhjxc/crush-those-cookies/releases/download/1.0.0/crush-those-cookies-1.0.0.xpi</em:updateLink>
+                <em:updateLink>https://github.com/wsdfhjxc/crush-those-cookies/releases/download/1.0.1/crush-those-cookies-1.0.1.xpi</em:updateLink>
                 
               </Description>
             </em:targetApplication>
