@@ -14,7 +14,8 @@ let Prefs = function(extName) {
         crushingDelay: 10,
         crushOnLastWindowClose: false,
         whitelistedDomains: "",
-        toolbarButtonPosition: -1
+		toolbarButtonPlaceId: "nav-bar",
+        toolbarButtonPosition: 0
     };
     
     this.currentPrefs = {};
