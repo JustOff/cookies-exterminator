@@ -13,4 +13,4 @@ Example of manual domain whitelisting:
 - adding __.palemoon.org__ will prevent removing cookies coming from both palemoon.org and its subdomains like forum.palemoon.org or addons.palemoon.org
 
 ### Notice
-As this extension by default removes third-party cookies it might possibly break sessions or negatively affect browsing experience on some websites with distributed content. This may cover banking, social or any other interactive services. Use it at your own risk.
+As this extension by default removes third-party cookies it might possibly break sessions or negatively affect browsing experience on some websites with distributed content. This may cover banking, social or any other interactive web services. Use it at your own risk.
