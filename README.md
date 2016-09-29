@@ -2,10 +2,10 @@
 This is an extension for Pale Moon web browser which crushes those cookies which are no longer desirable. It simply removes cookies coming from domains which are not bound with any opened documents after specified delay. By default this also includes third-party cookies created inside such documents. Cookie crushing is triggered on changes of domains in opened tabs and also on tabs and browser's windows close. Whitelist can be used to exclude domains, subdomains or basic wildcard domains from crushing cookies of their origin. The extension comes with a toolbar menu button providing quick access to some common actions.
 
 ### Building
-Pack all files (except README.md, update.rdf and build.sh) from this directory into a ZIP archive with .xpi extension. Alternatively, while on Linux, make build.sh an executable via terminal with `chmod +x build.sh` and execute it with `./build.sh`.
+Pack all files (except README.md and build.sh) from this directory into a ZIP archive with .xpi extension. Alternatively, while on Linux, make build.sh an executable via terminal with `chmod +x build.sh` and execute it with `./build.sh` to create the .xpi file.
 
 ### Usage
-Open the .xpi file with Pale Moon or drag the .xpi file inside its window and confirm installation. The menu button should appear in the toolbar. All preferences of the extension are accessible within Add-ons Manager page.
+The latest installable release is always available at the [Pale Moon add-ons website](https://addons.palemoon.org/extensions/privacy-and-security/crush-those-cookies/). Otherwise, for self-built .xpi file just open it with Pale Moon. After installation the menu button should appear in the toolbar. All detailed preferences of the extension are accessible within Add-ons Manager page.
 
 Example of manual domain whitelisting:
 - adding __palemoon.&#8203;org__ to whitelisted domains will prevent removing cookies coming from palemoon.org
