@@ -5,7 +5,7 @@ This is an extension for Pale Moon web browser which crushes those cookies which
 Pack all files (except README.md and build.sh) from this directory into a ZIP archive with .xpi extension. Alternatively, while on Linux, make build.sh an executable via terminal with `chmod +x build.sh` and execute it with `./build.sh` to create the .xpi file.
 
 ### Usage
-The latest installable release is always available at the [Pale Moon add-ons website](https://addons.palemoon.org/extensions/privacy-and-security/crush-those-cookies/). Otherwise, for self-built .xpi file just open it with Pale Moon. After installation the menu button should appear in the toolbar. All detailed preferences of the extension are accessible within Add-ons Manager page.
+The latest installable release is always available at the [Pale Moon add-ons website](https://addons.palemoon.org/extensions/privacy-and-security/crush-those-cookies/). For a self-built .xpi file, just open it with Pale Moon. After installation the menu button should appear in the toolbar. All detailed preferences of the extension are accessible within Add-ons Manager page.
 
 Example of manual domain whitelisting:
 - adding __palemoon.&#8203;org__ to whitelisted domains will prevent removing cookies coming from palemoon.org
