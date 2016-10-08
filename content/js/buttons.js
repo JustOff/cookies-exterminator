@@ -27,11 +27,14 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         notCrushed: "Previously crushed cookies from "
     };
         
-    this.menuitemClass = "menuitem-non-iconic";
+//    this.menuitemClass = "menuitem-non-iconic";
     
     this.menuitemIds = {
         suspendResume: "ctcSuspendResume",
         whitelistAddRemove: "ctcWhitelistAddRemove",
+		whiteList: "ctcWhiteList",
+		cleanOnWinClose: "ctcCleanOnWinClose",
+		cleanOnTabsClose: "ctcCleanOnTabsClose",
         manageWhitelist: "ctcManageWhitelist",
         viewLog: "ctcViewLog"
     };
@@ -44,6 +47,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         remove: "Remove ",
         removeEnding: " from whitelist",
         addRemoveNoDomain: "Current document has no domain",
+		whiteList: "Whitelist ",
+		cleanOnWinClose: "Keep until browser exit",
+		cleanOnTabsClose: "Preserve while in use",
         manageWhitelist: "Manage whitelisted domains",
         log: "View activity log"
     };
@@ -74,7 +80,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         // create menuitems
         let menuitemSuspendResume = document.createElement("menuitem");
         menuitemSuspendResume.setAttribute("id", this.menuitemIds.suspendResume);
-        menuitemSuspendResume.setAttribute("class", this.menuitemClass);
+//        menuitemSuspendResume.setAttribute("class", this.menuitemClass);
         menuitemSuspendResume.addEventListener("command", function(event) {
             if (Prefs.getValue("suspendCrushing")) {
                 Prefs.setValue("suspendCrushing", false);
@@ -85,10 +91,11 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
             Prefs.save();
             Buttons.refresh();
         }, false);
-        
+
+/*        
         let menuitemWhitelistAddRemove = document.createElement("menuitem");
         menuitemWhitelistAddRemove.setAttribute("id", this.menuitemIds.whitelistAddRemove);
-        menuitemWhitelistAddRemove.setAttribute("class", this.menuitemClass);
+//        menuitemWhitelistAddRemove.setAttribute("class", this.menuitemClass);
         menuitemWhitelistAddRemove.addEventListener("command", function(event) {
             let window = Services.wm.getMostRecentWindow("navigator:browser");
             let domain = window.gBrowser.contentDocument.domain;
@@ -111,11 +118,103 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                 Buttons.refresh();
             }
         }, false);
+*/
         
+        let menuitemWhiteList = document.createElement("menuitem");
+        menuitemWhiteList.setAttribute("id", this.menuitemIds.whiteList);
+//        menuitemWhiteList.setAttribute("class", this.menuitemClass);
+		menuitemWhiteList.setAttribute("type", "radio");
+		menuitemWhiteList.setAttribute("name", "clean");
+        menuitemWhiteList.addEventListener("command", function(event) {
+            let window = Services.wm.getMostRecentWindow("navigator:browser");
+            let domain = window.gBrowser.contentDocument.domain;
+            
+            if (domain) {
+                let rawDomain = Utils.getRawDomain(domain);
+                
+                let whitelisted = Whitelist.isWhitelisted(rawDomain);
+                if (!whitelisted) {
+                    Whitelist.addDomain(rawDomain);
+                }
+                
+                let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+                if (whitelistedTemp) {
+                    if (typeof whitelistedTemp === "string") {
+                        rawDomain = whitelistedTemp;
+                    }
+                    Whitelist.removeDomainTemp(rawDomain);
+				}
+
+                Buttons.refresh();
+            }
+        }, false);
+
+        let menuitemCleanOnWinClose = document.createElement("menuitem");
+        menuitemCleanOnWinClose.setAttribute("id", this.menuitemIds.cleanOnWinClose);
+        menuitemCleanOnWinClose.setAttribute("label", this.menuitemLabels.cleanOnWinClose);
+//        menuitemCleanOnWinClose.setAttribute("class", this.menuitemClass);
+		menuitemCleanOnWinClose.setAttribute("type", "radio");
+		menuitemCleanOnWinClose.setAttribute("name", "clean");
+        menuitemCleanOnWinClose.addEventListener("command", function(event) {
+            let window = Services.wm.getMostRecentWindow("navigator:browser");
+            let domain = window.gBrowser.contentDocument.domain;
+            
+            if (domain) {
+                let rawDomain = Utils.getRawDomain(domain);
+                
+                let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+                if (!whitelistedTemp) {
+                    Whitelist.addDomainTemp(rawDomain);
+                }
+
+                let whitelisted = Whitelist.isWhitelisted(rawDomain);
+                if (whitelisted) {
+                    if (typeof whitelisted === "string") {
+                        rawDomain = whitelisted;
+                    }
+                    Whitelist.removeDomain(rawDomain);
+				}
+                
+                Buttons.refresh();
+            }
+        }, false);
+
+        let menuitemCleanOnTabsClose = document.createElement("menuitem");
+        menuitemCleanOnTabsClose.setAttribute("id", this.menuitemIds.cleanOnTabsClose);
+        menuitemCleanOnTabsClose.setAttribute("label", this.menuitemLabels.cleanOnTabsClose);
+//        menuitemCleanOnTabsClose.setAttribute("class", this.menuitemClass);
+		menuitemCleanOnTabsClose.setAttribute("type", "radio");
+		menuitemCleanOnTabsClose.setAttribute("name", "clean");
+        menuitemCleanOnTabsClose.addEventListener("command", function(event) {
+            let window = Services.wm.getMostRecentWindow("navigator:browser");
+            let domain = window.gBrowser.contentDocument.domain;
+            
+            if (domain) {
+                let rawDomain = Utils.getRawDomain(domain);
+                
+                let whitelisted = Whitelist.isWhitelisted(rawDomain);
+                let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+                
+                if (whitelisted || whitelistedTemp) {
+                    if (typeof whitelisted === "string") {
+                        rawDomain = whitelisted;
+                    }
+                    if (typeof whitelistedTemp === "string") {
+                        rawDomain = whitelistedTemp;
+                    }
+                    
+                    Whitelist.removeDomain(rawDomain);
+                    Whitelist.removeDomainTemp(rawDomain);
+                }
+                
+                Buttons.refresh();
+            }
+        }, false);
+
         let menuitemManageWhitelist = document.createElement("menuitem");
         menuitemManageWhitelist.setAttribute("id", this.menuitemIds.manageWhitelist);
         menuitemManageWhitelist.setAttribute("label", this.menuitemLabels.manageWhitelist);
-        menuitemManageWhitelist.setAttribute("class", this.menuitemClass);
+//        menuitemManageWhitelist.setAttribute("class", this.menuitemClass);
         menuitemManageWhitelist.addEventListener("command", function(event) {
             let existingWindow = Services.wm.getMostRecentWindow("ctcPrefsWindow");
             if (existingWindow) {
@@ -129,7 +228,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let menuitemViewLog = document.createElement("menuitem");
         menuitemViewLog.setAttribute("id", this.menuitemIds.viewLog);
         menuitemViewLog.setAttribute("label", this.menuitemLabels.log);
-        menuitemViewLog.setAttribute("class", this.menuitemClass);
+//        menuitemViewLog.setAttribute("class", this.menuitemClass);
         menuitemViewLog.addEventListener("command", function(event) {
             let existingWindow = Services.wm.getMostRecentWindow("ctcLogWindow");
             if (existingWindow) {
@@ -139,6 +238,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                 window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "minimizable,centerscreen");
             }
         }, false);
+
+        let menuitemSeparator1 = document.createElement("menuseparator");
+        let menuitemSeparator2 = document.createElement("menuseparator");
         
         // create menupopup element
         let menupopup = document.createElement("menupopup");
@@ -151,33 +253,57 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
             menuitemSuspendResume.setAttribute("label", Prefs.getValue("suspendCrushing") ?
                                                         Buttons.menuitemLabels.resume :
                                                         Buttons.menuitemLabels.suspend);
-            
-            let menuitemWhitelistAddRemove = document.getElementById(Buttons.menuitemIds.whitelistAddRemove);
+
+//            let menuitemWhitelistAddRemove = document.getElementById(Buttons.menuitemIds.whitelistAddRemove);
+			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
+			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
+			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
             let domain = window.gBrowser.contentDocument.domain;
             
             if (domain) {
                 let rawDomain = Utils.getRawDomain(domain);
                 
                 let whitelisted = Whitelist.isWhitelisted(rawDomain);
+                let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
                 
-                if (whitelisted) {
+                if (whitelistedTemp) {
+                    if (typeof whitelistedTemp === "string") {
+                        rawDomain = whitelistedTemp;
+                    }
+                    
+//                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
+//                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
+//                                                                     rawDomain +
+//                                                                     Buttons.menuitemLabels.removeEnding);
+					menuitemCleanOnWinClose.setAttribute("checked", "true");
+                } else if (whitelisted) {
                     if (typeof whitelisted === "string") {
                         rawDomain = whitelisted;
                     }
                     
-                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
-                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
-                                                                     rawDomain +
-                                                                     Buttons.menuitemLabels.removeEnding);
+//                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
+//                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
+//                                                                     rawDomain +
+//                                                                     Buttons.menuitemLabels.removeEnding);
+					menuitemWhiteList.setAttribute("checked", "true");
                 } else {
-                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
-                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.add +
-                                                                     rawDomain +
-                                                                     Buttons.menuitemLabels.addEnding);
+//                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
+//                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.add +
+//                                                                     rawDomain +
+//                                                                     Buttons.menuitemLabels.addEnding);
+					menuitemCleanOnTabsClose.setAttribute("checked", "true");
                 }
+                menuitemWhiteList.setAttribute("disabled", "false");
+                menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + rawDomain);
+                menuitemCleanOnWinClose.setAttribute("disabled", "false");
+                menuitemCleanOnTabsClose.setAttribute("disabled", "false");
             } else {
-                menuitemWhitelistAddRemove.setAttribute("disabled", "true");
-                menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.addRemoveNoDomain);
+//                menuitemWhitelistAddRemove.setAttribute("disabled", "true");
+//                menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.addRemoveNoDomain);
+                menuitemWhiteList.setAttribute("disabled", "true");
+                menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList);
+                menuitemCleanOnWinClose.setAttribute("disabled", "true");
+                menuitemCleanOnTabsClose.setAttribute("disabled", "true");
             }
             
             let menuitemViewLog = window.document.getElementById(Buttons.menuitemIds.viewLog);
@@ -186,9 +312,14 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         
         // append menuitems to the menupopup
         menupopup.appendChild(menuitemSuspendResume);
-        menupopup.appendChild(menuitemWhitelistAddRemove);
-        menupopup.appendChild(menuitemManageWhitelist);
+		menupopup.appendChild(menuitemSeparator1);
         menupopup.appendChild(menuitemViewLog);
+        menupopup.appendChild(menuitemManageWhitelist);
+//        menupopup.appendChild(menuitemWhitelistAddRemove);
+		menupopup.appendChild(menuitemSeparator2);
+		menupopup.appendChild(menuitemWhiteList);
+		menupopup.appendChild(menuitemCleanOnWinClose);
+		menupopup.appendChild(menuitemCleanOnTabsClose);
         
         // append menupopup to the button
         button.appendChild(menupopup);

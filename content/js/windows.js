@@ -47,7 +47,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
                     let immediatelyForLastWindow = windowsCounter == 1;
                     
                     Crusher.prepare(domains, immediatelyForLastWindow);
-                }
+				}
                 
                 Tabs.clear(domWindow);
                 Buttons.clear(domWindow);
@@ -69,6 +69,8 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
     };
     
     this.clear = function() {
+		Crusher.prepare(null, true, true);
+
         Services.wm.removeListener(this.windowListener);
         
         let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");

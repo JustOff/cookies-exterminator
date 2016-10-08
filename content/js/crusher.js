@@ -3,12 +3,16 @@ let EXPORTED_SYMBOLS = ["Crusher"];
 Components.utils.import("resource://gre/modules/Services.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
-    this.prepare = function(domain, immediately) {
+    this.prepare = function(domain, immediately, clearTempWhitelist) {
         if (!Prefs.getValue("suspendCrushing")) {
             let timestamp = Date.now();
             
             if (immediately) {
-                this.execute(domain, timestamp, immediately);
+				if (clearTempWhitelist) {
+					this.execute(domain, timestamp, immediately, clearTempWhitelist);
+				} else {
+					this.execute(domain, timestamp, immediately);
+				}
             } else {
                 Utils.setTimeout(this.execute.bind(this, domain, timestamp),
                                  Prefs.getValue("crushingDelay"));
@@ -16,8 +20,20 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
         }
     };
     
-    this.execute = function(domain, timestamp, ignoreBrowsersCheck) {
-        if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
+    this.execute = function(domain, timestamp, ignoreBrowsersCheck, clearTempWhitelist) {
+//Components.utils.reportError(clearTempWhitelist);
+		if (clearTempWhitelist) {
+/*			
+			let whitelistedTemp = Whitelist.GetWhitelistedTemp();
+			for (let currentDomain in whitelistedTemp) {
+//Components.utils.reportError("zz1");
+//Components.utils.reportError(currentDomain);
+//Components.utils.reportError("zz1_");
+				this.executeForCookies(Services.cookies.getCookiesFromHost(currentDomain), timestamp, ignoreBrowsersCheck, clearTempWhitelist);
+			}
+*/
+			this.executeForCookies(Services.cookies.enumerator, timestamp, ignoreBrowsersCheck, clearTempWhitelist);
+		} else if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
             this.executeForCookies(Services.cookies.enumerator, timestamp, ignoreBrowsersCheck);
         } else if (typeof domain === "string") {
             this.executeForCookies(Services.cookies.getCookiesFromHost(domain), timestamp, ignoreBrowsersCheck);
@@ -28,7 +44,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
         }
     };
     
-    this.executeForCookies = function(cookiesEnumerator, timestamp, ignoreBrowsersCheck) {
+    this.executeForCookies = function(cookiesEnumerator, timestamp, ignoreBrowsersCheck, clearTempWhitelist) {
         let crushedSomething = false;
         let crushedCookiesDomains = {};
         
@@ -37,9 +53,9 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
             
             let cookieRawDomain = Utils.getRawDomain(cookie.rawHost);
 
-            if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, ignoreBrowsersCheck)) {
+            if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, ignoreBrowsersCheck, clearTempWhitelist)) {
                 Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
-                
+//Components.utils.reportError(cookie.host);                
                 crushedSomething = true;
                 crushedCookiesDomains[cookieRawDomain] = true;
             }
@@ -62,11 +78,16 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
         }
     };
     
-    this.mayBeCrushed = function(cookie, cookieRawDomain, timestamp, ignoreBrowsersCheck) {
+    this.mayBeCrushed = function(cookie, cookieRawDomain, timestamp, ignoreBrowsersCheck, clearTempWhitelist) {
         let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
+        
+        if (clearTempWhitelist) {
+            return true;
+        }
         
         if (cookieLastAccessTimestamp > timestamp ||
             Whitelist.isWhitelisted(cookieRawDomain) ||
+			Whitelist.isWhitelistedTemp(cookieRawDomain) ||
             (!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
             return false;
         }
