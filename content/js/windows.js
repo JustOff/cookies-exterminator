@@ -32,7 +32,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
                     windowsCounter++;
                 }
                 
-                if (windowsCounter > 1 || Prefs.getValue("crushOnLastWindowClose")) {
+                if (windowsCounter > 1) {
                     let tabBrowser = domWindow.gBrowser;
                     
                     let domains = [];
@@ -44,9 +44,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
                         domains.push(domain);
                     }
                     
-                    let immediatelyForLastWindow = windowsCounter == 1;
-                    
-                    Crusher.prepare(domains, immediatelyForLastWindow);
+                    Crusher.prepare(domains);
 				}
                 
                 Tabs.clear(domWindow);
@@ -69,7 +67,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
     };
     
     this.clear = function() {
-		Crusher.prepare(null, true, true);
+		Crusher.prepare(null, true);
 
         Services.wm.removeListener(this.windowListener);
         

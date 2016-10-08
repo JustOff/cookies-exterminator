@@ -75,11 +75,7 @@ let Whitelist = function(Prefs) {
     this.isWhitelistedTemp = function(domain) {
         return this.domainsTemp[domain] || this.checkForWildcard(domain, this.domainsTemp);
     };
-/*    
-    this.GetWhitelistedTemp = function() {
-        return this.domainsTemp;
-    };
-*/
+
     this.checkForWildcard = function(domain, domains) {
         if (typeof domain === "string") {
             let domainParts = domain.split('.');
