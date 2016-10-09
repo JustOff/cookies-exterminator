@@ -217,6 +217,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 
 		let menuitemSeparator1 = document.createElement("menuseparator");
 		let menuitemSeparator2 = document.createElement("menuseparator");
+		let menuitemSeparator3 = document.createElement("menuseparator");
 
 		// create menupopup element
 		let menupopup = document.createElement("menupopup");
@@ -271,9 +272,10 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menupopup.appendChild(menuitemEnable);
 		menupopup.appendChild(menuitemSeparator1);
 		menupopup.appendChild(menuitemViewLog);
-		menupopup.appendChild(menuitemManageCookies);
 		menupopup.appendChild(menuitemManageWhitelist);
 		menupopup.appendChild(menuitemSeparator2);
+		menupopup.appendChild(menuitemManageCookies);
+		menupopup.appendChild(menuitemSeparator3);
 		menupopup.appendChild(menuitemWhiteList);
 		menupopup.appendChild(menuitemCleanOnWinClose);
 		menupopup.appendChild(menuitemCleanOnTabsClose);

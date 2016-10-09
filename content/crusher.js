@@ -39,9 +39,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 			let cookieRawDomain = Utils.getRawDomain(cookie.rawHost);
 
-Components.utils.reportError("HR");
-Components.utils.reportError(cookie.host);
-Components.utils.reportError(cookieRawDomain);
+Components.utils.reportError("C: " + cookie.host + " : " + cookieRawDomain);
 			if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, cleanup)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
@@ -75,6 +73,10 @@ Components.utils.reportError(cookieRawDomain);
 	};
 
 	this.mayBeCrushed = function(cookie, cookieRawDomain, timestamp, cleanup) {
+		if (Whitelist.isWhitelisted(cookieRawDomain)) {
+			return false;
+		}
+
 		if (cleanup) {
 			return true;
 		}
@@ -82,7 +84,6 @@ Components.utils.reportError(cookieRawDomain);
 		let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
 
 		if (cookieLastAccessTimestamp > timestamp ||
-			Whitelist.isWhitelisted(cookieRawDomain) ||
 			Whitelist.isWhitelistedTemp(cookieRawDomain) ||
 			(!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
 			return false;
@@ -120,9 +121,7 @@ Components.utils.reportError(cookieRawDomain);
 						}
 					}
 
-Components.utils.reportError("?");
-Components.utils.reportError(rawDomain);
-Components.utils.reportError(cookieRawDomain);
+Components.utils.reportError("?: " + rawDomain);
 					if (rawDomain == cookieRawDomain) {
 						return false;
 					}
