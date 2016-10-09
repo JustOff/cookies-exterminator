@@ -53,6 +53,10 @@ Components.utils.reportError(cookieRawDomain);
 			}
 		}
 
+		if (cleanup) {
+			return;
+		}
+
 		if (crushedSomething) {
 			let crushedCookiesDomainsString = "";
 
