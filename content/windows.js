@@ -69,6 +69,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 	this.clear = function(shutdown) {
 		if (shutdown) {
 			Crusher.prepare(null, true);
+			return;
 		}
 
 		Services.wm.removeListener(this.windowListener);

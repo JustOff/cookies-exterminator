@@ -63,14 +63,17 @@ function startup(data, reason) {
 }
 
 function shutdown(data, reason) {
+	// cleanup
+	if(reason == APP_SHUTDOWN) {
+		Windows.clear(true);
+		return;
+	}
+
 	// remove preferences and log windows event observers
 	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsLoad");
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
-
-	// cleanup
-	Windows.clear(reason == APP_SHUTDOWN);
 
 	// unload own modules
 	Components.utils.unload(extJSPath + "prefs.js");
