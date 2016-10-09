@@ -10,6 +10,7 @@
 	<em:creator>Off JustOff &lt;Off.Just.Off@gmail.com&gt;</em:creator>
 	<em:contributor>Wojciech Stachurski (wsdfhjxc)</em:contributor>
 	<!-- em:homepageURL>https://addons.mozilla.org/addon/cookies-xtrm/</em:homepageURL -->
+	<em:updateURL>https://localhost/update.xml</em:updateURL>
 	<em:optionsURL>chrome://cookies-xtrm/content/prefs.xul</em:optionsURL>
 	<em:targetApplication>
 	  <Description>
