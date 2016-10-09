@@ -6,10 +6,11 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
     this.contentURL = "chrome://" + extName + "/content/";
     
     this.iconFileNames = {
-        normal: "toolbar_icon.png",
-        suspended: "toolbar_icon_suspended.png",
-        crushed: "toolbar_icon_crushed.png",
-        whitelisted: "toolbar_icon_whitelisted.png"
+        normal: "icon_default.png",
+        suspended: "icon_suspended.png",
+        crushed: "icon_crushed.png",
+        greylisted: "icon_greylisted.png",
+        whitelisted: "icon_whitelisted.png"
     };
     
     this.xulDocFileNames = {
@@ -27,31 +28,23 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         notCrushed: "Previously crushed cookies from "
     };
         
-//    this.menuitemClass = "menuitem-non-iconic";
-    
     this.menuitemIds = {
         suspendResume: "ctcSuspendResume",
-        whitelistAddRemove: "ctcWhitelistAddRemove",
+        viewLog: "ctcViewLog",
+        manageWhitelist: "ctcManageWhitelist",
 		whiteList: "ctcWhiteList",
 		cleanOnWinClose: "ctcCleanOnWinClose",
-		cleanOnTabsClose: "ctcCleanOnTabsClose",
-        manageWhitelist: "ctcManageWhitelist",
-        viewLog: "ctcViewLog"
+		cleanOnTabsClose: "ctcCleanOnTabsClose"
     };
     
     this.menuitemLabels = {
         suspend: "Suspend crushing cookies",
         resume: "Resume crushing cookies",
-        add: "Add ",
-        addEnding: " to whitelist",
-        remove: "Remove ",
-        removeEnding: " from whitelist",
-        addRemoveNoDomain: "Current document has no domain",
+        log: "View activity log",
+        manageWhitelist: "Manage whitelisted domains",
 		whiteList: "Whitelist ",
 		cleanOnWinClose: "Keep until browser exit",
-		cleanOnTabsClose: "Preserve while in use",
-        manageWhitelist: "Manage whitelisted domains",
-        log: "View activity log"
+		cleanOnTabsClose: "Preserve only while in use"
     };
         
     this.menupopupId = "ctcMenupopup";
@@ -80,7 +73,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         // create menuitems
         let menuitemSuspendResume = document.createElement("menuitem");
         menuitemSuspendResume.setAttribute("id", this.menuitemIds.suspendResume);
-//        menuitemSuspendResume.setAttribute("class", this.menuitemClass);
         menuitemSuspendResume.addEventListener("command", function(event) {
             if (Prefs.getValue("suspendCrushing")) {
                 Prefs.setValue("suspendCrushing", false);
@@ -92,37 +84,8 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
             Buttons.refresh();
         }, false);
 
-/*        
-        let menuitemWhitelistAddRemove = document.createElement("menuitem");
-        menuitemWhitelistAddRemove.setAttribute("id", this.menuitemIds.whitelistAddRemove);
-//        menuitemWhitelistAddRemove.setAttribute("class", this.menuitemClass);
-        menuitemWhitelistAddRemove.addEventListener("command", function(event) {
-            let window = Services.wm.getMostRecentWindow("navigator:browser");
-            let domain = window.gBrowser.contentDocument.domain;
-            
-            if (domain) {
-                let rawDomain = Utils.getRawDomain(domain);
-                
-                let whitelisted = Whitelist.isWhitelisted(rawDomain);
-                
-                if (whitelisted) {
-                    if (typeof whitelisted === "string") {
-                        rawDomain = whitelisted;
-                    }
-                    
-                    Whitelist.removeDomain(rawDomain);
-                } else {
-                    Whitelist.addDomain(rawDomain);
-                }
-                
-                Buttons.refresh();
-            }
-        }, false);
-*/
-        
         let menuitemWhiteList = document.createElement("menuitem");
         menuitemWhiteList.setAttribute("id", this.menuitemIds.whiteList);
-//        menuitemWhiteList.setAttribute("class", this.menuitemClass);
 		menuitemWhiteList.setAttribute("type", "radio");
 		menuitemWhiteList.setAttribute("name", "clean");
         menuitemWhiteList.addEventListener("command", function(event) {
@@ -152,7 +115,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let menuitemCleanOnWinClose = document.createElement("menuitem");
         menuitemCleanOnWinClose.setAttribute("id", this.menuitemIds.cleanOnWinClose);
         menuitemCleanOnWinClose.setAttribute("label", this.menuitemLabels.cleanOnWinClose);
-//        menuitemCleanOnWinClose.setAttribute("class", this.menuitemClass);
 		menuitemCleanOnWinClose.setAttribute("type", "radio");
 		menuitemCleanOnWinClose.setAttribute("name", "clean");
         menuitemCleanOnWinClose.addEventListener("command", function(event) {
@@ -182,7 +144,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let menuitemCleanOnTabsClose = document.createElement("menuitem");
         menuitemCleanOnTabsClose.setAttribute("id", this.menuitemIds.cleanOnTabsClose);
         menuitemCleanOnTabsClose.setAttribute("label", this.menuitemLabels.cleanOnTabsClose);
-//        menuitemCleanOnTabsClose.setAttribute("class", this.menuitemClass);
 		menuitemCleanOnTabsClose.setAttribute("type", "radio");
 		menuitemCleanOnTabsClose.setAttribute("name", "clean");
         menuitemCleanOnTabsClose.addEventListener("command", function(event) {
@@ -214,7 +175,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let menuitemManageWhitelist = document.createElement("menuitem");
         menuitemManageWhitelist.setAttribute("id", this.menuitemIds.manageWhitelist);
         menuitemManageWhitelist.setAttribute("label", this.menuitemLabels.manageWhitelist);
-//        menuitemManageWhitelist.setAttribute("class", this.menuitemClass);
         menuitemManageWhitelist.addEventListener("command", function(event) {
             let existingWindow = Services.wm.getMostRecentWindow("ctcPrefsWindow");
             if (existingWindow) {
@@ -228,7 +188,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let menuitemViewLog = document.createElement("menuitem");
         menuitemViewLog.setAttribute("id", this.menuitemIds.viewLog);
         menuitemViewLog.setAttribute("label", this.menuitemLabels.log);
-//        menuitemViewLog.setAttribute("class", this.menuitemClass);
         menuitemViewLog.addEventListener("command", function(event) {
             let existingWindow = Services.wm.getMostRecentWindow("ctcLogWindow");
             if (existingWindow) {
@@ -254,7 +213,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                                                         Buttons.menuitemLabels.resume :
                                                         Buttons.menuitemLabels.suspend);
 
-//            let menuitemWhitelistAddRemove = document.getElementById(Buttons.menuitemIds.whitelistAddRemove);
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
@@ -270,27 +228,13 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                     if (typeof whitelistedTemp === "string") {
                         rawDomain = whitelistedTemp;
                     }
-                    
-//                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
-//                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
-//                                                                     rawDomain +
-//                                                                     Buttons.menuitemLabels.removeEnding);
 					menuitemCleanOnWinClose.setAttribute("checked", "true");
                 } else if (whitelisted) {
                     if (typeof whitelisted === "string") {
                         rawDomain = whitelisted;
                     }
-                    
-//                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
-//                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.remove +
-//                                                                     rawDomain +
-//                                                                     Buttons.menuitemLabels.removeEnding);
 					menuitemWhiteList.setAttribute("checked", "true");
                 } else {
-//                    menuitemWhitelistAddRemove.setAttribute("disabled", "false");
-//                    menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.add +
-//                                                                     rawDomain +
-//                                                                     Buttons.menuitemLabels.addEnding);
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
                 }
                 menuitemWhiteList.setAttribute("disabled", "false");
@@ -298,12 +242,11 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                 menuitemCleanOnWinClose.setAttribute("disabled", "false");
                 menuitemCleanOnTabsClose.setAttribute("disabled", "false");
             } else {
-//                menuitemWhitelistAddRemove.setAttribute("disabled", "true");
-//                menuitemWhitelistAddRemove.setAttribute("label", Buttons.menuitemLabels.addRemoveNoDomain);
                 menuitemWhiteList.setAttribute("disabled", "true");
                 menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList);
                 menuitemCleanOnWinClose.setAttribute("disabled", "true");
                 menuitemCleanOnTabsClose.setAttribute("disabled", "true");
+				menuitemCleanOnTabsClose.setAttribute("checked", "true");
             }
             
             let menuitemViewLog = window.document.getElementById(Buttons.menuitemIds.viewLog);
@@ -315,7 +258,6 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menupopup.appendChild(menuitemSeparator1);
         menupopup.appendChild(menuitemViewLog);
         menupopup.appendChild(menuitemManageWhitelist);
-//        menupopup.appendChild(menuitemWhitelistAddRemove);
 		menupopup.appendChild(menuitemSeparator2);
 		menupopup.appendChild(menuitemWhiteList);
 		menupopup.appendChild(menuitemCleanOnWinClose);
@@ -480,7 +422,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.suspended + ")";
             } else {
-                if (!rawDomain || Whitelist.isWhitelisted(rawDomain)) {
+				if (Whitelist.isWhitelistedTemp(rawDomain)) {
+                    button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.greylisted + ")";
+                } else if (Whitelist.isWhitelisted(rawDomain)) {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
                 } else {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";

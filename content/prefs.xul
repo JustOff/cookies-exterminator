@@ -177,37 +177,37 @@
           <spacer flex="0" height="15"/>
           
           <hbox flex="0" align="center">
-           <checkbox id="enableLogging" label="Enable activity logging"/>
+           <checkbox id="enableLogging" label="Log all activity"/>
           </hbox>
           
           <hbox flex="0" align="center">
-           <checkbox id="enableNotifications" label="Enable pop-up notifications"/>
-          </hbox>
-          
-          <spacer flex="0" height="15"/>
-          
-          <hbox flex="0" align="center">
-           <checkbox id="enableStrictDomainChecking" label="Enable strict domain and subdomain checking"/>
+           <checkbox id="enableNotifications" label="Use pop-up notifications"/>
           </hbox>
           
           <spacer flex="0" height="15"/>
           
           <hbox flex="0" align="center">
-            <checkbox id="keepCrushingThirdPartyCookies" label="Keep crushing third-party cookies"/>
+           <checkbox id="enableStrictDomainChecking" label="Strict domain and subdomain checking"/>
+          </hbox>
+          
+          <spacer flex="0" height="15"/>
+          
+          <hbox flex="0" align="center">
+            <checkbox id="keepCrushingThirdPartyCookies" label="Crush third-party cookies"/>
           </hbox>
           
           <hbox flex="0" align="center">
-            <checkbox id="keepCrushingSessionCookies" label="Keep crushing cookies marked as session cookies"/>
+            <checkbox id="keepCrushingSessionCookies" label="Crush session cookies"/>
           </hbox>
           
           <hbox flex="0" align="center">
-            <checkbox id="keepCrushingLocalStorage" label="Keep crushing LocalStorage data along with cookies"/>
+            <checkbox id="keepCrushingLocalStorage" label="Crush LocalStorage along with cookies"/>
           </hbox>
         
           <spacer flex="0" height="15"/>
         
           <hbox flex="0" align="center">
-            <label value="Cookie crushing delay in seconds"/>
+            <label value="Crushing delay in seconds"/>
             <spacer flex="1"/>
             <textbox id="crushingDelay" type="number" width="40" min="0" max="600"/>
             <spacer flex="10"/>
@@ -236,7 +236,7 @@
   </tabbox>
   
   <hbox style="padding: 0px 0px 5px 0px">
-    <button label="Reset values to default" oncommand="onReset();"/>
+    <button label="Reset to default" oncommand="onReset();"/>
     <spacer flex="1"/>
     <button label="Apply changes" oncommand="onApply();"/>
     <button label="Close" onclick="window.close();"/>
