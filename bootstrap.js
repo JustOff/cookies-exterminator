@@ -1,6 +1,6 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
 
-const extName = "crush-those-cookies";
+const extName = "cookies-xtrm";
 const extJSPath = "chrome://" + extName + "/content/js/";
 
 // future global references of module symbols

@@ -4,6 +4,7 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 
 let Buttons = function(extName, Prefs, Whitelist, Utils) {
     this.contentURL = "chrome://" + extName + "/content/";
+	this.skinURL = "chrome://" + extName + "/skin/";
     
     this.iconFileNames = {
         normal: "icon_default.png",
@@ -67,7 +68,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         button.setAttribute("type", "menu");
         button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
         button.setAttribute("tooltiptext", this.tooltipTexts.initial);
-        button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
+        button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
         button.style.MozBoxOrient = "inherit";
         
         let Buttons = this;
@@ -387,7 +388,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
             
             if (crushedDomainsString) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.crushed + crushedDomainsString);
-                button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.crushed + ")";
+                button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.crushed + ")";
                 
                 Utils.setTimeout(function() {
                     Buttons.refresh(window);
@@ -434,16 +435,16 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
             
             if (Prefs.getValue("suspendCrushing")) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
-                button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.suspended + ")";
+                button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
             } else {
 				if (!rawDomain) {
-					button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.unknown + ")";
+					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.unknown + ")";
 				} else if (Whitelist.isWhitelistedTemp(rawDomain)) {
-                    button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.greylisted + ")";
+                    button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted + ")";
                 } else if (Whitelist.isWhitelisted(rawDomain)) {
-                    button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
+                    button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.whitelisted + ")";
                 } else {
-                    button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.normal + ")";
+                    button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
                 }
                 
                 let buttonOldTooltipText = button.getAttribute("tooltiptext");
