@@ -3,21 +3,21 @@
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
-		id="ctcLog"
+		id="cookextermLog"
 		title="Crush Those Cookies activity log" 
 		style="min-width: 600px; max-width: 600px; min-height: 300px;"
-		windowtype="ctcLogWindow">
+		windowtype="cookextermLogWindow">
 
   <script type="application/x-javascript">
 	<![CDATA[
 		Components.utils.import("resource://gre/modules/Services.jsm");
 
 		function onWindowLoad() {
-			Services.obs.notifyObservers(window, "ctcLogOpen", null);
+			Services.obs.notifyObservers(window, "cookextermLogOpen", null);
 		}
 
 		function onClearLog() {
-			Services.obs.notifyObservers(window, "ctcLogClear", null);
+			Services.obs.notifyObservers(window, "cookextermLogClear", null);
 
 			let logTextbox = window.document.getElementById("logTextbox");
 			logTextbox.value = "";

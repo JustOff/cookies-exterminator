@@ -20,7 +20,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		log: "log.xul"
 	};
 
-	this.buttonId = "ctcButton";
+	this.buttonId = "cookextermButton";
 	this.buttonLabel = "Crush Those Cookies";
 
 	this.tooltipTexts = {
@@ -31,13 +31,13 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 	};
 
 	this.menuitemIds = {
-		enable: "ctcEnable",
-		viewLog: "ctcViewLog",
-		menuitemManageCookies: "ctcManageCookies",
-		manageWhitelist: "ctcManageWhitelist",
-		whiteList: "ctcWhiteList",
-		cleanOnWinClose: "ctcCleanOnWinClose",
-		cleanOnTabsClose: "ctcCleanOnTabsClose"
+		enable: "cookextermEnable",
+		viewLog: "cookextermViewLog",
+		menuitemManageCookies: "cookextermManageCookies",
+		manageWhitelist: "cookextermManageWhitelist",
+		whiteList: "cookextermWhiteList",
+		cleanOnWinClose: "cookextermCleanOnWinClose",
+		cleanOnTabsClose: "cookextermCleanOnTabsClose"
 	};
 
 	this.menuitemLabels = {
@@ -50,7 +50,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		cleanOnTabsClose: "Preserve only while in use"
 	};
 
-	this.menupopupId = "ctcMenupopup";
+	this.menupopupId = "cookextermMenupopup";
 
 	this.notificationIconTimeout = 5;
 
@@ -193,7 +193,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menuitemManageWhitelist.setAttribute("id", this.menuitemIds.manageWhitelist);
 		menuitemManageWhitelist.setAttribute("label", this.menuitemLabels.manageWhitelist);
 		menuitemManageWhitelist.addEventListener("command", function(event) {
-			let existingWindow = Services.wm.getMostRecentWindow("ctcPrefsWindow");
+			let existingWindow = Services.wm.getMostRecentWindow("cookextermPrefsWindow");
 			if (existingWindow) {
 				existingWindow.focus();
 			} else {
@@ -206,7 +206,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menuitemViewLog.setAttribute("id", this.menuitemIds.viewLog);
 		menuitemViewLog.setAttribute("label", this.menuitemLabels.log);
 		menuitemViewLog.addEventListener("command", function(event) {
-			let existingWindow = Services.wm.getMostRecentWindow("ctcLogWindow");
+			let existingWindow = Services.wm.getMostRecentWindow("cookextermLogWindow");
 			if (existingWindow) {
 				existingWindow.focus();
 			} else {

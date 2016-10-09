@@ -47,7 +47,7 @@ function startup(data, reason) {
 	Windows.init(reason == ADDON_INSTALL); // this will do the rest
 
 	// add preferences and log windows event observers
-	Services.obs.addObserver(Prefs.onOpen, "ctcPrefsLoad", false);
+	Services.obs.addObserver(Prefs.onOpen, "cookextermPrefsLoad", false);
 
 	onPrefsApply = {
 		observe: function(aSubject, aTopic, aData) {
@@ -57,17 +57,17 @@ function startup(data, reason) {
 		}
 	};
 
-	Services.obs.addObserver(onPrefsApply, "ctcPrefsApply", false);
-	Services.obs.addObserver(Log.onOpen, "ctcLogOpen", false);
-	Services.obs.addObserver(Log.onClear, "ctcLogClear", false);
+	Services.obs.addObserver(onPrefsApply, "cookextermPrefsApply", false);
+	Services.obs.addObserver(Log.onOpen, "cookextermLogOpen", false);
+	Services.obs.addObserver(Log.onClear, "cookextermLogClear", false);
 }
 
 function shutdown(data, reason) {
 	// remove preferences and log windows event observers
-	Services.obs.removeObserver(Prefs.onOpen, "ctcPrefsLoad");
-	Services.obs.removeObserver(onPrefsApply, "ctcPrefsApply");
-	Services.obs.removeObserver(Log.onOpen, "ctcLogOpen");
-	Services.obs.removeObserver(Log.onClear, "ctcLogClear");
+	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsLoad");
+	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
+	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
+	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
 
 	// cleanup
 	Windows.clear();

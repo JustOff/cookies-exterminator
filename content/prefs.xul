@@ -3,17 +3,17 @@
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
-		id="ctcPrefs"
+		id="cookextermPrefs"
 		title="Crush Those Cookies preferences" 
 		style="min-width: 385px; min-height: 340px;"
-		windowtype="ctcPrefsWindow">
+		windowtype="cookextermPrefsWindow">
 
   <script type="application/x-javascript">
 	<![CDATA[
 		Components.utils.import("resource://gre/modules/Services.jsm");
 
 		function onWindowLoad() {
-			Services.obs.notifyObservers(window, "ctcPrefsLoad", null);
+			Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
 
 			updateDomainsListbox("domainsListbox", "whitelistedDomains");
 			updateDomainsListbox("domainsListboxTemp", "whitelistedDomainsTemp");
@@ -36,14 +36,14 @@
 		}
 
 		function onReset() {
-			Services.obs.notifyObservers(window, "ctcPrefsLoad", null);
+			Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
 
 			updateDomainsListbox("domainsListbox", "whitelistedDomains");
 			updateDomainsListbox("domainsListboxTemp", "whitelistedDomainsTemp");
 		} 
 
 		function onApply() {
-			Services.obs.notifyObservers(window, "ctcPrefsApply", null);
+			Services.obs.notifyObservers(window, "cookextermPrefsApply", null);
 			window.close();
 		}
 

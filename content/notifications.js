@@ -7,7 +7,7 @@ let Notifications = function(extName, Prefs) {
 	this.contentURL = "chrome://" + extName + "/skin/";
 	this.iconFileName = "icon.png";
 
-	this.alertName = "ctcNotification";
+	this.alertName = "cookextermNotification";
 	this.alertTitle = "Crushed cookies from";
 
 	this.notify = function(crushedDomainsString) {
