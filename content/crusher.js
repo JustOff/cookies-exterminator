@@ -45,7 +45,11 @@ Components.utils.reportError("HR");
 Components.utils.reportError(cookie.host);
 Components.utils.reportError(cookieRawDomain);
 				if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, cleanup)) {
-					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
+					if (typeof cookie.originAttributes === "object") {
+						Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
+					} else {
+						Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
+					}
 					crushedSomething = true;
 					crushedCookiesDomains[cookieRawDomain] = true;
 				}
