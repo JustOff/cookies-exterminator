@@ -21,13 +21,13 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 	};
 
 	this.buttonId = "cookextermButton";
-	this.buttonLabel = "Crush Those Cookies";
+	this.buttonLabel = "Cookies Exterminator";
 
 	this.tooltipTexts = {
-		initial: "Didn't crush any cookies yet",
+		initial: "No coookies was cleaned yet",
 		suspended: "Suspended",
-		crushed: "Recently crushed cookies from ",
-		notCrushed: "Previously crushed cookies from "
+		crushed: "Recently cleaned cookies from ",
+		notCrushed: "Previously cleaned cookies from "
 	};
 
 	this.menuitemIds = {

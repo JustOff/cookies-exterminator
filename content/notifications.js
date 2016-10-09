@@ -8,7 +8,7 @@ let Notifications = function(extName, Prefs) {
 	this.iconFileName = "icon.png";
 
 	this.alertName = "cookextermNotification";
-	this.alertTitle = "Crushed cookies from";
+	this.alertTitle = "Cleaned cookies from";
 
 	this.notify = function(crushedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && crushedDomainsString) {

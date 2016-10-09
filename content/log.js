@@ -12,7 +12,7 @@ let Log = function(Prefs) {
 							   ("0" + date.getMinutes()).slice(-2) + ":" +
 							   ("0" + date.getSeconds()).slice(-2);
 
-			let message = readableDate + " - crushed cookies from " +
+			let message = readableDate + " - cleaned cookies from " +
 						  crushedDomainsString;
 
 			this.loggedMessages.push(message);

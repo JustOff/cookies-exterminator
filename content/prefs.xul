@@ -4,7 +4,7 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		id="cookextermPrefs"
-		title="Crush Those Cookies preferences" 
+		title="Cookies Exterminator preferences" 
 		style="min-width: 385px; min-height: 340px;"
 		windowtype="cookextermPrefsWindow">
 
@@ -183,7 +183,7 @@
 	  <tabpanel id="generalTabpanel">
 		<vbox flex="1">
 		  <hbox flex="0" align="center">
-		   <checkbox id="suspendCrushing" label="Suspend crushing cookies"/>
+		   <checkbox id="suspendCrushing" label="Suspend cookies processing"/>
 		  </hbox>
 
 		  <spacer flex="0" height="15"/>
@@ -205,21 +205,21 @@
 		  <spacer flex="0" height="15"/>
 
 		  <hbox flex="0" align="center">
-			<checkbox id="keepCrushingThirdPartyCookies" label="Crush third-party cookies"/>
+			<checkbox id="keepCrushingThirdPartyCookies" label="Concider third-party cookies"/>
 		  </hbox>
 
 		  <hbox flex="0" align="center">
-			<checkbox id="keepCrushingSessionCookies" label="Crush session cookies"/>
+			<checkbox id="keepCrushingSessionCookies" label="Clean session cookies"/>
 		  </hbox>
 
 		  <hbox flex="0" align="center">
-			<checkbox id="keepCrushingLocalStorage" label="Crush LocalStorage along with cookies"/>
+			<checkbox id="keepCrushingLocalStorage" label="Clean LocalStorage along with cookies"/>
 		  </hbox>
 
 		  <spacer flex="0" height="15"/>
 
 		  <hbox flex="0" align="center">
-			<label value="Crushing delay in seconds"/>
+			<label value="Cleaning delay in seconds"/>
 			<spacer flex="1"/>
 			<textbox id="crushingDelay" type="number" width="40" min="0" max="600"/>
 			<spacer flex="10"/>
