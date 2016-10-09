@@ -131,14 +131,6 @@ let Prefs = function(extName) {
         }
     };
     
-    this.onReset = {
-        Prefs: this,
-        feedPrefWindow: this.feedPrefWindow,
-        observe: function(aSubject, aTopic, aData) {
-            this.feedPrefWindow.call(this.Prefs, aSubject, true);
-        }
-    };
-    
     this.onApply = {
         Prefs: this,
         saveFromPrefWindow: this.saveFromPrefWindow,

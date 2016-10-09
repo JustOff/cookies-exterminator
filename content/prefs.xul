@@ -13,9 +13,10 @@
         Components.utils.import("resource://gre/modules/Services.jsm");
       
         function onWindowLoad() {
-            Services.obs.notifyObservers(window, "ctcPrefsOpen", null);
+            Services.obs.notifyObservers(window, "ctcPrefsLoad", null);
         
-            updateDomainsListbox();
+            updateDomainsListbox("domainsListbox", "whitelistedDomains");
+            updateDomainsListbox("domainsListboxTemp", "whitelistedDomainsTemp");
         
             let tabbox = window.document.getElementById("tabbox");
         
@@ -35,13 +36,15 @@
         }
       
         function onReset() {
-            Services.obs.notifyObservers(window, "ctcPrefsReset", null);
+            Services.obs.notifyObservers(window, "ctcPrefsLoad", null);
             
-            updateDomainsListbox();
+            updateDomainsListbox("domainsListbox", "whitelistedDomains");
+			updateDomainsListbox("domainsListboxTemp", "whitelistedDomainsTemp");
         } 
       
         function onApply() {
             Services.obs.notifyObservers(window, "ctcPrefsApply", null);
+			window.close();
         }
         
         function onSelect(domainsListbox) {
@@ -49,64 +52,72 @@
             
             if (selectedDomain) {
                 let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+				let newDomainTextboxGrey = window.document.getElementById("newDomainTextboxGrey");
                 
                 newDomainTextbox.value = selectedDomain.value;
+				newDomainTextboxGrey.value = selectedDomain.value;
             }
         }
       
-        function onAddDomain() {
-            let domainsListbox = window.document.getElementById("domainsListbox");
-            let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+        function onAddDomain(domListbox, domTextbox, listedDomains) {
+            let domainsListbox = window.document.getElementById(domListbox);
+            let newDomainTextbox = window.document.getElementById(domTextbox);
+			let domTextbox1 = window.document.getElementById("newDomainTextbox");
+			let domTextbox2 = window.document.getElementById("newDomainTextboxGrey");
         
             if (newDomainTextbox.value != "") {
                 domainsListbox.appendItem(newDomainTextbox.value, newDomainTextbox.value);
-                newDomainTextbox.value = "";
+                domTextbox1.value = ""; domTextbox2.value = "";
             
                 sortDomainsListbox(domainsListbox);
-                updateWhitelistedDomains();
+                updateWhitelistedDomains(domListbox, listedDomains);
             }
         }
       
-        function onEditDomain() {
-            let domainsListbox = window.document.getElementById("domainsListbox");
+        function onEditDomain(domListbox, domTextbox, listedDomains) {
+            let domainsListbox = window.document.getElementById(domListbox);
             let selectedDomain = domainsListbox.getSelectedItem(0);
-            let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+            let newDomainTextbox = window.document.getElementById(domTextbox);
+			let domTextbox1 = window.document.getElementById("newDomainTextbox");
+			let domTextbox2 = window.document.getElementById("newDomainTextboxGrey");
             
             if (selectedDomain && newDomainTextbox.value != "") {
                 selectedDomain.value = newDomainTextbox.value;
                 selectedDomain.label = newDomainTextbox.value;
                 
-                newDomainTextbox.value = "";
+                domTextbox1.value = ""; domTextbox2.value = "";
                 domainsListbox.clearSelection();
                 
                 sortDomainsListbox(domainsListbox);
-                updateWhitelistedDomains();
+                updateWhitelistedDomains(domListbox, listedDomains);
             }
         }
       
-        function onRemoveDomain() {
-            let domainsListbox = window.document.getElementById("domainsListbox");
+        function onRemoveDomain(domListbox, domTextbox, listedDomains) {
+            let domainsListbox = window.document.getElementById(domListbox);
             let selectedDomain = domainsListbox.getSelectedItem(0);
             
             if (selectedDomain) {
                 let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
-                let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+                let newDomainTextbox = window.document.getElementById(domTextbox);
+				let domTextbox1 = window.document.getElementById("newDomainTextbox");
+				let domTextbox2 = window.document.getElementById("newDomainTextboxGrey");
                 
                 domainsListbox.removeItemAt(selectedDomainIndex);
                 domainsListbox.clearSelection();
                 
-                newDomainTextbox.value = "";
+                domTextbox1.value = ""; domTextbox2.value = "";
             
                 sortDomainsListbox(domainsListbox);
-                updateWhitelistedDomains();
+                updateWhitelistedDomains(domListbox, listedDomains);
             }
         }
       
-        function updateWhitelistedDomains() {
-            let whitelistedDomains = window.document.getElementById("whitelistedDomains");
+        function updateWhitelistedDomains(domListbox, listedDomains) {
+            let whitelistedDomains = window.document.getElementById(listedDomains);
             whitelistedDomains.value = "";
             
-            let domainsListbox = window.document.getElementById("domainsListbox");
+            let domainsListbox = window.document.getElementById(domListbox);
             let rows = domainsListbox.getRowCount();
             
             for (let i = 0; i < rows; i++) {
@@ -117,15 +128,15 @@
             whitelistedDomains.value = whitelistedDomains.value.slice(0, -1);
         }
       
-        function updateDomainsListbox() {
-            let domainsListbox = window.document.getElementById("domainsListbox");
+        function updateDomainsListbox(listbox, domains) {
+            let domainsListbox = window.document.getElementById(listbox);
             let rows = domainsListbox.getRowCount();
             
             for (let i = 0; i < rows; i++) {
                 domainsListbox.removeItemAt(0);
             }
         
-            let whitelistedDomains = window.document.getElementById("whitelistedDomains");
+            let whitelistedDomains = window.document.getElementById(domains);
         
             if (whitelistedDomains.value != "") {
                 let separatedDomains = whitelistedDomains.value.split(';');
@@ -162,8 +173,9 @@
   
   <tabbox id="tabbox" flex="1" style="padding: 5px">
     <tabs>
-      <tab id="generalTab" label="General"/>
-      <tab id="whitelistTab" label="Whitelisted domains"/>
+      <tab id="generalTab" label="Options"/>
+      <tab id="whitelistTab" label="Whitelist"/>
+      <tab id="greylistTab" label="Greylist"/>
     </tabs>
     
     <tabpanels flex="1">
@@ -222,24 +234,40 @@
         
           <hbox flex="1" align="center">
             <textbox id="newDomainTextbox" width="150"/>
-            <button label="Add" oncommand="onAddDomain();" style="min-width: 50px"/>
+            <button label="Add" oncommand="onAddDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
             <spacer flex="1"/>
-            <button label="Edit" oncommand="onEditDomain();" style="min-width: 50px"/>
-            <button label="Remove" oncommand="onRemoveDomain();"/>
+            <button label="Update" oncommand="onEditDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+            <button label="Remove" oncommand="onRemoveDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');"/>
           </hbox>
         </vbox>
         
         <textbox id="whitelistedDomains" hidden="true"/>
       </tabpanel>
       
+      <tabpanel id="greylistTabpanel">
+        <vbox flex="1">
+          <listbox id="domainsListboxTemp" height="250" onselect="onSelect(this);"></listbox>
+        
+          <hbox flex="1" align="center">
+            <textbox id="newDomainTextboxGrey" width="150"/>
+            <button label="Add" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+            <spacer flex="1"/>
+            <button label="Update" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+            <button label="Remove" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');"/>
+          </hbox>
+        </vbox>
+        
+        <textbox id="whitelistedDomainsTemp" hidden="true"/>
+      </tabpanel>
+      
     </tabpanels>
   </tabbox>
   
   <hbox style="padding: 0px 0px 5px 0px">
-    <button label="Reset to default" oncommand="onReset();"/>
+    <button label="Reset" oncommand="onReset();"/>
     <spacer flex="1"/>
-    <button label="Apply changes" oncommand="onApply();"/>
-    <button label="Close" onclick="window.close();"/>
+    <button label="Accept" oncommand="onApply();"/>
+    <button label="Discard" onclick="window.close();"/>
   </hbox>
   
 </window>

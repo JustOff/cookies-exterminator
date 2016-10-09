@@ -47,8 +47,7 @@ function startup(data, reason) {
     Windows.init(reason == ADDON_INSTALL); // this will do the rest
     
     // add preferences and log windows event observers
-    Services.obs.addObserver(Prefs.onOpen, "ctcPrefsOpen", false);
-    Services.obs.addObserver(Prefs.onReset, "ctcPrefsReset", false);
+    Services.obs.addObserver(Prefs.onOpen, "ctcPrefsLoad", false);
     
     onPrefsApply = {
         observe: function(aSubject, aTopic, aData) {
@@ -65,8 +64,7 @@ function startup(data, reason) {
 
 function shutdown(data, reason) {
     // remove preferences and log windows event observers
-    Services.obs.removeObserver(Prefs.onOpen, "ctcPrefsOpen");
-    Services.obs.removeObserver(Prefs.onReset, "ctcPrefsReset");
+    Services.obs.removeObserver(Prefs.onOpen, "ctcPrefsLoad");
     Services.obs.removeObserver(onPrefsApply, "ctcPrefsApply");
     Services.obs.removeObserver(Log.onOpen, "ctcLogOpen");
     Services.obs.removeObserver(Log.onClear, "ctcLogClear");

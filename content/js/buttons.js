@@ -32,6 +32,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
     this.menuitemIds = {
 		enable: "ctcEnable",
         viewLog: "ctcViewLog",
+		menuitemManageCookies: "ctcManageCookies",
         manageWhitelist: "ctcManageWhitelist",
 		whiteList: "ctcWhiteList",
 		cleanOnWinClose: "ctcCleanOnWinClose",
@@ -41,7 +42,8 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
     this.menuitemLabels = {
         enable: "Enable cookies processing",
         log: "View activity log",
-        manageWhitelist: "Manage whitelisted domains",
+		manageCookies: "Remove individual cookies",
+        manageWhitelist: "Manage domains",
 		whiteList: "Whitelist ",
 		cleanOnWinClose: "Keep until browser exit",
 		cleanOnTabsClose: "Preserve only while in use"
@@ -174,6 +176,18 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
             }
         }, false);
 
+        let menuitemManageCookies = document.createElement("menuitem");
+        menuitemManageCookies.setAttribute("id", this.menuitemIds.manageCookies);
+        menuitemManageCookies.setAttribute("label", this.menuitemLabels.manageCookies);
+        menuitemManageCookies.addEventListener("command", function(event) {
+            let existingWindow = Services.wm.getMostRecentWindow("Browser:Cookies");
+            if (!existingWindow) {
+				let features = "chrome,centerscreen," + Services.prefs.getBoolPref("browser.preferences.instantApply") ? "dialog=no" : "modal";
+                existingWindow = Services.wm.getMostRecentWindow(null).openDialog("chrome://browser/content/preferences/cookies.xul", "Browser:Cookies", features, null);
+            }
+            existingWindow.focus();
+        }, false);
+        
         let menuitemManageWhitelist = document.createElement("menuitem");
         menuitemManageWhitelist.setAttribute("id", this.menuitemIds.manageWhitelist);
         menuitemManageWhitelist.setAttribute("label", this.menuitemLabels.manageWhitelist);
@@ -256,6 +270,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menupopup.appendChild(menuitemEnable);
 		menupopup.appendChild(menuitemSeparator1);
         menupopup.appendChild(menuitemViewLog);
+		menupopup.appendChild(menuitemManageCookies);
         menupopup.appendChild(menuitemManageWhitelist);
 		menupopup.appendChild(menuitemSeparator2);
 		menupopup.appendChild(menuitemWhiteList);
