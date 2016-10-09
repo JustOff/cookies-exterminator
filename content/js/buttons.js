@@ -7,6 +7,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
     
     this.iconFileNames = {
         normal: "icon_default.png",
+        unknown: "icon_unknown.png",
         suspended: "icon_suspended.png",
         crushed: "icon_crushed.png",
         greylisted: "icon_greylisted.png",
@@ -420,7 +421,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
                 button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
                 button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.suspended + ")";
             } else {
-				if (Whitelist.isWhitelistedTemp(rawDomain)) {
+				if (!rawDomain) {
+					button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.unknown + ")";
+				} else if (Whitelist.isWhitelistedTemp(rawDomain)) {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.greylisted + ")";
                 } else if (Whitelist.isWhitelisted(rawDomain)) {
                     button.style.listStyleImage = "url(" + this.contentURL + this.iconFileNames.whitelisted + ")";
