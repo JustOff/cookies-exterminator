@@ -67,6 +67,8 @@ function shutdown(data, reason) {
 	if(reason == APP_SHUTDOWN) {
 		Windows.clear(true);
 		return;
+	} else {
+		Windows.clear();
 	}
 
 	// remove preferences and log windows event observers
