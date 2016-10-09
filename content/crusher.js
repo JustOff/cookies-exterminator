@@ -33,27 +33,23 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.executeForCookies = function(cookiesEnumerator, timestamp, cleanup) {
 		let crushedSomething = false;
 		let crushedCookiesDomains = {};
-		let checkedCookiesDomains = {};
 
 		while (cookiesEnumerator.hasMoreElements()) {
 			let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
 
 			let cookieRawDomain = Utils.getRawDomain(cookie.rawHost);
 
-			if (!!!checkedCookiesDomains[cookieRawDomain]) {
 Components.utils.reportError("HR");
 Components.utils.reportError(cookie.host);
 Components.utils.reportError(cookieRawDomain);
-				if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, cleanup)) {
-					if (typeof cookie.originAttributes === "object") {
-						Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
-					} else {
-						Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
-					}
-					crushedSomething = true;
-					crushedCookiesDomains[cookieRawDomain] = true;
+			if (this.mayBeCrushed(cookie, cookieRawDomain, timestamp, cleanup)) {
+				if (typeof cookie.originAttributes === "object") {
+					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
+				} else {
+					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
 				}
-				checkedCookiesDomains[cookieRawDomain] = true;
+				crushedSomething = true;
+				crushedCookiesDomains[cookieRawDomain] = true;
 			}
 		}
 
