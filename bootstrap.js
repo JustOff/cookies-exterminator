@@ -70,7 +70,7 @@ function shutdown(data, reason) {
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
 
 	// cleanup
-	Windows.clear();
+	Windows.clear(reason == APP_SHUTDOWN);
 
 	// unload own modules
 	Components.utils.unload(extJSPath + "prefs.js");
