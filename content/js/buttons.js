@@ -29,7 +29,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
     };
         
     this.menuitemIds = {
-        suspendResume: "ctcSuspendResume",
+		enable: "ctcEnable",
         viewLog: "ctcViewLog",
         manageWhitelist: "ctcManageWhitelist",
 		whiteList: "ctcWhiteList",
@@ -38,8 +38,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
     };
     
     this.menuitemLabels = {
-        suspend: "Suspend crushing cookies",
-        resume: "Resume crushing cookies",
+        enable: "Enable cookies processing",
         log: "View activity log",
         manageWhitelist: "Manage whitelisted domains",
 		whiteList: "Whitelist ",
@@ -71,9 +70,11 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         let Buttons = this;
         
         // create menuitems
-        let menuitemSuspendResume = document.createElement("menuitem");
-        menuitemSuspendResume.setAttribute("id", this.menuitemIds.suspendResume);
-        menuitemSuspendResume.addEventListener("command", function(event) {
+        let menuitemEnable = document.createElement("menuitem");
+        menuitemEnable.setAttribute("id", this.menuitemIds.enable);
+		menuitemEnable.setAttribute("type", "checkbox");
+        menuitemEnable.setAttribute("label", this.menuitemLabels.enable);
+        menuitemEnable.addEventListener("command", function(event) {
             if (Prefs.getValue("suspendCrushing")) {
                 Prefs.setValue("suspendCrushing", false);
             } else {
@@ -207,12 +208,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         menupopup.addEventListener("popupshowing", function(event) {
             let window = Services.wm.getMostRecentWindow("navigator:browser");
             let document = window.document;
-            
-            let menuitemSuspendResume = document.getElementById(Buttons.menuitemIds.suspendResume);
-            menuitemSuspendResume.setAttribute("label", Prefs.getValue("suspendCrushing") ?
-                                                        Buttons.menuitemLabels.resume :
-                                                        Buttons.menuitemLabels.suspend);
 
+			let menuitemEnable = document.getElementById(Buttons.menuitemIds.enable);
+			menuitemEnable.setAttribute("checked", Prefs.getValue("suspendCrushing") ? false : true);
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
@@ -254,7 +252,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
         }, false);
         
         // append menuitems to the menupopup
-        menupopup.appendChild(menuitemSuspendResume);
+		menupopup.appendChild(menuitemEnable);
 		menupopup.appendChild(menuitemSeparator1);
         menupopup.appendChild(menuitemViewLog);
         menupopup.appendChild(menuitemManageWhitelist);
