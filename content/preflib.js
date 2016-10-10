@@ -20,31 +20,24 @@ let Prefs = function(extName) {
 	this.currentPrefs = {};
 
 	this.prefsBranch = Services.prefs.getBranch("extensions." + extName + ".");
-	this.syncBranch = Services.prefs.getBranch("services.sync.prefs.sync.extensions." + extName + ".");
+	this.defaultBranch = Services.prefs.getDefaultBranch("extensions." + extName + ".");
+	this.syncBranch = Services.prefs.getDefaultBranch("services.sync.prefs.sync.extensions." + extName + ".");
 
 	this.init = function() {
 		for (let prefName in this.defaultPrefs) {
-			let prefNotExists = !this.prefsBranch.getPrefType(prefName);
 			let prefValue = this.defaultPrefs[prefName];
-			let prefType = typeof prefValue;
 
-			switch (prefType) {
+			switch (typeof prefValue) {
 				case "string": {
-					if (prefNotExists) {
-						this.prefsBranch.setCharPref(prefName, prefValue);
-					}
+					this.defaultBranch.setCharPref(prefName, prefValue);
 					this.currentPrefs[prefName] = this.prefsBranch.getCharPref(prefName);
 				} break;
 				case "number": {
-					if (prefNotExists) {
-						this.prefsBranch.setIntPref(prefName, prefValue);
-					}
+					this.defaultBranch.setIntPref(prefName, prefValue);
 					this.currentPrefs[prefName] = this.prefsBranch.getIntPref(prefName);
 				} break;
 				case "boolean": {
-					if (prefNotExists) {
-						this.prefsBranch.setBoolPref(prefName, prefValue);
-					}
+					this.defaultBranch.setBoolPref(prefName, prefValue);
 					this.currentPrefs[prefName] = this.prefsBranch.getBoolPref(prefName);
 				} break;
 			}
@@ -56,9 +49,8 @@ let Prefs = function(extName) {
 	this.save = function() {
 		for (let prefName in this.currentPrefs) {
 			let prefValue = this.currentPrefs[prefName];
-			let prefType = typeof prefValue;
 
-			switch (prefType) {
+			switch (typeof prefValue) {
 				case "string": {
 					this.prefsBranch.setCharPref(prefName, prefValue);
 				} break;
