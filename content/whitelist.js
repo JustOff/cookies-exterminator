@@ -78,27 +78,10 @@ let Whitelist = function(Prefs) {
 
 	this.checkForWildcard = function(domain, domains) {
 		if (typeof domain === "string") {
-			let domainParts = domain.split('.');
-			let domainPartsAmount = domainParts.length;
-
-			let domainEnding = domainParts[domainPartsAmount - 1];
-			let partialDomain = domainEnding;
-
-			for (let i = domainPartsAmount - 2; i >= 0; i--) {
-				partialDomain = domainParts[i] + '.' + partialDomain;
-
-				let dottedDomain = '.' + partialDomain;
-
-				if (domains[dottedDomain]) {
-					return dottedDomain;
-				}
-
-				if (i > 0) {
-					let wildcardDomain = '*' + dottedDomain;
-
-					if (domains[wildcardDomain]) {
-						return wildcardDomain;
-					}
+			while (domain.indexOf(".") != -1) {
+				domain = domain.substring(domain.indexOf(".") + 1);
+				if (domain.indexOf(".") != -1 && domains[domain]) {
+					return domain;
 				}
 			}
 		}

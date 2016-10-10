@@ -98,19 +98,19 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			let domain = window.gBrowser.contentDocument.domain;
 
 			if (domain) {
-				let rawDomain = Utils.getRawDomain(domain);
+				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelisted = Whitelist.isWhitelisted(rawDomain);
+				let whitelisted = Whitelist.isWhitelisted(baseDomain);
 				if (!whitelisted) {
-					Whitelist.addDomain(rawDomain);
+					Whitelist.addDomain(baseDomain);
 				}
 
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
 				if (whitelistedTemp) {
 					if (typeof whitelistedTemp === "string") {
-						rawDomain = whitelistedTemp;
+						baseDomain = whitelistedTemp;
 					}
-					Whitelist.removeDomainTemp(rawDomain);
+					Whitelist.removeDomainTemp(baseDomain);
 				}
 
 				Buttons.refresh();
@@ -127,19 +127,19 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			let domain = window.gBrowser.contentDocument.domain;
 
 			if (domain) {
-				let rawDomain = Utils.getRawDomain(domain);
+				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
 				if (!whitelistedTemp) {
-					Whitelist.addDomainTemp(rawDomain);
+					Whitelist.addDomainTemp(baseDomain);
 				}
 
-				let whitelisted = Whitelist.isWhitelisted(rawDomain);
+				let whitelisted = Whitelist.isWhitelisted(baseDomain);
 				if (whitelisted) {
 					if (typeof whitelisted === "string") {
-						rawDomain = whitelisted;
+						baseDomain = whitelisted;
 					}
-					Whitelist.removeDomain(rawDomain);
+					Whitelist.removeDomain(baseDomain);
 				}
 
 				Buttons.refresh();
@@ -156,21 +156,21 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			let domain = window.gBrowser.contentDocument.domain;
 
 			if (domain) {
-				let rawDomain = Utils.getRawDomain(domain);
+				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelisted = Whitelist.isWhitelisted(rawDomain);
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+				let whitelisted = Whitelist.isWhitelisted(baseDomain);
+				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
 
 				if (whitelisted || whitelistedTemp) {
 					if (typeof whitelisted === "string") {
-						rawDomain = whitelisted;
+						baseDomain = whitelisted;
 					}
 					if (typeof whitelistedTemp === "string") {
-						rawDomain = whitelistedTemp;
+						baseDomain = whitelistedTemp;
 					}
 
-					Whitelist.removeDomain(rawDomain);
-					Whitelist.removeDomainTemp(rawDomain);
+					Whitelist.removeDomain(baseDomain);
+					Whitelist.removeDomainTemp(baseDomain);
 				}
 
 				Buttons.refresh();
@@ -234,26 +234,26 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			let domain = window.gBrowser.contentDocument.domain;
 
 			if (domain) {
-				let rawDomain = Utils.getRawDomain(domain);
+				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelisted = Whitelist.isWhitelisted(rawDomain);
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(rawDomain);
+				let whitelisted = Whitelist.isWhitelisted(baseDomain);
+				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
 
 				if (whitelistedTemp) {
 					if (typeof whitelistedTemp === "string") {
-						rawDomain = whitelistedTemp;
+						baseDomain = whitelistedTemp;
 					}
 					menuitemCleanOnWinClose.setAttribute("checked", "true");
 				} else if (whitelisted) {
 					if (typeof whitelisted === "string") {
-						rawDomain = whitelisted;
+						baseDomain = whitelisted;
 					}
 					menuitemWhiteList.setAttribute("checked", "true");
 				} else {
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
 				}
 				menuitemWhiteList.setAttribute("disabled", "false");
-				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + rawDomain);
+				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + baseDomain);
 				menuitemCleanOnWinClose.setAttribute("disabled", "false");
 				menuitemCleanOnTabsClose.setAttribute("disabled", "false");
 			} else {
@@ -433,17 +433,15 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		if (button) {
 			let domain = window.gBrowser.contentDocument.domain;
 
-			let rawDomain = Utils.getRawDomain(domain);
-
 			if (Prefs.getValue("suspendCrushing")) {
 				button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
 				button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
 			} else {
-				if (!rawDomain) {
+				if (!domain) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.unknown + ")";
-				} else if (Whitelist.isWhitelistedTemp(rawDomain)) {
+				} else if (Whitelist.isWhitelistedTemp(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted + ")";
-				} else if (Whitelist.isWhitelisted(rawDomain)) {
+				} else if (Whitelist.isWhitelisted(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.whitelisted + ")";
 				} else {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";

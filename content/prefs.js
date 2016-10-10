@@ -7,7 +7,6 @@ let Prefs = function(extName) {
 		suspendCrushing: false,
 		enableLogging: true,
 		enableNotifications: true,
-		enableStrictDomainChecking: true,
 		keepCrushingThirdPartyCookies: true,
 		keepCrushingSessionCookies: true,
 		keepCrushingLocalStorage: true,
