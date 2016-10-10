@@ -100,20 +100,15 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelisted = Whitelist.isWhitelisted(baseDomain);
-				if (!whitelisted) {
+				if (!(Whitelist.isWhitelisted(baseDomain) === true)) {
 					Whitelist.addDomain(baseDomain);
-				}
 
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
-				if (whitelistedTemp) {
-					if (typeof whitelistedTemp === "string") {
-						baseDomain = whitelistedTemp;
+					if (Whitelist.isWhitelistedTemp(baseDomain) === true) {
+						Whitelist.removeDomainTemp(baseDomain);
 					}
-					Whitelist.removeDomainTemp(baseDomain);
-				}
 
-				Buttons.refresh();
+					Buttons.refresh();
+				}
 			}
 		}, false);
 
@@ -129,20 +124,15 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
-				if (!whitelistedTemp) {
+				if (!(Whitelist.isWhitelistedTemp(baseDomain) === true)) {
 					Whitelist.addDomainTemp(baseDomain);
-				}
 
-				let whitelisted = Whitelist.isWhitelisted(baseDomain);
-				if (whitelisted) {
-					if (typeof whitelisted === "string") {
-						baseDomain = whitelisted;
+					if (Whitelist.isWhitelisted(baseDomain) === true) {
+						Whitelist.removeDomain(baseDomain);
 					}
-					Whitelist.removeDomain(baseDomain);
-				}
 
-				Buttons.refresh();
+					Buttons.refresh();
+				}
 			}
 		}, false);
 
@@ -158,22 +148,14 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelisted = Whitelist.isWhitelisted(baseDomain);
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
-
-				if (whitelisted || whitelistedTemp) {
-					if (typeof whitelisted === "string") {
-						baseDomain = whitelisted;
-					}
-					if (typeof whitelistedTemp === "string") {
-						baseDomain = whitelistedTemp;
-					}
+				if (Whitelist.isWhitelisted(baseDomain) === true 
+						|| Whitelist.isWhitelistedTemp(baseDomain) === true) {
 
 					Whitelist.removeDomain(baseDomain);
 					Whitelist.removeDomainTemp(baseDomain);
-				}
 
-				Buttons.refresh();
+					Buttons.refresh();
+				}
 			}
 		}, false);
 
@@ -236,19 +218,10 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
-				let whitelisted = Whitelist.isWhitelisted(baseDomain);
-				let whitelistedTemp = Whitelist.isWhitelistedTemp(baseDomain);
-
-				if (whitelistedTemp) {
-					if (typeof whitelistedTemp === "string") {
-						baseDomain = whitelistedTemp;
-					}
-					menuitemCleanOnWinClose.setAttribute("checked", "true");
-				} else if (whitelisted) {
-					if (typeof whitelisted === "string") {
-						baseDomain = whitelisted;
-					}
+				if (Whitelist.isWhitelisted(baseDomain) === true) {
 					menuitemWhiteList.setAttribute("checked", "true");
+				} else if (Whitelist.isWhitelistedTemp(baseDomain) === true) {
+					menuitemCleanOnWinClose.setAttribute("checked", "true");
 				} else {
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
 				}
@@ -439,10 +412,10 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			} else {
 				if (!domain) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.unknown + ")";
-				} else if (Whitelist.isWhitelistedTemp(domain)) {
-					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted + ")";
 				} else if (Whitelist.isWhitelisted(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.whitelisted + ")";
+				} else if (Whitelist.isWhitelistedTemp(domain)) {
+					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted + ")";
 				} else {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
 				}
