@@ -47,7 +47,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		manageWhitelist: "Manage domain exceptions",
 		whiteList: "Whitelist ",
 		cleanOnWinClose: "Keep until browser exit",
-		cleanOnTabsClose: "Preserve only while in use"
+		cleanOnTabsClose: "Clean as soon as possible"
 	};
 
 	this.menupopupId = "cookextermMenupopup";

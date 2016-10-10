@@ -38,7 +38,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		while (cookiesEnumerator.hasMoreElements()) {
 			let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
 
-Components.utils.reportError("C: " + cookie.host);
+//Components.utils.reportError("C: " + cookie.host);
 			if (this.mayBeCrushed(cookie, timestamp, cleanup)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
@@ -104,7 +104,7 @@ Components.utils.reportError("C: " + cookie.host);
 				if (domain) {
 //				if (domain && domain != "") {
 
-Components.utils.reportError("?: " + domain);
+//Components.utils.reportError("?: " + domain);
 					if (cookie.rawHost == domain ||
 							cookie.isDomain && cookie.rawHost == domain.substring(domain.indexOf(".") + 1)) {
 						return false;
