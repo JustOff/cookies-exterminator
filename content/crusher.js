@@ -1,6 +1,7 @@
 let EXPORTED_SYMBOLS = ["Crusher"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
+//Components.utils.import("resource://gre/modules/Console.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.prepare = function(domain, cleanup) {
@@ -97,8 +98,13 @@ Components.utils.reportError("C: " + cookie.host + " : " + cookieRawDomain);
 
 			for (let browser of tabBrowser.browsers) {
 				let domain = browser.contentDocument.domain;
+//				let domain = browser.contentDocument.location.host;
+
+//console.log(browser.contentDocument);
+//Components.utils.reportError("L: " + browser.contentDocument.location.host);
 
 				if (domain) {
+//				if (domain && domain != "") {
 					let rawDomain = domain;
 
 					if (Prefs.getValue("enableStrictDomainChecking")) {
@@ -128,6 +134,10 @@ Components.utils.reportError("?: " + rawDomain);
 
 					if (Prefs.getValue("keepCrushingLocalStorage")) {
 						let storage = browser.contentWindow.localStorage;
+//						let storage = null;
+//						try {
+//							storage = browser.contentWindow.localStorage;
+//						} catch(e) {}
 
 						if (storage) {
 							storage.clear();

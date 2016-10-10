@@ -24,7 +24,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 	this.buttonLabel = "Cookies Exterminator";
 
 	this.tooltipTexts = {
-		initial: "No coookies was cleaned yet",
+		initial: "No cookies were cleaned yet",
 		suspended: "Suspended",
 		crushed: "Recently cleaned cookies from ",
 		notCrushed: "Previously cleaned cookies from "
@@ -42,9 +42,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 
 	this.menuitemLabels = {
 		enable: "Enable cookies processing",
-		log: "View activity log",
+		log: "Display cleanup log",
 		manageCookies: "Remove individual cookies",
-		manageWhitelist: "Manage domains",
+		manageWhitelist: "Manage domain exceptions",
 		whiteList: "Whitelist ",
 		cleanOnWinClose: "Keep until browser exit",
 		cleanOnTabsClose: "Preserve only while in use"
@@ -272,9 +272,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menupopup.appendChild(menuitemEnable);
 		menupopup.appendChild(menuitemSeparator1);
 		menupopup.appendChild(menuitemViewLog);
-		menupopup.appendChild(menuitemManageWhitelist);
-		menupopup.appendChild(menuitemSeparator2);
 		menupopup.appendChild(menuitemManageCookies);
+		menupopup.appendChild(menuitemSeparator2);
+		menupopup.appendChild(menuitemManageWhitelist);
 		menupopup.appendChild(menuitemSeparator3);
 		menupopup.appendChild(menuitemWhiteList);
 		menupopup.appendChild(menuitemCleanOnWinClose);
