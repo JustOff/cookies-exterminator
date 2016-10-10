@@ -16,7 +16,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 	};
 
 	this.xulDocFileNames = {
-		prefs: "prefs.xul",
+		prefs: "options.xul",
 		log: "log.xul"
 	};
 

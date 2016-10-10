@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		xmlns:html="http://www.w3.org/1999/xhtml"
+		id="cookextermPrefs"
+		title="Cookies Exterminator preferences" 
+		style="min-width: 385px; min-height: 340px;"
+		windowtype="cookextermPrefsWindow">
+
+  <script src="options.js"/>
+
+  <tabbox id="tabbox" flex="1" style="padding: 5px">
+	<tabs>
+	  <tab id="generalTab" label="Options"/>
+	  <tab id="whitelistTab" label="Whitelist"/>
+	  <tab id="greylistTab" label="Greylist"/>
+	</tabs>
+
+	<tabpanels flex="1">
+
+	  <tabpanel id="generalTabpanel">
+		<vbox flex="1">
+		  <hbox flex="0" align="center">
+		   <checkbox id="suspendCrushing" label="Suspend cookies processing"/>
+		  </hbox>
+
+		  <spacer flex="0" height="15"/>
+
+		  <hbox flex="0" align="center">
+		   <checkbox id="enableLogging" label="Log all activity"/>
+		  </hbox>
+
+		  <hbox flex="0" align="center">
+		   <checkbox id="enableNotifications" label="Use pop-up notifications"/>
+		  </hbox>
+
+		  <spacer flex="0" height="15"/>
+
+		  <hbox flex="0" align="center">
+			<checkbox id="keepCrushingThirdPartyCookies" label="Concider third-party cookies"/>
+		  </hbox>
+
+		  <hbox flex="0" align="center">
+			<checkbox id="keepCrushingSessionCookies" label="Clean session cookies"/>
+		  </hbox>
+
+		  <hbox flex="0" align="center">
+			<checkbox id="keepCrushingLocalStorage" label="Clean LocalStorage along with cookies"/>
+		  </hbox>
+
+		  <spacer flex="0" height="15"/>
+
+		  <hbox flex="0" align="center">
+			<label value="Cleaning delay in seconds"/>
+			<spacer flex="1"/>
+			<textbox id="crushingDelay" type="number" width="40" min="0" max="600"/>
+			<spacer flex="10"/>
+		  </hbox>
+
+		</vbox>
+	  </tabpanel>
+
+	  <tabpanel id="whitelistTabpanel">
+		<vbox flex="1">
+		  <listbox id="domainsListbox" height="250" onselect="onSelect(this);"></listbox>
+
+		  <hbox flex="1" align="center">
+			<textbox id="newDomainTextbox" width="150"/>
+			<button label="Add" oncommand="onAddDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+			<spacer flex="1"/>
+			<button label="Update" oncommand="onEditDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+			<button label="Remove" oncommand="onRemoveDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');"/>
+		  </hbox>
+		</vbox>
+
+		<textbox id="whitelistedDomains" hidden="true"/>
+	  </tabpanel>
+
+	  <tabpanel id="greylistTabpanel">
+		<vbox flex="1">
+		  <listbox id="domainsListboxTemp" height="250" onselect="onSelect(this);"></listbox>
+
+		  <hbox flex="1" align="center">
+			<textbox id="newDomainTextboxGrey" width="150"/>
+			<button label="Add" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+			<spacer flex="1"/>
+			<button label="Update" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+			<button label="Remove" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');"/>
+		  </hbox>
+		</vbox>
+
+		<textbox id="whitelistedDomainsTemp" hidden="true"/>
+	  </tabpanel>
+
+	</tabpanels>
+  </tabbox>
+
+  <hbox style="padding: 0px 0px 5px 0px">
+	<button label="Reset" oncommand="onReset();"/>
+	<spacer flex="1"/>
+	<button label="Accept" oncommand="onApply();"/>
+	<button label="Discard" onclick="window.close();"/>
+  </hbox>
+</window>

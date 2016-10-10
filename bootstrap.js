@@ -17,7 +17,7 @@ function startup(data, reason) {
 	let Imports = {};
 
 	// import own modules
-	Components.utils.import(extJSPath + "prefs.js", Imports);
+	Components.utils.import(extJSPath + "preflib.js", Imports);
 	Components.utils.import(extJSPath + "buttons.js", Imports);
 	Components.utils.import(extJSPath + "whitelist.js", Imports);
 	Components.utils.import(extJSPath + "log.js", Imports);
@@ -78,7 +78,7 @@ function shutdown(data, reason) {
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
 
 	// unload own modules
-	Components.utils.unload(extJSPath + "prefs.js");
+	Components.utils.unload(extJSPath + "preflib.js");
 	Components.utils.unload(extJSPath + "buttons.js");
 	Components.utils.unload(extJSPath + "whitelist.js");
 	Components.utils.unload(extJSPath + "log.js");
