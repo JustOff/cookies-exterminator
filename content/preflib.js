@@ -14,7 +14,7 @@ let Prefs = function(extName) {
 		whitelistedDomains: "",
 		whitelistedDomainsTemp: "",
 		toolbarButtonPlaceId: "nav-bar",
-		toolbarButtonPosition: 0
+		toolbarButtonNextItemId: ""
 	};
 
 	this.currentPrefs = {};

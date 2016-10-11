@@ -2,6 +2,14 @@ let EXPORTED_SYMBOLS = ["Buttons"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 
+function $(node, childId) {
+	if (node.getElementById) {
+		return node.getElementById(childId);
+	} else {
+		return node.querySelector("#" + childId);
+	}
+}
+
 let Buttons = function(extName, Prefs, Whitelist, Utils) {
 	this.contentURL = "chrome://" + extName + "/content/";
 	this.skinURL = "chrome://" + extName + "/skin/";
@@ -256,91 +264,70 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		// append menupopup to the button
 		button.appendChild(menupopup);
 
-		// append the button to customization palette
-		// this seems to be required even if the button will be placed elsewhere
-		let navigatorToolbox = document.getElementById("navigator-toolbox");
-		navigatorToolbox.palette.appendChild(button);
+		var toolbox = $(document, "navigator-toolbox");
+			toolbox.palette.appendChild(button);
 
-		let toolbarButtonPlaceId = Prefs.getValue("toolbarButtonPlaceId");
-		let toolbarButtonPosition = Prefs.getValue("toolbarButtonPosition");
-
-		if (toolbarButtonPlaceId != "") {
-			if (firstRun) {
-				// if it's the first run then just append the button at the end of the nav-bar
-				let navBar = document.getElementById("nav-bar");
-				navBar.insertItem(this.buttonId);
-
-				// get button's position
-				let buttonsArray = navBar.currentSet.split(",");
-				let buttonPosition = buttonsArray.indexOf(this.buttonId) + 1;
-
-				// update button's position in preferences and save it
-				Prefs.setValue("toolbarButtonPosition", buttonPosition);
-				Prefs.save();
+		var toolbarId = Prefs.getValue("toolbarButtonPlaceId"),
+			nextItemId = Prefs.getValue("toolbarButtonNextItemId"),
+			toolbar = toolbarId && $(document, toolbarId),
+			nextItem = toolbar && $(document, nextItemId);
+		
+		if (toolbar) {
+			if (nextItem && nextItem.parentNode && nextItem.parentNode.id.replace("-customization-target", "") == toolbarId) {
+				toolbar.insertItem(this.buttonId, nextItem);
 			} else {
-				// temporary check for compatibility with previous version
-				if (toolbarButtonPosition < 0) {
-					toolbarButtonPlaceId = "addon-bar";
-					toolbarButtonPosition = -toolbarButtonPosition;
-
-					// update button's place id and position in preferences and save it
-					Prefs.setValue("toolbarButtonPlaceId", toolbarButtonPlaceId);
-					Prefs.setValue("toolbarButtonPosition", toolbarButtonPosition);
-					Prefs.save();
-				}
-
-				let someBar = document.getElementById(toolbarButtonPlaceId);
-				if (someBar) {
-					let buttonsArray = someBar.currentSet.split(",");
-					let before = null;
-
-					for (let i = toolbarButtonPosition - 1; i < buttonsArray.length; i++) {
-						before = document.getElementById(buttonsArray[i]);
-						if (before) {
-							break;
-						}
+				var ids = (toolbar.getAttribute("currentset") || "").split(",");
+				nextItem = null;
+				for (var i = ids.indexOf(this.buttonId) + 1; i > 0 && i < ids.length; i++) {
+					nextItem = $(document, ids[i])
+					if (nextItem) {
+						break;
 					}
-
-					someBar.insertItem(this.buttonId, before);
 				}
+				toolbar.insertItem(this.buttonId, nextItem);
 			}
+			window.setToolbarVisibility(toolbar, true);
 		}
 
-		if (Prefs.getValue("suspendCrushing")) {
-			this.setIconAndTooltipSuspended();
-		}
-
+		this.onCustomization = this.onCustomization.bind(this);
 		this.afterCustomization = this.afterCustomization.bind(this);
 
+		window.addEventListener("customizationchange", this.onCustomization, false);
 		window.addEventListener("aftercustomization", this.afterCustomization, false);
 
 		this.refresh();
 	};
 
+	this.onCustomization = function(event) {
+		try {
+			var ucs = Services.prefs.getCharPref("browser.uiCustomization.state");
+			if ((/\"nav\-bar\"\:\[.*?\"cookextermButton\".*?\]/).test(ucs)) {
+				Prefs.setValue("toolbarButtonPlaceId", "nav-bar");
+				Prefs.save();
+			} else {
+				this.setPrefs(null, null);
+			}
+		} catch(e) {}
+	};
+
 	this.afterCustomization = function(event) {
-		let navigatorToolbox = event.target;
-		let window = navigatorToolbox.ownerDocument.defaultView;
-
-		let button = window.document.getElementById(this.buttonId);
-
-		let newToolbarButtonPlaceId = "";
-		let newToolbarButtonPosition = 0;
-
-		if (button) {
-			let buttonParent = button.parentNode;
-			if (buttonParent.currentSet && buttonParent.id) {
-				// get new button's place id
-				newToolbarButtonPlaceId = buttonParent.id;
-
-				// get new button's position
-				let buttonsArray = buttonParent.currentSet.split(",");
-				newToolbarButtonPosition = buttonsArray.indexOf(this.buttonId) + 1;
+		var toolbox = event.target,
+			b = $(toolbox.parentNode, this.buttonId),
+			toolbarId, nextItemId;
+		if (b) {
+			var parent = b.parentNode,
+				nextItem = b.nextSibling;
+			if (parent && (parent.localName == "toolbar" || parent.classList.contains("customization-target"))) {
+				toolbarId = parent.id;
+				nextItemId = nextItem && nextItem.id;
 			}
 		}
+		this.setPrefs(toolbarId, nextItemId);
+	};
 
-		// update button's place id and position in preferences and save them
-		Prefs.setValue("toolbarButtonPlaceId", newToolbarButtonPlaceId);
-		Prefs.setValue("toolbarButtonPosition", newToolbarButtonPosition);
+	this.setPrefs = function(toolbarId, nextItemId) {
+		Prefs.setValue("toolbarButtonPlaceId", toolbarId == "nav-bar-customization-target" ? "nav-bar" : toolbarId || "");
+		Prefs.setValue("toolbarButtonNextItemId", nextItemId || "");
 		Prefs.save();
 	};
 
@@ -448,6 +435,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			}
 		}
 
+		window.removeEventListener("customizationchange", this.onCustomization, false);
 		window.removeEventListener("aftercustomization", this.afterCustomization, false);
 	};
 
