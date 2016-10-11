@@ -70,6 +70,20 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			Buttons.notify();
 		}
 	};
+	
+	this.executeForCookie = function(cookie, timestamp, cleanup) {
+//Components.utils.reportError("-: " + cookie.host);
+		if (this.mayBeCrushed(cookie, timestamp, cleanup)) {
+			if (typeof cookie.originAttributes === "object") {
+				Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
+			} else {
+				Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
+			}
+			Buttons.notify(cookie.rawHost);
+			Notifications.notify(cookie.rawHost);
+			Log.log(cookie.rawHost); 
+		}
+	};
 
 	this.mayBeCrushed = function(cookie, timestamp, cleanup) {
 		if (Whitelist.isWhitelisted(cookie.rawHost)) {

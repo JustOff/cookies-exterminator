@@ -76,6 +76,20 @@ function startup(data, reason) {
 	Services.obs.addObserver(onPrefsApply, "cookextermPrefsApply", false);
 	Services.obs.addObserver(Log.onOpen, "cookextermLogOpen", false);
 	Services.obs.addObserver(Log.onClear, "cookextermLogClear", false);
+
+	function handleCookieChanged(aSubject, aTopic, aData) {
+		switch (aData) {
+			case "added":
+				var cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
+//Components.utils.reportError("+: " + aData + " : " + cookie.host);
+				let timestamp = Date.now();
+				Utils.setTimeout(Crusher.executeForCookie.bind(Crusher, cookie, timestamp),
+								 Prefs.getValue("crushingDelay"));
+				break;
+		}
+	};
+
+	Services.obs.addObserver(handleCookieChanged, "cookie-changed", false);
 }
 
 function shutdown(data, reason) {
@@ -92,6 +106,7 @@ function shutdown(data, reason) {
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
+	Services.obs.removeObserver(handleCookieChanged, "cookie-changed");
 
 	// unload own modules
 	Cu.unload(extJSPath + "preflib.js");
