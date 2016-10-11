@@ -255,16 +255,29 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		}, false);
 
 		// append menuitems to the menupopup
-		menupopup.appendChild(menuitemEnable);
-		menupopup.appendChild(menuitemSeparator1);
-		menupopup.appendChild(menuitemViewLog);
-		menupopup.appendChild(menuitemManageCookies);
-		menupopup.appendChild(menuitemSeparator2);
-		menupopup.appendChild(menuitemManageWhitelist);
-		menupopup.appendChild(menuitemSeparator3);
-		menupopup.appendChild(menuitemWhiteList);
-		menupopup.appendChild(menuitemCleanOnWinClose);
-		menupopup.appendChild(menuitemCleanOnTabsClose);
+		if (Prefs.getValue("toolbarButtonPlaceId") == "nav-bar") {
+			menupopup.appendChild(menuitemCleanOnTabsClose);
+			menupopup.appendChild(menuitemCleanOnWinClose);
+			menupopup.appendChild(menuitemWhiteList);
+			menupopup.appendChild(menuitemSeparator1);
+			menupopup.appendChild(menuitemManageWhitelist);
+			menupopup.appendChild(menuitemSeparator2);
+			menupopup.appendChild(menuitemManageCookies);
+			menupopup.appendChild(menuitemViewLog);
+			menupopup.appendChild(menuitemSeparator3);
+			menupopup.appendChild(menuitemEnable);
+		} else {
+			menupopup.appendChild(menuitemEnable);
+			menupopup.appendChild(menuitemSeparator3);
+			menupopup.appendChild(menuitemViewLog);
+			menupopup.appendChild(menuitemManageCookies);
+			menupopup.appendChild(menuitemSeparator2);
+			menupopup.appendChild(menuitemManageWhitelist);
+			menupopup.appendChild(menuitemSeparator1);
+			menupopup.appendChild(menuitemWhiteList);
+			menupopup.appendChild(menuitemCleanOnWinClose);
+			menupopup.appendChild(menuitemCleanOnTabsClose);
+		}
 
 		// append menupopup to the button
 		button.appendChild(menupopup);
@@ -327,6 +340,13 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			if (parent && (parent.localName == "toolbar" || parent.classList.contains("customization-target"))) {
 				toolbarId = parent.id;
 				nextItemId = nextItem && nextItem.id;
+			}
+			if ((toolbarId.substring(0, 7) == "nav-bar" && b.firstChild.childNodes[0].id == this.menuitemIds.enable) 
+					|| (toolbarId.substring(0, 7) != "nav-bar" && b.firstChild.childNodes[0].id == this.menuitemIds.cleanOnTabsClose)) {
+				let mnp = b.firstChild;
+				for (let i = mnp.childNodes.length - 2; i >= 0; i--) {
+					mnp.appendChild(mnp.childNodes[i]);
+				}
 			}
 		}
 		this.setPrefs(toolbarId, nextItemId);
