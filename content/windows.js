@@ -53,14 +53,14 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 		}
 	};
 
-	this.init = function(firstRun) {		  
+	this.init = function() {		  
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
 
 		while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
 
 			Tabs.init(window);
-			Buttons.init(window, firstRun);
+			Buttons.init(window);
 		}
 
 		Services.wm.addListener(this.windowListener);

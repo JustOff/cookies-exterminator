@@ -10,7 +10,7 @@ function $(node, childId) {
 	}
 }
 
-let Buttons = function(extName, Prefs, Whitelist, Utils) {
+let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	this.contentURL = "chrome://" + extName + "/content/";
 	this.skinURL = "chrome://" + extName + "/skin/";
 
@@ -62,7 +62,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 
 	this.notificationIconTimeout = 5;
 
-	this.init = function(window, firstRun) {
+	this.init = function(window) {
 		let document = window.document;
 
 		if (document.getElementById(this.buttonId)) {
@@ -171,12 +171,17 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		menuitemManageCookies.setAttribute("id", this.menuitemIds.manageCookies);
 		menuitemManageCookies.setAttribute("label", this.menuitemLabels.manageCookies);
 		menuitemManageCookies.addEventListener("command", function(event) {
-			let existingWindow = Services.wm.getMostRecentWindow("Browser:Cookies");
-			if (!existingWindow) {
-				let features = "chrome,centerscreen," + Services.prefs.getBoolPref("browser.preferences.instantApply") ? "dialog=no" : "modal";
-				existingWindow = Services.wm.getMostRecentWindow(null).openDialog("chrome://browser/content/preferences/cookies.xul", "Browser:Cookies", features, null);
+			if (appInfo == "SeaMonkey") {
+				Services.wm.getMostRecentWindow("navigator:browser").toDataManager();
+			} else {
+				let existingWindow = Services.wm.getMostRecentWindow("Browser:Cookies");
+				if (!existingWindow) {
+					let features = "chrome,centerscreen," + Services.prefs.getBoolPref("browser.preferences.instantApply") ? "dialog=no" : "modal";
+					existingWindow = Services.wm.getMostRecentWindow(null)
+						.openDialog("chrome://browser/content/preferences/cookies.xul", "Browser:Cookies", features, null);
+				}
+				existingWindow.focus();
 			}
-			existingWindow.focus();
 		}, false);
 
 		let menuitemManageWhitelist = document.createElement("menuitem");
@@ -264,10 +269,10 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 		// append menupopup to the button
 		button.appendChild(menupopup);
 
-		var toolbox = $(document, "navigator-toolbox");
+		let toolbox = $(document, "navigator-toolbox");
 			toolbox.palette.appendChild(button);
 
-		var toolbarId = Prefs.getValue("toolbarButtonPlaceId"),
+		let toolbarId = Prefs.getValue("toolbarButtonPlaceId"),
 			nextItemId = Prefs.getValue("toolbarButtonNextItemId"),
 			toolbar = toolbarId && $(document, toolbarId),
 			nextItem = toolbar && $(document, nextItemId);
@@ -276,9 +281,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 			if (nextItem && nextItem.parentNode && nextItem.parentNode.id.replace("-customization-target", "") == toolbarId) {
 				toolbar.insertItem(this.buttonId, nextItem);
 			} else {
-				var ids = (toolbar.getAttribute("currentset") || "").split(",");
+				let ids = (toolbar.getAttribute("currentset") || "").split(",");
 				nextItem = null;
-				for (var i = ids.indexOf(this.buttonId) + 1; i > 0 && i < ids.length; i++) {
+				for (let i = ids.indexOf(this.buttonId) + 1; i > 0 && i < ids.length; i++) {
 					nextItem = $(document, ids[i])
 					if (nextItem) {
 						break;
@@ -286,7 +291,9 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 				}
 				toolbar.insertItem(this.buttonId, nextItem);
 			}
-			window.setToolbarVisibility(toolbar, true);
+			if (appInfo != "SeaMonkey") {
+				window.setToolbarVisibility(toolbar, true);
+			}
 		}
 
 		this.onCustomization = this.onCustomization.bind(this);
@@ -300,7 +307,7 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 
 	this.onCustomization = function(event) {
 		try {
-			var ucs = Services.prefs.getCharPref("browser.uiCustomization.state");
+			let ucs = Services.prefs.getCharPref("browser.uiCustomization.state");
 			if ((/\"nav\-bar\"\:\[.*?\"cookextermButton\".*?\]/).test(ucs)) {
 				Prefs.setValue("toolbarButtonPlaceId", "nav-bar");
 				Prefs.save();
@@ -311,11 +318,11 @@ let Buttons = function(extName, Prefs, Whitelist, Utils) {
 	};
 
 	this.afterCustomization = function(event) {
-		var toolbox = event.target,
+		let toolbox = event.target,
 			b = $(toolbox.parentNode, this.buttonId),
 			toolbarId, nextItemId;
 		if (b) {
-			var parent = b.parentNode,
+			let parent = b.parentNode,
 				nextItem = b.nextSibling;
 			if (parent && (parent.localName == "toolbar" || parent.classList.contains("customization-target"))) {
 				toolbarId = parent.id;

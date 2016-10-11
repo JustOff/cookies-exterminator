@@ -2,7 +2,7 @@ let EXPORTED_SYMBOLS = ["Prefs"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 
-let Prefs = function(extName) {
+let Prefs = function(extName, appInfo) {
 	this.defaultPrefs = {
 		suspendCrushing: false,
 		enableLogging: true,
@@ -42,7 +42,9 @@ let Prefs = function(extName) {
 				} break;
 			}
 
-			this.syncBranch.setBoolPref(prefName, true);
+			if (appInfo == "PaleMoon") {
+				this.syncBranch.setBoolPref(prefName, true);
+			}
 		}
 	};
 
