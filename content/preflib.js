@@ -21,7 +21,9 @@ let Prefs = function(extName, appInfo) {
 
 	this.prefsBranch = Services.prefs.getBranch("extensions." + extName + ".");
 	this.defaultBranch = Services.prefs.getDefaultBranch("extensions." + extName + ".");
-	this.syncBranch = Services.prefs.getDefaultBranch("services.sync.prefs.sync.extensions." + extName + ".");
+	if (appInfo == "PaleMoon") {
+		this.syncBranch = Services.prefs.getDefaultBranch("services.sync.prefs.sync.extensions." + extName + ".");
+	}
 
 	this.init = function() {
 		for (let prefName in this.defaultPrefs) {

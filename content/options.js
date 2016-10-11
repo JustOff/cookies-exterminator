@@ -1,5 +1,9 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
 
+let Imports = {};
+Components.utils.import("chrome://cookies-xtrm/content/utils.js", Imports);
+let Utils = new Imports.Utils();
+
 function onWindowLoad() {
 	Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
 
@@ -110,7 +114,7 @@ function updateWhitelistedDomains(domListbox, listedDomains) {
 
 	for (let i = 0; i < rows; i++) {
 		let item = domainsListbox.getItemAtIndex(i);
-		whitelistedDomains.value += item.value + ";";
+		whitelistedDomains.value += Utils.UTF8toACE(item.value) + ";";
 	}
 
 	whitelistedDomains.value = whitelistedDomains.value.slice(0, -1);
@@ -130,6 +134,7 @@ function updateDomainsListbox(listbox, domains) {
 		let separatedDomains = whitelistedDomains.value.split(';');
 
 		for (let domain of separatedDomains) {
+			domain = Utils.ACEtoUTF8(domain);
 			domainsListbox.appendItem(domain, domain);
 		}
 	}

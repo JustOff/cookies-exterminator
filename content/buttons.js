@@ -72,7 +72,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		// create button element
 		let button = document.createElement("toolbarbutton");
 		button.setAttribute("id", this.buttonId);
-		button.setAttribute("label", "Crush Those Cookies");
+		button.setAttribute("label", "Cookies Exterminator");
 		button.setAttribute("type", "menu");
 		button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
 		button.setAttribute("tooltiptext", this.tooltipTexts.initial);
@@ -239,7 +239,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
 				}
 				menuitemWhiteList.setAttribute("disabled", "false");
-				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + baseDomain);
+				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + Utils.ACEtoUTF8(baseDomain));
 				menuitemCleanOnWinClose.setAttribute("disabled", "false");
 				menuitemCleanOnTabsClose.setAttribute("disabled", "false");
 			} else {
@@ -398,7 +398,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		let button = window.document.getElementById(this.buttonId);		
 
 		if (button) {
-			let domain = window.gBrowser.contentDocument.domain;
+			let domain = Utils.UTF8toACE(window.gBrowser.contentDocument.domain);
 
 			if (Prefs.getValue("suspendCrushing")) {
 				button.setAttribute("tooltiptext", this.tooltipTexts.suspended);

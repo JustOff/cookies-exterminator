@@ -103,6 +103,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 				if (domain) {
 //				if (domain && domain != "") {
+					domain = Utils.UTF8toACE(domain);
 
 //Components.utils.reportError("?: " + domain);
 					if (cookie.rawHost == domain ||
