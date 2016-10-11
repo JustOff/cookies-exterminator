@@ -4,23 +4,23 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 //Components.utils.import("resource://gre/modules/Console.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
-	this.prepare = function(domain, cleanup) {
+	this.prepare = function(domain, cleanup, single) {
 		if (!Prefs.getValue("suspendCrushing")) {
 			let timestamp = Date.now();
 
 			if (cleanup) {
 				this.execute(domain, timestamp, cleanup);
 			} else {
-				Utils.setTimeout(this.execute.bind(this, domain, timestamp),
+				Utils.setTimeout(this.execute.bind(this, domain, timestamp, cleanup, single),
 								 Prefs.getValue("crushingDelay"));
 			}
 		}
 	};
 
-	this.execute = function(domain, timestamp, cleanup) {
+	this.execute = function(domain, timestamp, cleanup, single) {
 		if (cleanup) {
 			this.executeForCookies(Services.cookies.enumerator, timestamp, cleanup);
-		} else if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
+		} else if (!!!single && Prefs.getValue("keepCrushingThirdPartyCookies")) {
 			this.executeForCookies(Services.cookies.enumerator, timestamp);
 		} else if (typeof domain === "string") {
 			this.executeForCookies(Services.cookies.getCookiesFromHost(domain), timestamp);
@@ -71,20 +71,6 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 	};
 	
-	this.executeForCookie = function(cookie, timestamp, cleanup) {
-//Components.utils.reportError("-: " + cookie.host);
-		if (this.mayBeCrushed(cookie, timestamp, cleanup)) {
-			if (typeof cookie.originAttributes === "object") {
-				Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
-			} else {
-				Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
-			}
-			Buttons.notify(cookie.rawHost);
-			Notifications.notify(cookie.rawHost);
-			Log.log(cookie.rawHost); 
-		}
-	};
-
 	this.mayBeCrushed = function(cookie, timestamp, cleanup) {
 		if (Whitelist.isWhitelisted(cookie.rawHost)) {
 			return false;
