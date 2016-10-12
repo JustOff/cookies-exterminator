@@ -17,24 +17,23 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 this.jobID = 0;
 
 	this.execute = function(onecookie) {
+		let cookies = [];
+		let crushedCookiesDomains = {};
+		let crushedSomething = false;
+
 		let cleanup = onecookie === true;
 this.jobID++;
 
 		if (!cleanup && onecookie) {
-			let cookies = Components.classes["@mozilla.org/array;1"]
-                        .createInstance(Components.interfaces.nsIMutableArray);
-			cookies.appendElement(onecookie, false);
-			cookiesEnumerator = cookies.enumerate();
+			cookies.push(onecookie);
 		} else {
-			cookiesEnumerator = Services.cookies.enumerator;
+			let cookiesEnumerator = Services.cookies.enumerator;
+			while (cookiesEnumerator.hasMoreElements()) {
+				cookies.push(cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2));
+			}
 		} 
 
-		let crushedSomething = false;
-		let crushedCookiesDomains = {};
-
-		while (cookiesEnumerator.hasMoreElements()) {
-			let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
-
+		for (let cookie of cookies) {
 			if (this.mayBeCrushed(cookie, cleanup)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
