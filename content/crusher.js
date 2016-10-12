@@ -14,25 +14,23 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 	};
 
-	this.execute = function(cookie) {
-		if (cookie === true) {
-			this.executeForCookies(Services.cookies.enumerator, true);
-		} else if (cookie) {
-			let cookies = Components.classes["@mozilla.org/array;1"]
-                        .createInstance(Components.interfaces.nsIMutableArray);
-			cookies.appendElement(cookie, false);
-			this.executeForCookies(cookies.enumerate());
-		} else {
-			this.executeForCookies(Services.cookies.enumerator);
-		} 
-	};
-
 this.jobID = 0;
 
-	this.executeForCookies = function(cookiesEnumerator, cleanup) {
+	this.execute = function(onecookie) {
+		let cleanup = onecookie === true;
+this.jobID++;
+
+		if (!cleanup && onecookie) {
+			let cookies = Components.classes["@mozilla.org/array;1"]
+                        .createInstance(Components.interfaces.nsIMutableArray);
+			cookies.appendElement(onecookie, false);
+			cookiesEnumerator = cookies.enumerate();
+		} else {
+			cookiesEnumerator = Services.cookies.enumerator;
+		} 
+
 		let crushedSomething = false;
 		let crushedCookiesDomains = {};
-this.jobID++;
 
 		while (cookiesEnumerator.hasMoreElements()) {
 			let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);

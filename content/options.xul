@@ -50,7 +50,7 @@
 		  <hbox flex="0" align="center">
 			<label value="Cleaning delay in seconds"/>
 			<spacer flex="1"/>
-			<textbox id="crushingDelay" type="number" width="40" min="0" max="600"/>
+			<textbox id="crushingDelay" type="number" width="40" min="10" max="600"/>
 			<spacer flex="10"/>
 		  </hbox>
 
