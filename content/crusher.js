@@ -6,6 +6,7 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.prepare = function(cookie) {
 		if (!Prefs.getValue("suspendCrushing")) {
+//Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name);
 			if (cookie === true) {
 				this.execute(true);
 			} else {
@@ -16,6 +17,17 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 this.jobID = 0;
 
+	this.prepareStorage = function(url) {
+		if (!Prefs.getValue("suspendCrushing") && Prefs.getValue("keepCrushingLocalStorage")) {
+Components.utils.reportError("[+S] " + url);
+			if (url === true) {
+				this.executeStorage(true);
+			} else {
+				Utils.setTimeout(this.executeStorage.bind(this, url), Prefs.getValue("crushingDelay"));
+			}
+		}
+	}
+	
 	this.execute = function(onecookie) {
 		let cookies = [];
 		let crushedCookiesDomains = {};
@@ -114,7 +126,7 @@ this.jobID++;
 //						} catch(e) {}
 
 						if (storage) {
-Components.utils.reportError("[-S]: " + domain);
+Components.utils.reportError("[-S] " + domain);
 							storage.clear();
 						}
 					}
@@ -124,4 +136,12 @@ Components.utils.reportError("[-S]: " + domain);
 
 		return true;
 	};
+	
+	this.executeStorage = function(url) {
+		let cleanup = url === true;
+this.jobID++;
+
+//Components.utils.reportError("[" + this.jobID + "][-S] " + url);
+Components.utils.reportError("[" + this.jobID + "][*S] " + url);
+	}
 };

@@ -81,7 +81,6 @@ function startup(data, reason) {
 		switch (aData) {
 			case "added":
 				let cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
-//Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name);
 				Crusher.prepare(cookie);
 				break;
 		}
@@ -105,7 +104,7 @@ function startup(data, reason) {
 		// ignored for now
 		} else {
 			// entry added
-Components.utils.reportError("[+S] " + de.url);
+			Crusher.prepareStorage(de.url);
 		}
 	}
 
