@@ -36,14 +36,16 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 	};
 
+this.jobID = 0;
+
 	this.executeForCookies = function(cookiesEnumerator, timestamp, cleanup) {
 		let crushedSomething = false;
 		let crushedCookiesDomains = {};
+this.jobID++;
 
 		while (cookiesEnumerator.hasMoreElements()) {
 			let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
 
-//Components.utils.reportError("C: " + cookie.host);
 			if (this.mayBeCrushed(cookie, timestamp, cleanup)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
@@ -52,6 +54,9 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				}
 				crushedSomething = true;
 				crushedCookiesDomains[cookie.rawHost] = true;
+Components.utils.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
+			} else {
+Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
 			}
 		}
 
