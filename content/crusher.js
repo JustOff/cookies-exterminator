@@ -9,29 +9,27 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			if (cookie === true) {
 				this.execute(true);
 			} else {
-				Utils.setTimeout(this.execute.bind(this, cookie, Date.now()),
-								 Prefs.getValue("crushingDelay"));
+				Utils.setTimeout(this.execute.bind(this, cookie), Prefs.getValue("crushingDelay"));
 			}
 		}
 	};
 
-	this.execute = function(cookie, timestamp) {
+	this.execute = function(cookie) {
 		if (cookie === true) {
 			this.executeForCookies(Services.cookies.enumerator, true);
 		} else if (cookie) {
 			let cookies = Components.classes["@mozilla.org/array;1"]
                         .createInstance(Components.interfaces.nsIMutableArray);
 			cookies.appendElement(cookie, false);
-			this.executeForCookies(cookies.enumerate(), timestamp);
+			this.executeForCookies(cookies.enumerate());
 		} else {
-			this.executeForCookies(Services.cookies.enumerator, timestamp);
+			this.executeForCookies(Services.cookies.enumerator);
 		} 
 	};
 
 this.jobID = 0;
 
-	this.executeForCookies = function(cookiesEnumerator, timestamp) {
-Components.utils.reportError(timestamp);
+	this.executeForCookies = function(cookiesEnumerator, cleanup) {
 		let crushedSomething = false;
 		let crushedCookiesDomains = {};
 this.jobID++;
@@ -39,7 +37,7 @@ this.jobID++;
 		while (cookiesEnumerator.hasMoreElements()) {
 			let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
 
-			if (this.mayBeCrushed(cookie, timestamp)) {
+			if (this.mayBeCrushed(cookie, cleanup)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
 				} else {
@@ -53,7 +51,7 @@ Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + 
 			}
 		}
 
-		if (timestamp === true) {
+		if (cleanup) {
 			return;
 		}
 
@@ -74,19 +72,16 @@ Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + 
 		}
 	};
 	
-	this.mayBeCrushed = function(cookie, timestamp) {
+	this.mayBeCrushed = function(cookie, cleanup) {
 		if (Whitelist.isWhitelisted(cookie.rawHost)) {
 			return false;
 		}
 
-		if (timestamp === true) {
+		if (cleanup) {
 			return true;
 		}
 
-		let cookieLastAccessTimestamp = cookie.lastAccessed / 1000; // cut redundant 000
-
-		if (cookieLastAccessTimestamp > timestamp ||
-			Whitelist.isWhitelistedTemp(cookie.rawHost) ||
+		if (Whitelist.isWhitelistedTemp(cookie.rawHost) ||
 			(!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
 			return false;
 		}
