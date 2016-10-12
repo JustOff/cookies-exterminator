@@ -4,23 +4,28 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 //Components.utils.import("resource://gre/modules/Console.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
-	this.prepare = function(domain, cleanup, single) {
+	this.prepare = function(domain, onecookie, cleanup) {
 		if (!Prefs.getValue("suspendCrushing")) {
 			let timestamp = Date.now();
 
 			if (cleanup) {
-				this.execute(domain, timestamp, cleanup);
+				this.execute(null, null, null, true);
 			} else {
-				Utils.setTimeout(this.execute.bind(this, domain, timestamp, cleanup, single),
+				Utils.setTimeout(this.execute.bind(this, domain, onecookie, timestamp),
 								 Prefs.getValue("crushingDelay"));
 			}
 		}
 	};
 
-	this.execute = function(domain, timestamp, cleanup, single) {
+	this.execute = function(domain, onecookie, timestamp, cleanup) {
 		if (cleanup) {
 			this.executeForCookies(Services.cookies.enumerator, timestamp, cleanup);
-		} else if (!!!single && Prefs.getValue("keepCrushingThirdPartyCookies")) {
+		} else if (onecookie) {
+			let cookies = Components.classes["@mozilla.org/array;1"]
+                        .createInstance(Components.interfaces.nsIMutableArray);
+			cookies.appendElement(onecookie, false);
+			this.executeForCookies(cookies.enumerate(), timestamp);
+		} else if (Prefs.getValue("keepCrushingThirdPartyCookies")) {
 			this.executeForCookies(Services.cookies.enumerator, timestamp);
 		} else if (typeof domain === "string") {
 			this.executeForCookies(Services.cookies.getCookiesFromHost(domain), timestamp);

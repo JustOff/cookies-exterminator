@@ -60,7 +60,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 	this.menupopupId = "cookextermMenupopup";
 
-	this.notificationIconTimeout = 5;
+	this.notificationIconTimeout = 3;
 
 	this.init = function(window) {
 		let document = window.document;
