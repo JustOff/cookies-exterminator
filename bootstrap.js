@@ -59,6 +59,9 @@ function startup(data, reason) {
 
 	// initialize
 	Prefs.init();
+	if (reason == ADDON_INSTALL) {
+		Prefs.importFromPermissions();
+	}
 	Whitelist.init();
 	Windows.init(); // this will do the rest
 

@@ -6,10 +6,10 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.prepare = function(cookie) {
 		if (!Prefs.getValue("suspendCrushing")) {
-//Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name);
 			if (cookie === true) {
 				this.execute(true);
 			} else {
+//if (cookie) { Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name); }
 				Utils.setTimeout(this.execute.bind(this, cookie), Prefs.getValue("crushingDelay"));
 			}
 		}
@@ -19,10 +19,10 @@ this.jobID = 0;
 
 	this.prepareStorage = function(url) {
 		if (!Prefs.getValue("suspendCrushing") && Prefs.getValue("keepCrushingLocalStorage")) {
-Components.utils.reportError("[+S] " + url);
 			if (url === true) {
 				this.executeStorage(true);
 			} else {
+if (url) { Components.utils.reportError("[+S] " + url); }
 				Utils.setTimeout(this.executeStorage.bind(this, url), Prefs.getValue("crushingDelay"));
 			}
 		}

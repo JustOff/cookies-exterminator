@@ -132,4 +132,31 @@ let Prefs = function(extName, appInfo) {
 			this.saveFromPrefWindow.call(this.Prefs, aSubject);
 		}
 	};
+
+	this.importFromPermissions = function() {
+		if (this.getValue("whitelistedDomains") != "" || this.getValue("whitelistedDomainsTemp") != "") {
+			return;
+		}
+		let white = [], grey = [];
+		let permissions = Services.perms.enumerator;
+		while (permissions.hasMoreElements()) {
+			let perm = permissions.getNext().QueryInterface(Components.interfaces.nsIPermission);
+            if (perm.type == "cookie") {
+				let host = perm.principal ? perm.principal.URI.host : perm.host;
+				if (perm.capability == 1) {
+					if (white.indexOf(host) == -1) { white.push(host); }
+				} else if (perm.capability == 8) {
+					if (grey.indexOf(host) == -1) { grey.push(host); }
+				}
+            }
+        }
+		if (white.length > 0) {
+			this.setValue("whitelistedDomains", white.join(";"));
+			this.save();
+		}
+		if (grey.length > 0) {
+			this.setValue("whitelistedDomainsTemp", grey.join(";"));
+			this.save();
+		}
+	};
 };
