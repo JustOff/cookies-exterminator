@@ -80,14 +80,36 @@ function startup(data, reason) {
 	function handleCookieChanged(aSubject, aTopic, aData) {
 		switch (aData) {
 			case "added":
-				var cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
-Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name);
+				let cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
+//Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name);
 				Crusher.prepare(cookie);
 				break;
 		}
 	};
 
 	Services.obs.addObserver(handleCookieChanged, "cookie-changed", false);
+	
+	function handleDomStorageChanged(aSubject, aTopic, aData) {
+		let de = aSubject;
+		try {
+			de = de.QueryInterface(Ci.nsIDOMStorageEvent);
+		} catch(e) {
+			// ignore
+		}
+
+		// ignore entries that just changed
+		if (de.newValue && de.oldValue) return;
+
+		if (de.oldValue != null && de.newValue == null) {
+		// entry removed
+		// ignored for now
+		} else {
+			// entry added
+Components.utils.reportError("[+S] " + de.url);
+		}
+	}
+
+	Services.obs.addObserver(handleDomStorageChanged, "dom-storage2-changed", false);
 }
 
 function shutdown(data, reason) {
@@ -105,6 +127,7 @@ function shutdown(data, reason) {
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
 	Services.obs.removeObserver(handleCookieChanged, "cookie-changed");
+	Services.obs.removeObserver(handleDomStorageChanged, "dom-storage2-changed");
 
 	// unload own modules
 	Cu.unload(extJSPath + "preflib.js");

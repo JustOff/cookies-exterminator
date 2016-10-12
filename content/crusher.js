@@ -42,9 +42,9 @@ this.jobID++;
 				}
 				crushedSomething = true;
 				crushedCookiesDomains[cookie.rawHost] = true;
-Components.utils.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
+//Components.utils.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
 			} else {
-Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
+//Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
 			}
 		}
 
@@ -114,6 +114,7 @@ Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + 
 //						} catch(e) {}
 
 						if (storage) {
+Components.utils.reportError("[-S]: " + domain);
 							storage.clear();
 						}
 					}
