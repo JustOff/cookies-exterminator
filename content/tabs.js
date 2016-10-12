@@ -7,7 +7,7 @@ let Tabs = function(Crusher, Buttons) {
 		let domain = browser.contentDocument.domain;
 
 		if (domain) {
-			Crusher.prepare(domain);
+			Crusher.prepare();
 		}
 	};
 
@@ -21,7 +21,7 @@ let Tabs = function(Crusher, Buttons) {
 			let previousDomain = aBrowser.previousDomain;
 
 			if (previousDomain && previousDomain != domain) {
-				Crusher.prepare(previousDomain);
+				Crusher.prepare();
 			}
 
 			aBrowser["previousDomain"] = domain;

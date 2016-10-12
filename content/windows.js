@@ -33,18 +33,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 				}
 
 				if (windowsCounter > 1) {
-					let tabBrowser = domWindow.gBrowser;
-
-					let domains = [];
-
-					for (let tab of tabBrowser.tabs) {
-						let browser = tab.linkedBrowser;
-						let domain = browser.contentDocument.domain;
-
-						domains.push(domain);
-					}
-
-					Crusher.prepare(domains);
+					Crusher.prepare();
 				}
 
 				Tabs.clear(domWindow);
@@ -68,7 +57,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 
 	this.clear = function(shutdown) {
 		if (shutdown) {
-			Crusher.prepare(null, null, true);
+			Crusher.prepare(true);
 			return;
 		}
 

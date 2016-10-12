@@ -82,7 +82,7 @@ function startup(data, reason) {
 			case "added":
 				var cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
 Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name);
-				Crusher.prepare(null, cookie);
+				Crusher.prepare(cookie);
 				break;
 		}
 	};

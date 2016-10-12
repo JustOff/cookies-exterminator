@@ -7,7 +7,6 @@ let Prefs = function(extName, appInfo) {
 		suspendCrushing: false,
 		enableLogging: true,
 		enableNotifications: true,
-		keepCrushingThirdPartyCookies: true,
 		keepCrushingSessionCookies: true,
 		keepCrushingLocalStorage: true,
 		crushingDelay: 10,

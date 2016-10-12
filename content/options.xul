@@ -38,10 +38,6 @@
 		  <spacer flex="0" height="15"/>
 
 		  <hbox flex="0" align="center">
-			<checkbox id="keepCrushingThirdPartyCookies" label="Concider third-party cookies"/>
-		  </hbox>
-
-		  <hbox flex="0" align="center">
 			<checkbox id="keepCrushingSessionCookies" label="Clean session cookies"/>
 		  </hbox>
 
