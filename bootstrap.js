@@ -51,7 +51,7 @@ function startup(data, reason) {
 	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs);
 
-	let Notifications = new Imports.Notifications(extName, Prefs);
+	let Notifications = new Imports.Notifications(extName, Prefs, Utils);
 	let Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
 
 	Tabs = new Imports.Tabs(Crusher, Buttons);
