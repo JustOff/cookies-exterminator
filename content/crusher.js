@@ -126,7 +126,7 @@ this.jobID++;
 //						} catch(e) {}
 
 						if (storage) {
-Components.utils.reportError("[-S] " + domain);
+Components.utils.reportError("[-s] " + domain);
 							storage.clear();
 						}
 					}
@@ -141,7 +141,9 @@ Components.utils.reportError("[-S] " + domain);
 		let cleanup = url === true;
 this.jobID++;
 
+		if (!cleanup && url) {
 //Components.utils.reportError("[" + this.jobID + "][-S] " + url);
 Components.utils.reportError("[" + this.jobID + "][*S] " + url);
+		}
 	}
 };

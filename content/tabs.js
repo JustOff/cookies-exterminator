@@ -8,6 +8,7 @@ let Tabs = function(Crusher, Buttons) {
 
 		if (domain) {
 			Crusher.prepare();
+			Crusher.prepareStorage();
 		}
 	};
 
@@ -22,6 +23,7 @@ let Tabs = function(Crusher, Buttons) {
 
 			if (previousDomain && previousDomain != domain) {
 				Crusher.prepare();
+				Crusher.prepareStorage();
 			}
 
 			aBrowser["previousDomain"] = domain;
