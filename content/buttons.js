@@ -226,7 +226,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
-			let domain = window.gBrowser.contentDocument.domain;
+			let domain = null;
+			try {
+				domain = window.gBrowser.contentDocument.domain;
+			} catch(e) {}
 
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
@@ -415,10 +418,13 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	};
 
 	this.refreshForWindow = function(window) {
-		let button = window.document.getElementById(this.buttonId);		
+		let button = window.document.getElementById(this.buttonId);
+		let domain = null;
 
 		if (button) {
-			let domain = Utils.UTF8toACE(window.gBrowser.contentDocument.domain);
+			try {
+				domain = Utils.UTF8toACE(window.gBrowser.contentDocument.domain);
+			} catch(e) {}
 
 			if (Prefs.getValue("suspendCrushing")) {
 				button.setAttribute("tooltiptext", this.tooltipTexts.suspended);

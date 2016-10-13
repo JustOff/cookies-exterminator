@@ -17,17 +17,18 @@ let Tabs = function(Crusher, Buttons) {
 			if (aFlag & Components.interfaces.nsIWebProgress.LOCATION_CHANGE_SAME_DOCUMENT) {
 				return;
 			}
+			try {
+				let domain = aBrowser.contentDocument.domain;
+				if (domain) {
+					let previousDomain = aBrowser.previousDomain;
+					if (previousDomain != domain) {
+						Crusher.prepare();
+						Crusher.prepareStorage();
+					}
 
-			let domain = aBrowser.contentDocument.domain;
-			if (domain) {
-				let previousDomain = aBrowser.previousDomain;
-				if (previousDomain != domain) {
-					Crusher.prepare();
-					Crusher.prepareStorage();
+					aBrowser["previousDomain"] = domain;
 				}
-
-				aBrowser["previousDomain"] = domain;
-			}
+			} catch(e) {}
 		}
 	};
 
@@ -37,7 +38,9 @@ let Tabs = function(Crusher, Buttons) {
 				return;
 			}
 
-			Buttons.refresh();
+			try {
+				Buttons.refresh();
+			} catch(e) {}
 		}
 	};
 
