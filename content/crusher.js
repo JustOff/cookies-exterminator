@@ -135,7 +135,7 @@ this.jobID++;
 			for (let browser of tabBrowser.browsers) {
 				let domain;
 				try {
-					let domain = browser.contentDocument.domain;
+					domain = browser.contentDocument.domain;
 				} catch(e) {}
 //				let domain = browser.contentDocument.location.host;
 
