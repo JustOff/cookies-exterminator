@@ -19,14 +19,15 @@ let Tabs = function(Crusher, Buttons) {
 			}
 
 			let domain = aBrowser.contentDocument.domain;
-			let previousDomain = aBrowser.previousDomain;
+			if (domain) {
+				let previousDomain = aBrowser.previousDomain;
+				if (previousDomain != domain) {
+					Crusher.prepare();
+					Crusher.prepareStorage();
+				}
 
-			if (previousDomain && previousDomain != domain) {
-				Crusher.prepare();
-				Crusher.prepareStorage();
+				aBrowser["previousDomain"] = domain;
 			}
-
-			aBrowser["previousDomain"] = domain;
 		}
 	};
 
@@ -42,11 +43,6 @@ let Tabs = function(Crusher, Buttons) {
 
 	this.init = function(window) {
 		let tabBrowser = window.gBrowser;
-
-		for (let tab of tabBrowser.tabs) {
-			let browser = window.gBrowser.getBrowserForTab(tab);
-			browser["previousDomain"] = browser.contentDocument.domain;
-		}
 
 		tabBrowser.tabContainer.addEventListener("TabClose", this.onClose, false);
 		tabBrowser.addTabsProgressListener(this.onTabProgress);
