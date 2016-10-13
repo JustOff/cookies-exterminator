@@ -1,7 +1,6 @@
 let EXPORTED_SYMBOLS = ["Crusher"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
-//Components.utils.import("resource://gre/modules/Console.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	let Crusher = this;
@@ -53,7 +52,7 @@ this.jobID = 0;
 			if (url === true) {
 				this.executeStorage(true);
 			} else {
-if (url) { Components.utils.reportError("[+S] " + url); }
+if (url) { Components.utils.reportError("[+s] 4" + url); }
 				Utils.setTimeout(this.executeStorage.bind(this, url), Prefs.getValue("crushingDelay"));
 			}
 		}
@@ -137,33 +136,27 @@ this.jobID++;
 				try {
 					domain = browser.contentDocument.domain;
 				} catch(e) {}
-//				let domain = browser.contentDocument.location.host;
-
-//console.log(browser.contentDocument);
-//Components.utils.reportError("L: " + browser.contentDocument.location.host);
 
 				if (domain) {
-//				if (domain && domain != "") {
 					domain = Utils.UTF8toACE(domain);
 
-//Components.utils.reportError("?: " + domain);
 					if (cookie.rawHost == domain ||
 							cookie.isDomain && cookie.rawHost == domain.substring(domain.indexOf(".") + 1)) {
 						return false;
 					}
-
+/*
 					if (Prefs.getValue("keepCrushingLocalStorage")) {
-						let storage = browser.contentWindow.localStorage;
-//						let storage = null;
-//						try {
-//							storage = browser.contentWindow.localStorage;
-//						} catch(e) {}
+						let storage;
+						try {
+							storage = browser.contentWindow.localStorage;
+						} catch(e) {}
 
 						if (storage) {
-Components.utils.reportError("[-s] " + domain);
+Components.utils.reportError("[" + this.jobID + "][-SC] " + domain + "(" + cookie.rawHost + ")");
 							storage.clear();
 						}
 					}
+*/
 				}
 			}
 		}
@@ -171,13 +164,14 @@ Components.utils.reportError("[-s] " + domain);
 		return true;
 	};
 	
+this.jobIDs = 0;
+
 	this.executeStorage = function(url) {
 		let cleanup = url === true;
-this.jobID++;
+this.jobIDs++;
 
 		if (!cleanup && url) {
-//Components.utils.reportError("[" + this.jobID + "][-S] " + url);
-Components.utils.reportError("[" + this.jobID + "][*S] " + url);
+Components.utils.reportError("[" + this.jobIDs + "s][*] " + url);
 		}
 	}
 };
