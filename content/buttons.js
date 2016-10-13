@@ -288,7 +288,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		let toolbarId = Prefs.getValue("toolbarButtonPlaceId"),
 			nextItemId = Prefs.getValue("toolbarButtonNextItemId"),
 			toolbar = toolbarId && $(document, toolbarId),
-			nextItem = toolbar && $(document, nextItemId);
+			nextItem = toolbar && nextItemId != "" && $(document, nextItemId);
 		
 		if (toolbar) {
 			if (nextItem && nextItem.parentNode && nextItem.parentNode.id.replace("-customization-target", "") == toolbarId) {
