@@ -144,18 +144,23 @@ let Prefs = function(extName, appInfo) {
             if (perm.type == "cookie") {
 				let host = perm.principal ? perm.principal.URI.host : perm.host;
 				if (perm.capability == 1) {
-					if (white.indexOf(host) == -1) { white.push(host); }
+					if (white.indexOf(host) == -1) {
+						white.push(host);
+					}
 				} else if (perm.capability == 8) {
-					if (grey.indexOf(host) == -1) { grey.push(host); }
+					if (grey.indexOf(host) == -1) {
+						grey.push(host);
+					}
 				}
             }
         }
 		if (white.length > 0) {
 			this.setValue("whitelistedDomains", white.join(";"));
-			this.save();
 		}
 		if (grey.length > 0) {
 			this.setValue("whitelistedDomainsTemp", grey.join(";"));
+		}
+		if (white.length > 0 || grey.length > 0) {
 			this.save();
 		}
 	};
