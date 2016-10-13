@@ -4,6 +4,37 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 //Components.utils.import("resource://gre/modules/Console.jsm");
 
 let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
+	let Crusher = this;
+
+	this.handleCookieChanged = function(aSubject, aTopic, aData) {
+		switch (aData) {
+			case "added":
+				let cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
+				Crusher.prepare(cookie);
+				break;
+		}
+	};
+
+	this.handleDomStorageChanged = function(aSubject, aTopic, aData) {
+		let de = aSubject;
+		try {
+			de = de.QueryInterface(Components.interfaces.nsIDOMStorageEvent);
+		} catch(e) {
+			// ignore
+		}
+
+		// ignore entries that just changed
+		if (de.newValue && de.oldValue) return;
+
+		if (de.oldValue != null && de.newValue == null) {
+		// entry removed
+		// ignored for now
+		} else {
+			// entry added
+			Crusher.prepareStorage(de.url);
+		}
+	}
+	
 	this.prepare = function(cookie) {
 		if (!Prefs.getValue("suspendCrushing")) {
 			if (cookie === true) {

@@ -50,10 +50,8 @@ function startup(data, reason) {
 	Whitelist = new Imports.Whitelist(Prefs);
 	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs);
-
 	let Notifications = new Imports.Notifications(extName, Prefs, Utils);
-	let Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
-
+	Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
 	Tabs = new Imports.Tabs(Crusher, Buttons);
 	Windows = new Imports.Windows(Tabs, Buttons, Crusher, Prefs);
 
@@ -79,39 +77,8 @@ function startup(data, reason) {
 	Services.obs.addObserver(onPrefsApply, "cookextermPrefsApply", false);
 	Services.obs.addObserver(Log.onOpen, "cookextermLogOpen", false);
 	Services.obs.addObserver(Log.onClear, "cookextermLogClear", false);
-
-	function handleCookieChanged(aSubject, aTopic, aData) {
-		switch (aData) {
-			case "added":
-				let cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
-				Crusher.prepare(cookie);
-				break;
-		}
-	};
-
-	Services.obs.addObserver(handleCookieChanged, "cookie-changed", false);
-	
-	function handleDomStorageChanged(aSubject, aTopic, aData) {
-		let de = aSubject;
-		try {
-			de = de.QueryInterface(Ci.nsIDOMStorageEvent);
-		} catch(e) {
-			// ignore
-		}
-
-		// ignore entries that just changed
-		if (de.newValue && de.oldValue) return;
-
-		if (de.oldValue != null && de.newValue == null) {
-		// entry removed
-		// ignored for now
-		} else {
-			// entry added
-			Crusher.prepareStorage(de.url);
-		}
-	}
-
-	Services.obs.addObserver(handleDomStorageChanged, "dom-storage2-changed", false);
+	Services.obs.addObserver(Crusher.handleCookieChanged, "cookie-changed", false);
+	Services.obs.addObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed", false);
 }
 
 function shutdown(data, reason) {
@@ -128,8 +95,8 @@ function shutdown(data, reason) {
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
-	Services.obs.removeObserver(handleCookieChanged, "cookie-changed");
-	Services.obs.removeObserver(handleDomStorageChanged, "dom-storage2-changed");
+	Services.obs.removeObserver(Crusher.handleCookieChanged, "cookie-changed");
+	Services.obs.removeObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed");
 
 	// unload own modules
 	Cu.unload(extJSPath + "preflib.js");
