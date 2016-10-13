@@ -133,7 +133,7 @@ this.jobID++;
 			let tabBrowser = window.gBrowser;
 
 			for (let browser of tabBrowser.browsers) {
-				let domain = null;
+				let domain;
 				try {
 					let domain = browser.contentDocument.domain;
 				} catch(e) {}

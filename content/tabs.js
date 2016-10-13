@@ -4,7 +4,11 @@ let Tabs = function(Crusher, Buttons) {
 	this.onClose = function(event) {
 		let tab = event.target;
 		let browser = tab.linkedBrowser;
-		let domain = browser.contentDocument.domain;
+		let domain;
+		
+		try {
+			domain = browser.contentDocument.domain;
+		} catch(e) {}
 
 		if (domain) {
 			Crusher.prepare();

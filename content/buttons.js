@@ -226,7 +226,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
-			let domain = null;
+			let domain;
 			try {
 				domain = window.gBrowser.contentDocument.domain;
 			} catch(e) {}
@@ -419,7 +419,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 	this.refreshForWindow = function(window) {
 		let button = window.document.getElementById(this.buttonId);
-		let domain = null;
+		let domain;
 
 		if (button) {
 			try {
