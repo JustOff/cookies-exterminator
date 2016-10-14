@@ -16,11 +16,14 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 	this.iconFileNames = {
 		normal: "icon_default.png",
+		normal_s: "icon_default_s.png",
 		unknown: "icon_unknown.png",
 		suspended: "icon_suspended.png",
 		crushed: "icon_crushed.png",
 		greylisted: "icon_greylisted.png",
-		whitelisted: "icon_whitelisted.png"
+		greylisted_s: "icon_greylisted_s.png",
+		whitelisted: "icon_whitelisted.png",
+		whitelisted_s: "icon_whitelisted_s.png"
 	};
 
 	this.xulDocFileNames = {
@@ -428,7 +431,15 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 			if (!Prefs.getValue("enableProcessing")) {
 				button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
-				button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
+				if (!domain) {
+					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
+				} else if (Whitelist.isWhitelisted(domain)) {
+					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.whitelisted_s + ")";
+				} else if (Whitelist.isWhitelistedTemp(domain)) {
+					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted_s + ")";
+				} else {
+					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal_s + ")";
+				}
 			} else {
 				if (!domain) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.unknown + ")";
