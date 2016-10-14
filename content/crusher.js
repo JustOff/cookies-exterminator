@@ -2,7 +2,7 @@ let EXPORTED_SYMBOLS = ["Crusher"];
 
 let Cc = Components.classes, Ci = Components.interfaces, Cu = Components.utils;
 
-Components.utils.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 let ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 let securityManager = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
@@ -16,7 +16,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.handleCookieChanged = function(aSubject, aTopic, aData) {
 		switch (aData) {
 			case "added":
-				let cookie = aSubject.QueryInterface(Components.interfaces.nsICookie2);
+				let cookie = aSubject.QueryInterface(Ci.nsICookie2);
 				Crusher.prepare(cookie);
 				break;
 		}
@@ -30,7 +30,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				// added
 				let uri = ioService.newURI(aSubject.url, null, null);
 				Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + (uri.port == -1 ? 80 : uri.port)] = true;
-Components.utils.reportError("[+s] " + uri.scheme + "://" + uri.hostPort);
+Cu.reportError("[+s] " + uri.scheme + "://" + uri.hostPort);
 			}
 		}
 	}
@@ -40,7 +40,7 @@ Components.utils.reportError("[+s] " + uri.scheme + "://" + uri.hostPort);
 			if (cookie === true) {
 				this.execute(true);
 			} else {
-//if (cookie) { Components.utils.reportError("[+] " + cookie.host + " : " + cookie.name); }
+//if (cookie) { Cu.reportError("[+] " + cookie.host + " : " + cookie.name); }
 				Utils.setTimeout(this.execute.bind(this, cookie), Prefs.getValue("crushingDelay"));
 			}
 		}
@@ -54,8 +54,7 @@ Components.utils.reportError("[+s] " + uri.scheme + "://" + uri.hostPort);
 				Utils.setTimeout(this.executeStorage.bind(this, host), Prefs.getValue("crushingDelay"));
 			}
 		}
-	}
-	
+	};
 this.jobID = 0;
 
 	this.execute = function(onecookie) {
@@ -71,13 +70,12 @@ this.jobID++;
 		} else {
 			let cookiesEnumerator = Services.cookies.enumerator;
 			while (cookiesEnumerator.hasMoreElements()) {
-				cookies.push(cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2));
+				cookies.push(cookiesEnumerator.getNext().QueryInterface(Ci.nsICookie2));
 			}
 		} 
 
 		for (let cookie of cookies) {
 			if (this.mayBeCrushed(cookie, cleanup)) {
-//Components.utils.reportError("oA: " + typeof cookie.originAttributes);
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
 				} else {
@@ -85,9 +83,9 @@ this.jobID++;
 				}
 				crushedSomething = true;
 				crushedCookiesDomains[cookie.rawHost] = true;
-//Components.utils.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
+//Cu.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
 			} else {
-//Components.utils.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
+//Cu.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
 			}
 		}
 
@@ -129,7 +127,7 @@ this.jobID++;
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
 
 		while (windowsEnumerator.hasMoreElements()) {
-			let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
+			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
 			let tabBrowser = window.gBrowser;
 
 			for (let browser of tabBrowser.browsers) {
@@ -151,7 +149,6 @@ this.jobID++;
 
 		return true;
 	};
-	
 this.jobIDs = 0;
 
 	this.executeStorage = function(onehost) {
@@ -170,10 +167,10 @@ this.jobIDs++;
 						delete this.storageTracker[url];
 						crushedStorageDomains[uri.host] = true;
 						crushedSomething = true;
-Components.utils.reportError("[" + this.jobIDs + "s][-] " + url);
+Cu.reportError("[" + this.jobIDs + "s][-] " + url);
 					}
 				} else {
-Components.utils.reportError("[" + this.jobIDs + "s][*] " + url);
+Cu.reportError("[" + this.jobIDs + "s][*] " + url);
 				}
 			}
 //		}
@@ -211,7 +208,7 @@ Components.utils.reportError("[" + this.jobIDs + "s][*] " + url);
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
 
 		while (windowsEnumerator.hasMoreElements()) {
-			let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
+			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
 			let tabBrowser = window.gBrowser;
 
 			for (let browser of tabBrowser.browsers) {
@@ -253,7 +250,7 @@ Components.utils.reportError("[" + this.jobIDs + "s][*] " + url);
 				rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
 				if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
 				Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
-//Components.utils.reportError("[i] " + scheme + "://" + rhost + ":" + port);
+//Cu.reportError("[i] " + scheme + "://" + rhost + ":" + port);
 			}
 			dbQuery.reset();
 			dbQuery.finalize();
@@ -271,11 +268,9 @@ function clearStorage(uri) {
 			storage.clear();
 			return true;
 		}
-	} catch(e) {
-Components.utils.reportError(e.message);
-	}
+	} catch(e) {}
 	return false;
-}
+};
 
 function getLocalStorage(uri) {
 	let principal, storage;
@@ -283,7 +278,6 @@ function getLocalStorage(uri) {
 		principal = securityManager.getNoAppCodebasePrincipal(uri);
 		storage = domStorageManager.getLocalStorageForPrincipal(principal, null);
 	} catch (e) {
-Components.utils.reportError("localstorage: ", e.message);
 		return null;
 	}
 
