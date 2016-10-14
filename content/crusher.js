@@ -29,8 +29,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			} else if (aSubject.oldValue == null) {
 				// added
 				let uri = ioService.newURI(aSubject.url, null, null);
-				Crusher.storageTracker[uri.host] = true;
-Components.utils.reportError("[+s] " + uri.host);
+				Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + (uri.port == -1 ? 80 : uri.port)] = true;
+Components.utils.reportError("[+s] " + uri.scheme + "://" + uri.hostPort);
 			}
 		}
 	}
@@ -163,16 +163,17 @@ this.jobIDs++;
 
 //		if (cleanup) {
 //		} else {
-			for (let host in this.storageTracker) {
-				if (this.mayBeCrushedStorage(host, cleanup)) {
-					clearStorage(host, "http", 80);
-					clearStorage(host, "https", 443);
-					delete this.storageTracker[host];
-					crushedStorageDomains[host] = true;
-					crushedSomething = true;
-Components.utils.reportError("[" + this.jobIDs + "s][-] " + host);
+			for (let url in this.storageTracker) {
+				let uri = ioService.newURI(url, null, null);
+				if (this.mayBeCrushedStorage(uri.host, cleanup)) {
+					if (clearStorage(uri)) {
+						delete this.storageTracker[url];
+						crushedStorageDomains[uri.host] = true;
+						crushedSomething = true;
+Components.utils.reportError("[" + this.jobIDs + "s][-] " + url);
+					}
 				} else {
-Components.utils.reportError("[" + this.jobIDs + "s][*] " + host);
+Components.utils.reportError("[" + this.jobIDs + "s][*] " + url);
 				}
 			}
 //		}
@@ -233,9 +234,9 @@ Components.utils.reportError("[" + this.jobIDs + "s][*] " + host);
 	};
 };
 
-function clearStorage(dom, proto, port) {
+function clearStorage(uri) {
 	try {
-		let storage = getLocalStorage(dom, proto, port);
+		let storage = getLocalStorage(uri);
 		if (storage) {
 			storage.clear();
 			return true;
@@ -246,11 +247,9 @@ Components.utils.reportError(e.message);
 	return false;
 }
 
-function getLocalStorage(domain, proto, port) {
-	let uri, principal, storage;
-	let s = proto + "://" + (domain.startsWith(".") ? domain.substr(1) : domain) + ":" + (port == -1 ? 80 : port);
+function getLocalStorage(uri) {
+	let principal, storage;
 	try {
-		uri = ioService.newURI(s, null, null);
 		principal = securityManager.getNoAppCodebasePrincipal(uri);
 		storage = domStorageManager.getLocalStorageForPrincipal(principal, null);
 	} catch (e) {
