@@ -22,7 +22,7 @@
 	  <tabpanel id="generalTabpanel">
 		<vbox flex="1">
 		  <hbox flex="0" align="center">
-		   <checkbox id="suspendCrushing" label="Suspend cookies processing"/>
+		   <checkbox id="enableProcessing" label="Enable"/>
 		  </hbox>
 
 		  <spacer flex="0" height="15"/>
@@ -42,7 +42,7 @@
 		  </hbox>
 
 		  <hbox flex="0" align="center">
-			<checkbox id="keepCrushingLocalStorage" label="Clean LocalStorage along with cookies"/>
+			<checkbox id="keepCrushingLocalStorage" label="Clean LocalStorage"/>
 		  </hbox>
 
 		  <spacer flex="0" height="15"/>

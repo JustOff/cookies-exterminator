@@ -49,7 +49,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	};
 
 	this.menuitemLabels = {
-		enable: "Enable cookies processing",
+		enable: "Enabled",
 		log: "Display cleanup log",
 		manageCookies: "Remove individual cookies",
 		manageWhitelist: "Manage domain exceptions",
@@ -87,10 +87,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemEnable.setAttribute("type", "checkbox");
 		menuitemEnable.setAttribute("label", this.menuitemLabels.enable);
 		menuitemEnable.addEventListener("command", function(event) {
-			if (Prefs.getValue("suspendCrushing")) {
-				Prefs.setValue("suspendCrushing", false);
+			if (Prefs.getValue("enableProcessing")) {
+				Prefs.setValue("enableProcessing", false);
 			} else {
-				Prefs.setValue("suspendCrushing", true);
+				Prefs.setValue("enableProcessing", true);
 			}
 
 			Prefs.save();
@@ -222,7 +222,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let document = window.document;
 
 			let menuitemEnable = document.getElementById(Buttons.menuitemIds.enable);
-			menuitemEnable.setAttribute("checked", Prefs.getValue("suspendCrushing") ? false : true);
+			menuitemEnable.setAttribute("checked", Prefs.getValue("enableProcessing") ? true : false);
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
@@ -426,7 +426,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				domain = Utils.UTF8toACE(window.gBrowser.contentDocument.domain);
 			} catch(e) {}
 
-			if (Prefs.getValue("suspendCrushing")) {
+			if (!Prefs.getValue("enableProcessing")) {
 				button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
 				button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
 			} else {

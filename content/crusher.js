@@ -36,7 +36,7 @@ Components.utils.reportError("[+s] " + uri.host);
 	}
 	
 	this.prepare = function(cookie) {
-		if (!Prefs.getValue("suspendCrushing")) {
+		if (Prefs.getValue("enableProcessing")) {
 			if (cookie === true) {
 				this.execute(true);
 			} else {
@@ -47,7 +47,7 @@ Components.utils.reportError("[+s] " + uri.host);
 	};
 
 	this.prepareStorage = function(host) {
-		if (!Prefs.getValue("suspendCrushing") && Prefs.getValue("keepCrushingLocalStorage")) {
+		if (Prefs.getValue("enableProcessing") && Prefs.getValue("keepCrushingLocalStorage")) {
 			if (host === true) {
 				this.executeStorage(true);
 			} else {

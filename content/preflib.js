@@ -4,7 +4,7 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 
 let Prefs = function(extName, appInfo) {
 	this.defaultPrefs = {
-		suspendCrushing: false,
+		enableProcessing: false,
 		enableLogging: true,
 		enableNotifications: true,
 		keepCrushingSessionCookies: true,
