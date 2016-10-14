@@ -106,7 +106,7 @@ this.jobID++;
 
 			Buttons.notify(crushedCookiesDomainsString);
 			Notifications.notify(crushedCookiesDomainsString);
-			Log.log(crushedCookiesDomainsString); 
+			Log.log(crushedCookiesDomainsString, "cookies");
 		} else {
 			Buttons.notify();
 		}
@@ -188,7 +188,7 @@ Components.utils.reportError("[" + this.jobIDs + "s][*] " + host);
 
 			Buttons.notify(crushedStorageDomainsString);
 			Notifications.notify(crushedStorageDomainsString);
-			Log.log(crushedStorageDomainsString); 
+			Log.log(crushedStorageDomainsString, "storage");
 		} else {
 			Buttons.notify();
 		}

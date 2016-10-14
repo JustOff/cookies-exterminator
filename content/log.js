@@ -3,7 +3,7 @@ let EXPORTED_SYMBOLS = ["Log"];
 let Log = function(Prefs) {
 	this.loggedMessages = [];
 
-	this.log = function(crushedDomainsString) {
+	this.log = function(crushedDomainsString, scope) {
 		if (Prefs.getValue("enableLogging") && crushedDomainsString) {
 			let date = new Date();
 			let readableDate = date.getDate() + "." +
@@ -12,7 +12,7 @@ let Log = function(Prefs) {
 							   ("0" + date.getMinutes()).slice(-2) + ":" +
 							   ("0" + date.getSeconds()).slice(-2);
 
-			let message = readableDate + " - cleaned cookies from " +
+			let message = readableDate + " - cleaned " + scope + " from " +
 						  crushedDomainsString;
 
 			this.loggedMessages.push(message);
