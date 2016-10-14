@@ -61,6 +61,7 @@ function startup(data, reason) {
 		Prefs.importFromPermissions();
 	}
 	Whitelist.init();
+	Utils.setTimeout(Crusher.getScopesFromDB.bind(this, null), 10);
 	Windows.init(); // this will do the rest
 
 	// add preferences and log windows event observers

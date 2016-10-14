@@ -232,6 +232,36 @@ Components.utils.reportError("[" + this.jobIDs + "s][*] " + url);
 
 		return true;
 	};
+
+	this.getScopesFromDB = function() {
+		let directoryService = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
+		let storageService = Cc["@mozilla.org/storage/service;1"].getService(Ci.mozIStorageService);
+		let db, port, scheme, host, rhost;
+		try {
+			let dbFile = directoryService.get("ProfD", Ci.nsIFile);
+			dbFile.append("webappsstore.sqlite");
+			if (!dbFile) {
+				return;
+			}
+			db = storageService.openDatabase(dbFile);
+			if (!db) {
+				return;
+			}
+			dbQuery = db.createStatement("SELECT DISTINCT scope FROM webappsstore2;");
+			while (dbQuery.executeStep()) {
+				[host, scheme, port] = dbQuery.row.scope.split(":");
+				rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
+				if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
+				Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
+//Components.utils.reportError("[i] " + scheme + "://" + rhost + ":" + port);
+			}
+			dbQuery.reset();
+			dbQuery.finalize();
+		} catch (e) {}
+		if (db) {
+			db.asyncClose();
+		};
+	};
 };
 
 function clearStorage(uri) {
