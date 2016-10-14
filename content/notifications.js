@@ -8,7 +8,7 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.iconFileName = "icon.png";
 
 	this.alertName = "cookextermNotification";
-	this.alertTitle = "Cleaned cookies from";
+	this.alertTitle = "Cleaned cookies/storage from";
 	
 	this.messageBuffer = "";
 

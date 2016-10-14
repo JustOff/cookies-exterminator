@@ -234,28 +234,30 @@ Components.utils.reportError("[" + this.jobIDs + "s][*] " + host);
 };
 
 function clearStorage(dom, proto, port) {
-//  try {
-      var storage = getLocalStorage(dom, proto, port);
-      if (storage) {
-        storage.clear();
-      }
-//  } catch(e) {
-//Components.utils.reportError(e.message);
-//  }
+	try {
+		let storage = getLocalStorage(dom, proto, port);
+		if (storage) {
+			storage.clear();
+			return true;
+		}
+	} catch(e) {
+Components.utils.reportError(e.message);
+	}
+	return false;
 }
 
 function getLocalStorage(domain, proto, port) {
-  var uri, principal, storage;
-  var s = proto + "://" + (domain.startsWith(".") ? domain.substr(1) : domain) + ":" + (port == -1 ? 80 : port);
-  try {
-    uri = ioService.newURI(s, null, null);
-    principal = securityManager.getNoAppCodebasePrincipal(uri);
-    storage = domStorageManager.getLocalStorageForPrincipal(principal, null);
-  } catch (e) {
+	let uri, principal, storage;
+	let s = proto + "://" + (domain.startsWith(".") ? domain.substr(1) : domain) + ":" + (port == -1 ? 80 : port);
+	try {
+		uri = ioService.newURI(s, null, null);
+		principal = securityManager.getNoAppCodebasePrincipal(uri);
+		storage = domStorageManager.getLocalStorageForPrincipal(principal, null);
+	} catch (e) {
 Components.utils.reportError("localstorage: ", e.message);
-    return null;
-  }
+		return null;
+	}
 
-  if (!storage || storage.length < 1) return null;
-  return storage;
-}
+	if (!storage || storage.length < 1) return null;
+	return storage;
+};
