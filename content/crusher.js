@@ -231,33 +231,47 @@ Cu.reportError("[" + this.jobIDs + "s][*] " + url);
 	};
 
 	this.getScopesFromDB = function() {
+		let Cc = Components.classes, Ci = Components.interfaces, Cu = Components.utils;
 		let directoryService = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
 		let storageService = Cc["@mozilla.org/storage/service;1"].getService(Ci.mozIStorageService);
-		let db, port, scheme, host, rhost;
+		
 		try {
+			// Firefox provide no API to get localstorage from all scopes, so direct access
 			let dbFile = directoryService.get("ProfD", Ci.nsIFile);
 			dbFile.append("webappsstore.sqlite");
 			if (!dbFile) {
 				return;
 			}
-			db = storageService.openDatabase(dbFile);
-			if (!db) {
+			this.db = storageService.openDatabase(dbFile);
+			if (!this.db) {
 				return;
 			}
-			dbQuery = db.createStatement("SELECT DISTINCT scope FROM webappsstore2;");
-			while (dbQuery.executeStep()) {
-				[host, scheme, port] = dbQuery.row.scope.split(":");
-				rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
-				if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
-				Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
-//Cu.reportError("[i] " + scheme + "://" + rhost + ":" + port);
-			}
-			dbQuery.reset();
-			dbQuery.finalize();
+			this.dbQuery = this.db.createStatement("SELECT DISTINCT scope FROM webappsstore2;");
 		} catch (e) {}
-		if (db) {
-			db.asyncClose();
-		};
+		this.dbQuery.executeAsync({
+			handleResult: function(aResultSet) {
+				let port, scheme, host, rhost;
+				try {
+					for (let row = aResultSet.getNextRow(); row; row = aResultSet.getNextRow()) {
+						[host, scheme, port] = row.getResultByName("scope").split(":");
+						rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
+						if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
+						Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
+//Cu.reportError("[i] " + scheme + "://" + rhost + ":" + port);
+					}
+				} catch (e) {}
+			},
+			handleError: function(aError) {
+			},
+			handleCompletion: function(aReason) {
+				if (this.dbQuery) {
+					this.dbQuery.finalize();
+				}
+				if (this.db) {
+					this.db.asyncClose();
+				};
+			}
+		});
 	};
 };
 
