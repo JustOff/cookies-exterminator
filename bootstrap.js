@@ -65,17 +65,24 @@ function startup(data, reason) {
 	Windows.init(); // this will do the rest
 
 	// add preferences and log windows event observers
-	Services.obs.addObserver(Prefs.onEvent, "cookextermPrefsEvent", false);
 
-	onPrefsApply = {
+	onPrefsEvent = {
 		observe: function(aSubject, aTopic, aData) {
-			Prefs.onApply.observe(aSubject, aTopic, aData);
-			Whitelist.onPrefsApply();
-			Buttons.onPrefsApply();
+			if (aData == "Apply") {
+				Prefs.onApply.observe(aSubject, aTopic, null);
+				Whitelist.onPrefsApply();
+				Buttons.onPrefsApply();
+			} else if (aData == "Load") {
+				Prefs.onLoad.observe(aSubject, aTopic, null);
+			} else if (aData == "Export") {
+				Prefs.onExport.observe(aSubject, aTopic, null);
+			} else if (aData == "Import") {
+				Prefs.onImport.observe(aSubject, aTopic, null);
+			}
 		}
 	};
 
-	Services.obs.addObserver(onPrefsApply, "cookextermPrefsApply", false);
+	Services.obs.addObserver(onPrefsEvent, "cookextermPrefsEvent", false);
 	Services.obs.addObserver(Log.onEvent, "cookextermLogEvent", false);
 	Services.obs.addObserver(Crusher.handleCookieChanged, "cookie-changed", false);
 	Services.obs.addObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed", false);
@@ -91,8 +98,7 @@ function shutdown(data, reason) {
 	}
 
 	// remove preferences and log windows event observers
-	Services.obs.removeObserver(Prefs.onEvent, "cookextermPrefsEvent");
-	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
+	Services.obs.removeObserver(onPrefsEvent, "cookextermPrefsEvent");
 	Services.obs.removeObserver(Log.onEvent, "cookextermLogEvent");
 	Services.obs.removeObserver(Crusher.handleCookieChanged, "cookie-changed");
 	Services.obs.removeObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed");

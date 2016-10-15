@@ -35,7 +35,7 @@ function onReset() {
 } 
 
 function onApply() {
-	Services.obs.notifyObservers(window, "cookextermPrefsApply", null);
+	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Apply");
 	window.close();
 }
 
