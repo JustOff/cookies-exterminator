@@ -159,5 +159,3 @@ function sortDomainsListbox(domainsListbox) {
 		}
 	}
 }
-
-window.onload = onWindowLoad;
