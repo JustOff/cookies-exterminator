@@ -1,8 +1,14 @@
 let EXPORTED_SYMBOLS = ["Prefs"];
 
-Components.utils.import("resource://gre/modules/Services.jsm");
+let Cc = Components.classes, Ci = Components.interfaces, Cu = Components.utils;
 
-let Prefs = function(extName, appInfo) {
+Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/FileUtils.jsm");
+Cu.import("resource://gre/modules/NetUtil.jsm");
+
+let BACKUP_VERSION = "1.0";
+
+let Prefs = function(extName, appInfo, Utils) {
 	this.defaultPrefs = {
 		enableProcessing: false,
 		enableLogging: true,
@@ -117,11 +123,52 @@ let Prefs = function(extName, appInfo) {
 		this.save();
 	};
 
+	this.exportPrefs = function() {
+		let file = Utils.chooseFile("save", ["conf"], "cookies-xtrm-backup.conf");
+		if (file) {
+			let data = {prefs: {}};
+			for (let prefName in this.currentPrefs) {
+				data["prefs"][prefName] = this.currentPrefs[prefName];
+			}
+			data["version"] = BACKUP_VERSION;
+			data = Utils.toJSON(data);
+			data = Utils.md5hash(data) + data;
+			let ostream;
+			try {
+				ostream = FileUtils.openAtomicFileOutputStream(file);
+			} catch (e) {
+				ostream = FileUtils.openSafeFileOutputStream(file);
+			}
+			let converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
+				.createInstance(Ci.nsIScriptableUnicodeConverter);
+			converter.charset = "UTF-8";
+			let istream = converter.convertToInputStream(data);
+			NetUtil.asyncCopy(istream, ostream, function(status) {
+				try {
+					if (!Components.isSuccessCode(status)) {
+						throw "File error";
+					}
+					Utils.alert("Settings exported successfully!");
+				} catch(e) {
+					Utils.alert(e);
+				}
+			});
+		}
+	};
+
 	this.onOpen = {
 		Prefs: this,
 		feedPrefWindow: this.feedPrefWindow,
 		observe: function(aSubject, aTopic, aData) {
 			this.feedPrefWindow.call(this.Prefs, aSubject);
+		}
+	};
+
+	this.onExport = {
+		Prefs: this,
+		exportPrefs: this.exportPrefs,
+		observe: function(aSubject, aTopic, aData) {
+			this.exportPrefs.call(this.Prefs, null);
 		}
 	};
 
@@ -140,7 +187,7 @@ let Prefs = function(extName, appInfo) {
 		let white = [], grey = [];
 		let permissions = Services.perms.enumerator;
 		while (permissions.hasMoreElements()) {
-			let perm = permissions.getNext().QueryInterface(Components.interfaces.nsIPermission);
+			let perm = permissions.getNext().QueryInterface(Ci.nsIPermission);
             if (perm.type == "cookie") {
 				let host = perm.principal ? perm.principal.URI.host : perm.host;
 				if (perm.capability == 1) {

@@ -46,7 +46,7 @@ function startup(data, reason) {
 	let Utils = new Imports.Utils();
 
 	// create new objects from module symbols with passed dependencies
-	Prefs = new Imports.Prefs(extName, appInfo);
+	Prefs = new Imports.Prefs(extName, appInfo, Utils);
 	Whitelist = new Imports.Whitelist(Prefs);
 	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs);
@@ -66,6 +66,7 @@ function startup(data, reason) {
 
 	// add preferences and log windows event observers
 	Services.obs.addObserver(Prefs.onOpen, "cookextermPrefsLoad", false);
+	Services.obs.addObserver(Prefs.onExport, "cookextermPrefsExport", false);
 
 	onPrefsApply = {
 		observe: function(aSubject, aTopic, aData) {
@@ -93,6 +94,7 @@ function shutdown(data, reason) {
 
 	// remove preferences and log windows event observers
 	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsLoad");
+	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsExport");
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");

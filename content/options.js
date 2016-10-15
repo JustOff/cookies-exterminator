@@ -159,3 +159,7 @@ function sortDomainsListbox(domainsListbox) {
 		}
 	}
 }
+
+function exportData() {
+	Services.obs.notifyObservers(window, "cookextermPrefsExport", null);
+}
