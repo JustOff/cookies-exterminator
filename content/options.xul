@@ -1,16 +1,23 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 
-<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		id="cookextermPrefs"
+		buttons="cancel,extra1,extra2"
+		buttonlabelextra1="Accept"
+		ondialogextra1="onApply();"
+		buttonlabelextra2="Reset"
+		ondialogextra2="onReset();"
+		defaultButton="extra1"
 		title="Cookies Exterminator preferences" 
 		style="min-width: 385px; min-height: 340px;"
 		windowtype="cookextermPrefsWindow">
 
-  <script src="options.js"/>
+  <prefpane id="general-pane" label="Cookies Exterminator preferences" flex="1">
 
-  <tabbox id="tabbox" flex="1" style="padding: 5px">
+  <spacer flex="1"/>
+  <tabbox id="tabbox" flex="1">
 	<tabs>
 	  <tab id="generalTab" label="Options"/>
 	  <tab id="whitelistTab" label="Whitelist"/>
@@ -19,20 +26,21 @@
 
 	<tabpanels flex="1">
 
-	  <tabpanel id="generalTabpanel">
-		<vbox flex="1">
+	  <tabpanel id="generalTabpanel" orient="vertical">
+	    <groupbox>
+		  <caption label="Main"/>
+
+		  <spacer flex="0" height="5"/>
+
 		  <hbox flex="0" align="center">
 		   <checkbox id="enableProcessing" label="Enable"/>
 		  </hbox>
 
-		  <spacer flex="0" height="15"/>
-
 		  <hbox flex="0" align="center">
-		   <checkbox id="enableLogging" label="Log all activity"/>
-		  </hbox>
-
-		  <hbox flex="0" align="center">
-		   <checkbox id="enableNotifications" label="Use pop-up notifications"/>
+			<label value="Cleaning delay in seconds"/>
+			<spacer flex="1"/>
+			<textbox id="crushingDelay" type="number" width="40" min="10" max="600"/>
+			<spacer flex="10"/>
 		  </hbox>
 
 		  <spacer flex="0" height="15"/>
@@ -48,13 +56,37 @@
 		  <spacer flex="0" height="15"/>
 
 		  <hbox flex="0" align="center">
-			<label value="Cleaning delay in seconds"/>
-			<spacer flex="1"/>
-			<textbox id="crushingDelay" type="number" width="40" min="10" max="600"/>
-			<spacer flex="10"/>
+		   <checkbox id="enableLogging" label="Log all activity"/>
 		  </hbox>
 
-		</vbox>
+		  <hbox flex="0" align="center">
+		   <checkbox id="enableNotifications" label="Use pop-up notifications"/>
+		  </hbox>
+
+		  <spacer flex="0" height="10"/>
+
+		</groupbox>
+		<groupbox>
+		  <caption label="Backup"/>
+						<grid>
+							<columns>
+								<column flex="1"/>
+								<column/>
+							</columns>
+							<rows>
+								<row align="center">
+									<label control="browse" flex="1">Settings</label>
+									<hbox>
+										<button class="browse" label="Export"
+												oncommand="exportData();"/>
+										<button class="browse" label="Import"
+												oncommand="importData();"/>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+		</groupbox>
+		<spacer flex="1"/>
 	  </tabpanel>
 
 	  <tabpanel id="whitelistTabpanel">
@@ -91,11 +123,6 @@
 
 	</tabpanels>
   </tabbox>
-
-  <hbox style="padding: 0px 0px 5px 0px">
-	<button label="Reset" oncommand="onReset();"/>
-	<spacer flex="1"/>
-	<button label="Accept" oncommand="onApply();"/>
-	<button label="Discard" onclick="window.close();"/>
-  </hbox>
-</window>
+  </prefpane>
+  <script src="options.js"/>
+</prefwindow>
