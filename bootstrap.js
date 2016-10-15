@@ -95,8 +95,8 @@ function shutdown(data, reason) {
 
 	// remove preferences and log windows event observers
 	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsLoad");
-	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsExport");
-	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsImport");
+	Services.obs.removeObserver(Prefs.onExport, "cookextermPrefsExport");
+	Services.obs.removeObserver(Prefs.onImport, "cookextermPrefsImport");
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
