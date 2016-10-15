@@ -7,8 +7,8 @@ let Utils = new Imports.Utils();
 function onWindowLoad() {
 	Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
 
-	updateDomainsListbox("domainsListbox", "whitelistedDomains");
-	updateDomainsListbox("domainsListboxTemp", "whitelistedDomainsTemp");
+	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
+	Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
 
 	let tabbox = window.document.getElementById("tabbox");
 
@@ -30,8 +30,8 @@ function onWindowLoad() {
 function onReset() {
 	Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
 
-	updateDomainsListbox("domainsListbox", "whitelistedDomains");
-	updateDomainsListbox("domainsListboxTemp", "whitelistedDomainsTemp");
+	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
+	Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
 } 
 
 function onApply() {
@@ -61,7 +61,7 @@ function onAddDomain(domListbox, domTextbox, listedDomains) {
 		domainsListbox.appendItem(newDomainTextbox.value, newDomainTextbox.value);
 		domTextbox1.value = ""; domTextbox2.value = "";
 
-		sortDomainsListbox(domainsListbox);
+		Utils.sortDomainsListbox(domainsListbox);
 		updateWhitelistedDomains(domListbox, listedDomains);
 	}
 }
@@ -80,7 +80,7 @@ function onEditDomain(domListbox, domTextbox, listedDomains) {
 		domTextbox1.value = ""; domTextbox2.value = "";
 		domainsListbox.clearSelection();
 
-		sortDomainsListbox(domainsListbox);
+		Utils.sortDomainsListbox(domainsListbox);
 		updateWhitelistedDomains(domListbox, listedDomains);
 	}
 }
@@ -100,7 +100,7 @@ function onRemoveDomain(domListbox, domTextbox, listedDomains) {
 
 		domTextbox1.value = ""; domTextbox2.value = "";
 
-		sortDomainsListbox(domainsListbox);
+		Utils.sortDomainsListbox(domainsListbox);
 		updateWhitelistedDomains(domListbox, listedDomains);
 	}
 }
@@ -120,46 +120,10 @@ function updateWhitelistedDomains(domListbox, listedDomains) {
 	whitelistedDomains.value = whitelistedDomains.value.slice(0, -1);
 }
 
-function updateDomainsListbox(listbox, domains) {
-	let domainsListbox = window.document.getElementById(listbox);
-	let rows = domainsListbox.getRowCount();
-
-	for (let i = 0; i < rows; i++) {
-		domainsListbox.removeItemAt(0);
-	}
-
-	let whitelistedDomains = window.document.getElementById(domains);
-
-	if (whitelistedDomains.value != "") {
-		let separatedDomains = whitelistedDomains.value.split(';');
-
-		for (let domain of separatedDomains) {
-			domain = Utils.ACEtoUTF8(domain);
-			domainsListbox.appendItem(domain, domain);
-		}
-	}
-
-	sortDomainsListbox(domainsListbox);
-}
-
-function sortDomainsListbox(domainsListbox) {
-	let rows = domainsListbox.getRowCount();
-
-	for (let i = 0; i < rows; i++) {
-		for (let j = rows - 1; j > i; j--) {
-			let domain = domainsListbox.getItemAtIndex(i);
-			let anotherDomain = domainsListbox.getItemAtIndex(j);
-
-			if (anotherDomain.value < domain.value) {
-				domain.value = anotherDomain.value;
-				anotherDomain.value = domain.label;
-				domain.label = domain.value;
-				anotherDomain.label = anotherDomain.value;
-			}
-		}
-	}
-}
-
 function exportData() {
 	Services.obs.notifyObservers(window, "cookextermPrefsExport", null);
+}
+
+function importData() {
+	Services.obs.notifyObservers(window, "cookextermPrefsImport", null);
 }

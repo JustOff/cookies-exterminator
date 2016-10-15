@@ -99,4 +99,44 @@ let Utils = function() {
 		let hexhash = [...hash].map(char => this.toHexString(char.charCodeAt(0))).join("");
 		return hexhash;
 	};
+
+	this.updateDomainsListbox = function(window, listbox, domains) {
+		let domainsListbox = window.document.getElementById(listbox);
+		let rows = domainsListbox.getRowCount();
+
+		for (let i = 0; i < rows; i++) {
+			domainsListbox.removeItemAt(0);
+		}
+
+		let whitelistedDomains = window.document.getElementById(domains);
+
+		if (whitelistedDomains.value != "") {
+			let separatedDomains = whitelistedDomains.value.split(';');
+
+			for (let domain of separatedDomains) {
+				domain = this.ACEtoUTF8(domain);
+				domainsListbox.appendItem(domain, domain);
+			}
+		}
+
+		this.sortDomainsListbox(domainsListbox);
+	};
+
+	this.sortDomainsListbox = function(domainsListbox) {
+		let rows = domainsListbox.getRowCount();
+
+		for (let i = 0; i < rows; i++) {
+			for (let j = rows - 1; j > i; j--) {
+				let domain = domainsListbox.getItemAtIndex(i);
+				let anotherDomain = domainsListbox.getItemAtIndex(j);
+
+				if (anotherDomain.value < domain.value) {
+					domain.value = anotherDomain.value;
+					anotherDomain.value = domain.label;
+					domain.label = domain.value;
+					anotherDomain.label = anotherDomain.value;
+				}
+			}
+		}
+	};
 };

@@ -67,6 +67,7 @@ function startup(data, reason) {
 	// add preferences and log windows event observers
 	Services.obs.addObserver(Prefs.onOpen, "cookextermPrefsLoad", false);
 	Services.obs.addObserver(Prefs.onExport, "cookextermPrefsExport", false);
+	Services.obs.addObserver(Prefs.onImport, "cookextermPrefsImport", false);
 
 	onPrefsApply = {
 		observe: function(aSubject, aTopic, aData) {
@@ -95,6 +96,7 @@ function shutdown(data, reason) {
 	// remove preferences and log windows event observers
 	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsLoad");
 	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsExport");
+	Services.obs.removeObserver(Prefs.onOpen, "cookextermPrefsImport");
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
 	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
 	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");

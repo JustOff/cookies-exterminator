@@ -146,9 +146,51 @@ let Prefs = function(extName, appInfo, Utils) {
 			NetUtil.asyncCopy(istream, ostream, function(status) {
 				try {
 					if (!Components.isSuccessCode(status)) {
-						throw "File error";
+						throw "File error!";
 					}
 					Utils.alert("Settings exported successfully!");
+				} catch(e) {
+					Utils.alert(e);
+				}
+			});
+		}
+	};
+
+	this.importPrefs = function(window) {
+		let file = Utils.chooseFile("open", ["conf"], "cookies-xtrm-backup.conf");
+		if (file) {
+			let Prefs = this;
+			NetUtil.asyncFetch(file, function(istream, status) {
+				try {
+					if (!Components.isSuccessCode(status)) {
+						throw "File error!";
+					}
+					let data = NetUtil.readInputStreamToString(istream, istream.available(), {charset:"UTF-8"});
+					let datahash = data.slice(0,32);
+					data = data.slice(32);
+					if (datahash != Utils.md5hash(data)) {
+						throw "File is corrupted!";
+					}
+					data = Utils.fromJSON(data);
+					if (data["version"] != BACKUP_VERSION) {
+						throw "Incompatible backup version!";
+					}
+					for (let prefName in Prefs.currentPrefs) {
+						let prefControl = window.document.getElementById(prefName);
+						if (prefControl) {
+							let prefValue = data["prefs"][prefName];
+							if (prefControl.type == "number") {
+								prefControl.valueNumber = prefValue;
+							} else if (prefControl.tagName == "checkbox") {
+								prefControl.checked = prefValue;
+							} else {
+								prefControl.value = prefValue;
+							}
+						}
+					}
+					Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
+					Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
+					Utils.alert("Settings imported successfully!");
 				} catch(e) {
 					Utils.alert(e);
 				}
@@ -169,6 +211,14 @@ let Prefs = function(extName, appInfo, Utils) {
 		exportPrefs: this.exportPrefs,
 		observe: function(aSubject, aTopic, aData) {
 			this.exportPrefs.call(this.Prefs, null);
+		}
+	};
+
+	this.onImport = {
+		Prefs: this,
+		importPrefs: this.importPrefs,
+		observe: function(aSubject, aTopic, aData) {
+			this.importPrefs.call(this.Prefs, aSubject);
 		}
 	};
 
