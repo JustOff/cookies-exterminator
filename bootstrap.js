@@ -78,8 +78,7 @@ function startup(data, reason) {
 	};
 
 	Services.obs.addObserver(onPrefsApply, "cookextermPrefsApply", false);
-	Services.obs.addObserver(Log.onOpen, "cookextermLogOpen", false);
-	Services.obs.addObserver(Log.onClear, "cookextermLogClear", false);
+	Services.obs.addObserver(Log.onEvent, "cookextermLogEvent", false);
 	Services.obs.addObserver(Crusher.handleCookieChanged, "cookie-changed", false);
 	Services.obs.addObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed", false);
 }
@@ -98,8 +97,7 @@ function shutdown(data, reason) {
 	Services.obs.removeObserver(Prefs.onExport, "cookextermPrefsExport");
 	Services.obs.removeObserver(Prefs.onImport, "cookextermPrefsImport");
 	Services.obs.removeObserver(onPrefsApply, "cookextermPrefsApply");
-	Services.obs.removeObserver(Log.onOpen, "cookextermLogOpen");
-	Services.obs.removeObserver(Log.onClear, "cookextermLogClear");
+	Services.obs.removeObserver(Log.onEvent, "cookextermLogEvent");
 	Services.obs.removeObserver(Crusher.handleCookieChanged, "cookie-changed");
 	Services.obs.removeObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed");
 

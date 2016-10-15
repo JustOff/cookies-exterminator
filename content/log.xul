@@ -13,11 +13,11 @@
 		Components.utils.import("resource://gre/modules/Services.jsm");
 
 		function onWindowLoad() {
-			Services.obs.notifyObservers(window, "cookextermLogOpen", null);
+			Services.obs.notifyObservers(window, "cookextermLogEvent", "Open");
 		}
 
 		function onClearLog() {
-			Services.obs.notifyObservers(window, "cookextermLogClear", null);
+			Services.obs.notifyObservers(window, "cookextermLogEvent", "Clear");
 
 			let logTextbox = window.document.getElementById("logTextbox");
 			logTextbox.value = "";

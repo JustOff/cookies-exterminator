@@ -19,26 +19,23 @@ let Log = function(Prefs) {
 		}
 	};
 
-	this.onOpen = {
+	this.onEvent = {
 		Log: this,
 		observe: function(aSubject, aTopic, aData) {
-			let window = aSubject;
-			let logTextbox = window.document.getElementById("logTextbox");
+			if (aData == "Open") {
+				let window = aSubject;
+				let logTextbox = window.document.getElementById("logTextbox");
 
-			if (logTextbox) {
-				for (let message of this.Log.loggedMessages) {
-					logTextbox.value += message + "\n\n";
+				if (logTextbox) {
+					for (let message of this.Log.loggedMessages) {
+						logTextbox.value += message + "\n\n";
+					}
+
+					logTextbox.selectionStart = logTextbox.value.length;
 				}
-
-				logTextbox.selectionStart = logTextbox.value.length;
+			} else if (aData == "Clear") {
+				this.Log.loggedMessages = [];
 			}
-		}
-	};
-
-	this.onClear = {
-		Log: this,
-		observe: function(aSubject, aTopic, aData) {
-			this.Log.loggedMessages = [];
 		}
 	};
 };
