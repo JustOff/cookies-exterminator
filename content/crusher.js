@@ -281,10 +281,11 @@ function clearStorage(uri) {
 		let storage = getLocalStorage(uri);
 		if (storage) {
 			storage.clear();
-			return true;
 		}
-	} catch(e) {}
-	return false;
+		return true;
+	} catch(e) {
+		return false;
+	}
 };
 
 function getLocalStorage(uri) {
