@@ -232,7 +232,6 @@ Cu.reportError("[" + this.jobIDs + "s][*] " + url);
 	};
 
 	this.getScopesFromDB = function() {
-		let Cc = Components.classes, Ci = Components.interfaces, Cu = Components.utils;
 		let directoryService = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
 		let storageService = Cc["@mozilla.org/storage/service;1"].getService(Ci.mozIStorageService);
 		

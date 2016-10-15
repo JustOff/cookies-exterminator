@@ -196,7 +196,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				existingWindow.focus();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
-				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "minimizable,centerscreen", "whitelist");
+				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "minimizable,centerscreen,modal", "whitelist");
 			}
 		}, false);
 

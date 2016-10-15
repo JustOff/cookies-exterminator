@@ -61,15 +61,15 @@
 						<column/>
 					</columns>
 					<rows>
-						<row align="center">
-							<label control="browse" flex="1">Settings</label>
-							<hbox>
-								<button class="browse" label="Export"
-										oncommand="exportData();"/>
-								<button class="browse" label="Import"
-										oncommand="importData();"/>
-							</hbox>
-						</row>
+					  <row align="center">
+						<label control="browse" flex="1">Settings</label>
+						<hbox>
+							<button class="browse" label="Export"
+									oncommand="exportData();"/>
+							<button class="browse" label="Import"
+									oncommand="importData();"/>
+						</hbox>
+					  </row>
 					</rows>
 				</grid>
 			</groupbox>
