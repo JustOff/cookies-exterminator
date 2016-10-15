@@ -124,7 +124,7 @@ let Prefs = function(extName, appInfo, Utils) {
 	};
 
 	this.exportPrefs = function() {
-		let file = Utils.chooseFile("save", ["conf"], "cookies-xtrm-backup.conf");
+		let file = Utils.chooseFile("save", ["text"], "cookies-xtrm-conf.txt");
 		if (file) {
 			let data = {prefs: {}};
 			for (let prefName in this.currentPrefs) {
@@ -157,7 +157,7 @@ let Prefs = function(extName, appInfo, Utils) {
 	};
 
 	this.importPrefs = function(window) {
-		let file = Utils.chooseFile("open", ["conf"], "cookies-xtrm-backup.conf");
+		let file = Utils.chooseFile("open", ["text"], "cookies-xtrm-conf.txt");
 		if (file) {
 			let Prefs = this;
 			NetUtil.asyncFetch(file, function(istream, status) {

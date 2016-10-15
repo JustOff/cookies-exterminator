@@ -53,7 +53,6 @@ let Utils = function() {
 					break;
 			}
 		}
-		fp.appendFilters(fp.filterAll);
 		fp.defaultString = name;
 
 		let result = fp.show();
