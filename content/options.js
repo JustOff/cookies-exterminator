@@ -5,7 +5,7 @@ Components.utils.import("chrome://cookies-xtrm/content/utils.js", Imports);
 let Utils = new Imports.Utils();
 
 function onWindowLoad() {
-	Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
+	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Load");
 
 	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
 	Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
@@ -28,7 +28,7 @@ function onWindowLoad() {
 }
 
 function onReset() {
-	Services.obs.notifyObservers(window, "cookextermPrefsLoad", null);
+	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Load");
 
 	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
 	Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
@@ -121,9 +121,9 @@ function updateWhitelistedDomains(domListbox, listedDomains) {
 }
 
 function exportData() {
-	Services.obs.notifyObservers(window, "cookextermPrefsExport", null);
+	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Export");
 }
 
 function importData() {
-	Services.obs.notifyObservers(window, "cookextermPrefsImport", null);
+	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Import");
 }

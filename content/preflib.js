@@ -198,27 +198,19 @@ let Prefs = function(extName, appInfo, Utils) {
 		}
 	};
 
-	this.onOpen = {
+	this.onEvent = {
 		Prefs: this,
 		feedPrefWindow: this.feedPrefWindow,
-		observe: function(aSubject, aTopic, aData) {
-			this.feedPrefWindow.call(this.Prefs, aSubject);
-		}
-	};
-
-	this.onExport = {
-		Prefs: this,
 		exportPrefs: this.exportPrefs,
-		observe: function(aSubject, aTopic, aData) {
-			this.exportPrefs.call(this.Prefs, null);
-		}
-	};
-
-	this.onImport = {
-		Prefs: this,
 		importPrefs: this.importPrefs,
 		observe: function(aSubject, aTopic, aData) {
-			this.importPrefs.call(this.Prefs, aSubject);
+			if (aData == "Load") {
+				this.feedPrefWindow.call(this.Prefs, aSubject);
+			} else if (aData == "Export") {
+				this.exportPrefs.call(this.Prefs, null);
+			} else if (aData == "Import") {
+				this.importPrefs.call(this.Prefs, aSubject);
+			}
 		}
 	};
 
