@@ -128,18 +128,21 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
 
-		while (windowsEnumerator.hasMoreElements()) {
+		loop1: while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
 			
 			if (PrivateBrowsingUtils.isWindowPrivate(window)) {
-				continue;
+				continue loop1;
 			}
 
 			let tabBrowser = window.gBrowser;
-			for (let browser of tabBrowser.browsers) {
+			loop2: for (let tab of tabBrowser.tabs) {
+				if (window.privateTab && window.privateTab.isTabPrivate(tab)) {
+					continue loop2;
+				}
 				let domain;
 				try {
-					domain = browser.contentDocument.domain;
+					domain = tab.linkedBrowser.contentDocument.domain;
 				} catch(e) {}
 
 				if (domain) {
