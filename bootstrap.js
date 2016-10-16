@@ -5,6 +5,12 @@ Cu.import("resource://gre/modules/Services.jsm");
 const extName = "cookies-xtrm";
 const extJSPath = "chrome://" + extName + "/content/";
 
+const INCOMPATIBLE = {
+	"trackerblock%40privacychoice.org": "TrackerBlock",
+	"optout%40dubfire.net": "TACO",
+	"john%40velvetcache.org": "Beef Taco"
+};
+
 // future global references of module symbols
 let Prefs = null;
 let Whitelist = null;
@@ -14,6 +20,7 @@ let Windows = null;
 
 let onPrefsApply = null;
 let appInfo = null;
+let compat = true;
 
 function startup(data, reason) {
 	appInfo = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULAppInfo);
@@ -60,6 +67,17 @@ function startup(data, reason) {
 	if (reason == ADDON_INSTALL) {
 		Prefs.importFromPermissions();
 	}
+
+	let addons = Services.prefs.getCharPref("extensions.enabledAddons").split(",");
+	for (let i in addons) {
+		let addon = addons[i].split(":")[0];
+		if (INCOMPATIBLE[addon]) {
+			Notifications.incompat(INCOMPATIBLE[addon]);
+			compat = false;
+			return;
+		}
+	}
+
 	Whitelist.init();
 	Utils.setTimeout(Crusher.getScopesFromDB.bind(this, null), 10);
 	Windows.init(); // this will do the rest
@@ -89,19 +107,20 @@ function startup(data, reason) {
 }
 
 function shutdown(data, reason) {
-	// cleanup
-	if(reason == APP_SHUTDOWN) {
-		Windows.clear(true);
-		return;
-	} else {
-		Windows.clear();
-	}
+	if (compat) {
+		if(reason == APP_SHUTDOWN) {
+			Windows.clear(true);
+			return;
+		} else {
+			Windows.clear();
+		}
 
-	// remove preferences and log windows event observers
-	Services.obs.removeObserver(onPrefsEvent, "cookextermPrefsEvent");
-	Services.obs.removeObserver(Log.onEvent, "cookextermLogEvent");
-	Services.obs.removeObserver(Crusher.handleCookieChanged, "cookie-changed");
-	Services.obs.removeObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed");
+		// remove preferences and log windows event observers
+		Services.obs.removeObserver(onPrefsEvent, "cookextermPrefsEvent");
+		Services.obs.removeObserver(Log.onEvent, "cookextermLogEvent");
+		Services.obs.removeObserver(Crusher.handleCookieChanged, "cookie-changed");
+		Services.obs.removeObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed");
+	}
 
 	// unload own modules
 	Cu.unload(extJSPath + "preflib.js");
