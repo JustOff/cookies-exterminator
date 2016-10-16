@@ -1,12 +1,17 @@
 let EXPORTED_SYMBOLS = ["Windows"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
+Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 	this.windowListener = {
 		onOpenWindow: function(nsIObj) {
 			let domWindow = nsIObj.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
 								  .getInterface(Components.interfaces.nsIDOMWindow);
+
+			if (PrivateBrowsingUtils.isWindowPrivate(domWindow)) {
+				return;
+			}
 
 			domWindow.addEventListener("load", function() {
 				domWindow.removeEventListener("load", arguments.callee, false);
@@ -49,8 +54,10 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 		while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
 
-			Tabs.init(window);
-			Buttons.init(window);
+			if (!PrivateBrowsingUtils.isWindowPrivate(window)) {
+				Tabs.init(window);
+				Buttons.init(window);
+			}
 		}
 
 		Services.wm.addListener(this.windowListener);

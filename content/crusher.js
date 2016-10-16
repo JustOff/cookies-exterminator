@@ -3,6 +3,7 @@ let EXPORTED_SYMBOLS = ["Crusher"];
 let Cc = Components.classes, Ci = Components.interfaces, Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 let ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 let securityManager = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
@@ -129,8 +130,12 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 		while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
-			let tabBrowser = window.gBrowser;
+			
+			if (PrivateBrowsingUtils.isWindowPrivate(window)) {
+				continue;
+			}
 
+			let tabBrowser = window.gBrowser;
 			for (let browser of tabBrowser.browsers) {
 				let domain;
 				try {
