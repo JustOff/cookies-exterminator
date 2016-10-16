@@ -31,7 +31,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				let uri = ioService.newURI(aSubject.url, null, null);
 				let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
 				Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
-Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
+//Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
 			}
 		}
 	}
@@ -56,7 +56,7 @@ Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
 			}
 		}
 	};
-this.jobID = 0;
+//this.jobID = 0;
 
 	this.execute = function(onecookie) {
 		let cookies = [];
@@ -64,7 +64,7 @@ this.jobID = 0;
 		let crushedSomething = false;
 
 		let cleanup = onecookie === true;
-this.jobID++;
+//this.jobID++;
 
 		if (!cleanup && onecookie) {
 			cookies.push(onecookie);
@@ -150,14 +150,14 @@ this.jobID++;
 
 		return true;
 	};
-this.jobIDs = 0;
+//this.jobIDs = 0;
 
 	this.executeStorage = function(onehost) {
 		let crushedStorageDomains = {};
 		let crushedSomething = false;
 
 		let cleanup = onehost === true;
-this.jobIDs++;
+//this.jobIDs++;
 
 //		if (cleanup) {
 //		} else {
@@ -168,10 +168,10 @@ this.jobIDs++;
 						delete this.storageTracker[url];
 						crushedStorageDomains[uri.host] = true;
 						crushedSomething = true;
-Cu.reportError("[" + this.jobIDs + "s][-] " + url);
+//Cu.reportError("[" + this.jobIDs + "s][-] " + url);
 					}
 				} else {
-Cu.reportError("[" + this.jobIDs + "s][*] " + url);
+//Cu.reportError("[" + this.jobIDs + "s][*] " + url);
 				}
 			}
 //		}

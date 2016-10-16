@@ -74,9 +74,7 @@ let Utils = function() {
 			str = str.replace(/\(|\)/g, '').replace(/(\w+):/g, '"$1":')
 			try {
 				return JSON.parse(str);
-			} catch (e) {
-				Cu.reportError("Error parsing " + str + ": " + e);
-			}
+			} catch (e) {}
 			return {};
 		}
 	};
