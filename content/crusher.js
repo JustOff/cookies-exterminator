@@ -73,46 +73,53 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 	};
 
-	this.prepareStorage = function(host) {
-		if (Prefs.getValue("enableProcessing") && Prefs.getValue("keepCrushingLocalStorage")) {
-			if (host === true) {
-				this.executeStorage(true);
-			} else {
-				Utils.setTimeout(this.executeStorage.bind(this, host), Prefs.getValue("crushingDelay"));
-			}
-		}
-	};
 //this.jobID = 0;
-
 	this.execute = function(anycookies) {
 		let cookies = [];
-		let crushedCookiesDomains = {};
+		let crushedDomains = {};
 		let crushedSomething = false;
 
 		let cleanup = anycookies === true;
+		let cleanAll = anycookies === "CleanAll";
 //this.jobID++;
 
-		if (!cleanup && anycookies !== "CleanAll") {
-			cookies = anycookies;
-		} else {
+		if (cleanup || cleanAll) {
 			let cookiesEnumerator = Services.cookies.enumerator;
 			while (cookiesEnumerator.hasMoreElements()) {
 				cookies.push(cookiesEnumerator.getNext().QueryInterface(Ci.nsICookie2));
 			}
+		} else {
+			cookies = anycookies;
 		} 
 
 		for (let cookie of cookies) {
-			if (this.mayBeCrushed(cookie, cleanup)) {
+			if (this.mayBeCrushedCookie(cookie, cleanup)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
 				} else {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
 				}
 				crushedSomething = true;
-				crushedCookiesDomains[cookie.rawHost] = true;
+				crushedDomains[cookie.rawHost] = true;
 //Cu.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
 			} else {
 //Cu.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
+			}
+		}
+
+		if (cleanup || cleanAll) {
+			for (let url in this.storageTracker) {
+				let uri = ioService.newURI(url, null, null);
+				if (this.mayBeCrushedStorage(uri.host, cleanup)) {
+					if (clearStorage(uri)) {
+						delete this.storageTracker[url];
+						crushedDomains[uri.host] = true;
+						crushedSomething = true;
+//Cu.reportError("[" + this.jobID + "s][-] " + url);
+					}
+				} else {
+//Cu.reportError("[" + this.jobID + "s][*] " + url);
+				}
 			}
 		}
 
@@ -121,23 +128,23 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 
 		if (crushedSomething) {
-			let crushedCookiesDomainsString = "";
+			let crushedDomainsString = "";
 
-			for (let domain in crushedCookiesDomains) {
-				crushedCookiesDomainsString += domain + ", ";
+			for (let domain in crushedDomains) {
+				crushedDomainsString += domain + ", ";
 			}
 
-			crushedCookiesDomainsString = crushedCookiesDomainsString.slice(0, -2);
+			crushedDomainsString = crushedDomainsString.slice(0, -2);
 
-			Buttons.notify(crushedCookiesDomainsString);
-			Notifications.notify(crushedCookiesDomainsString);
-			Log.log(crushedCookiesDomainsString, "cookies");
+			Buttons.notify(crushedDomainsString);
+			Notifications.notify(crushedDomainsString);
+			Log.log(crushedDomainsString, "cookies/storage");
 		} else {
 			Buttons.notify();
 		}
 	};
 	
-	this.mayBeCrushed = function(cookie, cleanup) {
+	this.mayBeCrushedCookie = function(cookie, cleanup) {
 		if (Whitelist.isWhitelisted(cookie.rawHost)) {
 			return false;
 		}
@@ -184,48 +191,6 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 
 		return true;
-	};
-//this.jobIDs = 0;
-
-	this.executeStorage = function(onehost) {
-		let crushedStorageDomains = {};
-		let crushedSomething = false;
-
-		let cleanup = onehost === true;
-//this.jobIDs++;
-
-//		if (cleanup) {
-//		} else {
-			for (let url in this.storageTracker) {
-				let uri = ioService.newURI(url, null, null);
-				if (this.mayBeCrushedStorage(uri.host, cleanup)) {
-					if (clearStorage(uri)) {
-						delete this.storageTracker[url];
-						crushedStorageDomains[uri.host] = true;
-						crushedSomething = true;
-//Cu.reportError("[" + this.jobIDs + "s][-] " + url);
-					}
-				} else {
-//Cu.reportError("[" + this.jobIDs + "s][*] " + url);
-				}
-			}
-//		}
-
-		if (crushedSomething) {
-			let crushedStorageDomainsString = "";
-
-			for (let domain in crushedStorageDomains) {
-				crushedStorageDomainsString += domain + ", ";
-			}
-
-			crushedStorageDomainsString = crushedStorageDomainsString.slice(0, -2);
-
-			Buttons.notify(crushedStorageDomainsString);
-			Notifications.notify(crushedStorageDomainsString);
-			Log.log(crushedStorageDomainsString, "storage");
-		} else {
-			Buttons.notify();
-		}
 	};
 
 	this.mayBeCrushedStorage = function(host, cleanup) {

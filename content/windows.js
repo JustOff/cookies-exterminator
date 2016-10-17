@@ -39,7 +39,6 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 
 				if (windowsCounter > 1) {
 					Crusher.prepare();
-					Crusher.prepareStorage();
 				}
 
 				Tabs.clear(domWindow);
@@ -66,7 +65,6 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 	this.clear = function(shutdown) {
 		if (shutdown) {
 			Crusher.prepare(true);
-			Crusher.prepareStorage(true);
 			return;
 		}
 
