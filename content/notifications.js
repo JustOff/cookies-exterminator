@@ -14,24 +14,11 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.conflictMessage = "Cookies Exterminator was NOT enabled because of conflicting add-on: ";
 	this.conflictTitle = "Cookies Exterminator Alert";
 	
-	this.messageBuffer = "";
-
 	this.notify = function(crushedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && crushedDomainsString) {
-			if (crushedDomainsString != "@") {
-				if (this.messageBuffer == "") {
-					Utils.setTimeout(this.notify.bind(this, "@"), 2);
-				}
-				this.messageBuffer = this.messageBuffer + ", " + crushedDomainsString;
-			} else {
-				let messageArray = this.messageBuffer.substring(2).split(", ");
-				this.messageBuffer = "";
-				messageArray = messageArray.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
-				let displayMessage = messageArray.join(", ");
-				AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-													this.alertTitle, displayMessage, 
-													false, "", null, this.alertName);
-			}
+			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
+												this.alertTitle, crushedDomainsString, 
+												false, "", null, this.alertName);
 		}
 	};
 
