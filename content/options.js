@@ -54,15 +54,13 @@ function onSelect(domainsListbox) {
 function onAddDomain(domListbox, domTextbox, listedDomains) {
 	let domainsListbox = window.document.getElementById(domListbox);
 	let newDomainTextbox = window.document.getElementById(domTextbox);
-	let domTextbox1 = window.document.getElementById("newDomainTextbox");
-	let domTextbox2 = window.document.getElementById("newDomainTextboxGrey");
 
 	if (newDomainTextbox.value != "") {
-		domainsListbox.appendItem(newDomainTextbox.value, newDomainTextbox.value);
-		domTextbox1.value = ""; domTextbox2.value = "";
+		window.document.getElementById(listedDomains).value += ";" + Utils.UTF8toACE(newDomainTextbox.value);
+		Utils.updateDomainsListbox(window, domListbox, listedDomains);
 
-		Utils.sortDomainsListbox(domainsListbox);
-		updateWhitelistedDomains(domListbox, listedDomains);
+		window.document.getElementById("newDomainTextbox").value = "";
+		window.document.getElementById("newDomainTextboxGrey").value = "";
 	}
 }
 
@@ -70,18 +68,24 @@ function onEditDomain(domListbox, domTextbox, listedDomains) {
 	let domainsListbox = window.document.getElementById(domListbox);
 	let selectedDomain = domainsListbox.getSelectedItem(0);
 	let newDomainTextbox = window.document.getElementById(domTextbox);
-	let domTextbox1 = window.document.getElementById("newDomainTextbox");
-	let domTextbox2 = window.document.getElementById("newDomainTextboxGrey");
 
 	if (selectedDomain && newDomainTextbox.value != "") {
-		selectedDomain.value = newDomainTextbox.value;
-		selectedDomain.label = newDomainTextbox.value;
+		let domainToRemove = Utils.UTF8toACE(selectedDomain.value);
+		let domainToAdd = Utils.UTF8toACE(newDomainTextbox.value);
+		let separatedDomains =  window.document.getElementById(listedDomains).value.split(';');
+		let domains = [];
+		for (let domain of separatedDomains) {
+			if (domain != domainToRemove) {
+				domains.push(domain);
+			} else {
+				domains.push(domainToAdd);
+			}
+		}
+		window.document.getElementById(listedDomains).value = domains.join(';');
+		Utils.updateDomainsListbox(window, domListbox, listedDomains);
 
-		domTextbox1.value = ""; domTextbox2.value = "";
-		domainsListbox.clearSelection();
-
-		Utils.sortDomainsListbox(domainsListbox);
-		updateWhitelistedDomains(domListbox, listedDomains);
+		window.document.getElementById("newDomainTextbox").value = "";
+		window.document.getElementById("newDomainTextboxGrey").value = "";
 	}
 }
 
@@ -90,34 +94,21 @@ function onRemoveDomain(domListbox, domTextbox, listedDomains) {
 	let selectedDomain = domainsListbox.getSelectedItem(0);
 
 	if (selectedDomain) {
-		let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
-		let newDomainTextbox = window.document.getElementById(domTextbox);
-		let domTextbox1 = window.document.getElementById("newDomainTextbox");
-		let domTextbox2 = window.document.getElementById("newDomainTextboxGrey");
+//		let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
+		let domainToRemove = Utils.UTF8toACE(selectedDomain.value);
+		let separatedDomains =  window.document.getElementById(listedDomains).value.split(';');
+		let domains = [];
+		for (let domain of separatedDomains) {
+			if (domain != domainToRemove) {
+				domains.push(domain);
+			}
+		}
+		window.document.getElementById(listedDomains).value = domains.join(';');
+		Utils.updateDomainsListbox(window, domListbox, listedDomains);
 
-		domainsListbox.removeItemAt(selectedDomainIndex);
-		domainsListbox.clearSelection();
-
-		domTextbox1.value = ""; domTextbox2.value = "";
-
-		Utils.sortDomainsListbox(domainsListbox);
-		updateWhitelistedDomains(domListbox, listedDomains);
+		window.document.getElementById("newDomainTextbox").value = "";
+		window.document.getElementById("newDomainTextboxGrey").value = "";
 	}
-}
-
-function updateWhitelistedDomains(domListbox, listedDomains) {
-	let whitelistedDomains = window.document.getElementById(listedDomains);
-	whitelistedDomains.value = "";
-
-	let domainsListbox = window.document.getElementById(domListbox);
-	let rows = domainsListbox.getRowCount();
-
-	for (let i = 0; i < rows; i++) {
-		let item = domainsListbox.getItemAtIndex(i);
-		whitelistedDomains.value += Utils.UTF8toACE(item.value) + ";";
-	}
-
-	whitelistedDomains.value = whitelistedDomains.value.slice(0, -1);
 }
 
 function exportData() {

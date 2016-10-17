@@ -109,30 +109,16 @@ let Utils = function() {
 
 		if (whitelistedDomains.value != "") {
 			let separatedDomains = whitelistedDomains.value.split(';');
+			let tmpDomains = [];
 
 			for (let domain of separatedDomains) {
-				domain = this.ACEtoUTF8(domain);
-				domainsListbox.appendItem(domain, domain);
+				tmpDomains.push(this.ACEtoUTF8(domain));
 			}
-		}
 
-		this.sortDomainsListbox(domainsListbox);
-	};
+			tmpDomains.sort();
 
-	this.sortDomainsListbox = function(domainsListbox) {
-		let rows = domainsListbox.getRowCount();
-
-		for (let i = 0; i < rows; i++) {
-			for (let j = rows - 1; j > i; j--) {
-				let domain = domainsListbox.getItemAtIndex(i);
-				let anotherDomain = domainsListbox.getItemAtIndex(j);
-
-				if (anotherDomain.value < domain.value) {
-					domain.value = anotherDomain.value;
-					anotherDomain.value = domain.label;
-					domain.label = domain.value;
-					anotherDomain.label = anotherDomain.value;
-				}
+			for (let domain of tmpDomains) {
+				domainsListbox.appendItem(domain, domain);
 			}
 		}
 	};
