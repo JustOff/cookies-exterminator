@@ -35,15 +35,40 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
 			}
 		}
-	}
-	
+	};
+
+	this.cookiesToClean = [];
+
+	this.cookiesCleanAll = false;
+
 	this.prepare = function(cookie) {
+		let master = false;
 		if (Prefs.getValue("enableProcessing")) {
 			if (cookie === true) {
 				this.execute(true);
 			} else {
-//if (cookie) { Cu.reportError("[+] " + cookie.host + " : " + cookie.name); }
-				Utils.setTimeout(this.execute.bind(this, cookie), Prefs.getValue("crushingDelay"));
+				if (cookie === "@") {
+					if (this.cookiesCleanAll) {
+						this.cookiesCleanAll = false;
+						this.cookiesToClean = [];
+						Utils.setTimeout(this.execute.bind(this, "CleanAll"), Prefs.getValue("crushingDelay") - 3);
+					} else {
+						let cookies = this.cookiesToClean;
+						this.cookiesToClean = [];
+						Utils.setTimeout(this.execute.bind(this, cookies), Prefs.getValue("crushingDelay") - 3);
+					}
+				} else {
+					master = !this.cookiesCleanAll && this.cookiesToClean.length == 0;
+					if (cookie) {
+//Cu.reportError("[+] " + cookie.host + " : " + cookie.name);
+						this.cookiesToClean.push(cookie);
+					} else {
+						this.cookiesCleanAll = true;
+					}
+					if (master) {
+						Utils.setTimeout(this.prepare.bind(this, "@"), 3);
+					}
+				}
 			}
 		}
 	};
@@ -59,16 +84,16 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	};
 //this.jobID = 0;
 
-	this.execute = function(onecookie) {
+	this.execute = function(anycookies) {
 		let cookies = [];
 		let crushedCookiesDomains = {};
 		let crushedSomething = false;
 
-		let cleanup = onecookie === true;
+		let cleanup = anycookies === true;
 //this.jobID++;
 
-		if (!cleanup && onecookie) {
-			cookies.push(onecookie);
+		if (!cleanup && anycookies !== "CleanAll") {
+			cookies = anycookies;
 		} else {
 			let cookiesEnumerator = Services.cookies.enumerator;
 			while (cookiesEnumerator.hasMoreElements()) {
@@ -137,6 +162,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 			let tabBrowser = window.gBrowser;
 			loop2: for (let tab of tabBrowser.tabs) {
+//Cu.reportError(tab.linkedBrowser.currentURI.spec);
 				if (window.privateTab && window.privateTab.isTabPrivate(tab)) {
 					continue loop2;
 				}
@@ -146,6 +172,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} catch(e) {}
 
 				if (domain) {
+//Cu.reportError("[" + this.jobID + "][?] " + cookie.host + " : " + cookie.name + " ? " + domain);
 					domain = Utils.UTF8toACE(domain);
 
 					if (cookie.rawHost == domain ||
@@ -235,6 +262,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} catch(e) {}
 
 				if (domain) {
+//Cu.reportError("[" + this.jobIDs + "s][?] " + host + " ? " + domain);
 					domain = Utils.UTF8toACE(domain);
 
 					if (host == domain) {
