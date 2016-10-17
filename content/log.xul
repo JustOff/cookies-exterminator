@@ -4,8 +4,9 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		id="cookextermLog"
+		persist="width height"
 		title="Cookies Exterminator cleanup log" 
-		style="min-width: 600px; max-width: 600px; min-height: 300px;"
+		style="width: 400px; height: 300px; min-width: 200px; min-height: 200px;"
 		windowtype="cookextermLogWindow">
 
   <script type="application/x-javascript">
@@ -29,13 +30,15 @@
   </script>
 
   <vbox flex="1" style="padding: 5px">
-	<textbox id="logTextbox" height="280" multiline="true" readonly="true"></textbox>
+	<textbox id="logTextbox" flex="1" multiline="true" readonly="true"></textbox>
   </vbox>
 
   <hbox style="padding: 0px 0px 5px 0px">
-	<button label="Clear log" oncommand="onClearLog();" width="500"/>
 	<spacer flex="1"/>
-	<button label="Close" onclick="window.close();"/>
+	<button label="Clear log" oncommand="onClearLog();" flex="8"/>
+	<spacer flex="1"/>
+	<button label="Close" onclick="window.close();" flex="2"/>
+	<spacer flex="1"/>
   </hbox>
 
 </window>

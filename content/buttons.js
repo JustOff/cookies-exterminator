@@ -209,7 +209,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				existingWindow.focus();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
-				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "minimizable,centerscreen");
+				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "minimizable,centerscreen,resizable");
 			}
 		}, false);
 

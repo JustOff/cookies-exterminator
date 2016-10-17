@@ -136,8 +136,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 			crushedDomainsString = crushedDomainsString.slice(0, -2);
 
-			Buttons.notify(crushedDomainsString);
 			Notifications.notify(crushedDomainsString);
+			Buttons.notify(crushedDomainsString);
 			Log.log(crushedDomainsString, "cookies/storage");
 		} else {
 			Buttons.notify();
