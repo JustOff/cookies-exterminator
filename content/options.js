@@ -56,8 +56,11 @@ function onAddDomain(domListbox, domTextbox, listedDomains) {
 	let newDomainTextbox = window.document.getElementById(domTextbox);
 
 	if (newDomainTextbox.value != "") {
-		window.document.getElementById(listedDomains).value += ";" + Utils.UTF8toACE(newDomainTextbox.value);
+		let domainToAdd = Utils.UTF8toACE(newDomainTextbox.value);
+		window.document.getElementById(listedDomains).value += ";" + domainToAdd;
 		Utils.updateDomainsListbox(window, domListbox, listedDomains);
+		separatedDomains = Utils.updateDomainsListbox(window, domListbox, listedDomains);
+		domainsListbox.ensureIndexIsVisible(separatedDomains.indexOf(domainToAdd));
 
 		window.document.getElementById("newDomainTextbox").value = "";
 		window.document.getElementById("newDomainTextboxGrey").value = "";
@@ -82,7 +85,8 @@ function onEditDomain(domListbox, domTextbox, listedDomains) {
 			}
 		}
 		window.document.getElementById(listedDomains).value = domains.join(';');
-		Utils.updateDomainsListbox(window, domListbox, listedDomains);
+		separatedDomains = Utils.updateDomainsListbox(window, domListbox, listedDomains);
+		domainsListbox.ensureIndexIsVisible(separatedDomains.indexOf(domainToAdd));
 
 		window.document.getElementById("newDomainTextbox").value = "";
 		window.document.getElementById("newDomainTextboxGrey").value = "";
@@ -94,7 +98,7 @@ function onRemoveDomain(domListbox, domTextbox, listedDomains) {
 	let selectedDomain = domainsListbox.getSelectedItem(0);
 
 	if (selectedDomain) {
-//		let selectedDomainIndex = domainsListbox.getIndexOfItem(selectedDomain);
+		let visibleIndex = domainsListbox.getIndexOfFirstVisibleRow() + domainsListbox.getNumberOfVisibleRows() - 1;
 		let domainToRemove = Utils.UTF8toACE(selectedDomain.value);
 		let separatedDomains =  window.document.getElementById(listedDomains).value.split(';');
 		let domains = [];
@@ -105,6 +109,7 @@ function onRemoveDomain(domListbox, domTextbox, listedDomains) {
 		}
 		window.document.getElementById(listedDomains).value = domains.join(';');
 		Utils.updateDomainsListbox(window, domListbox, listedDomains);
+		domainsListbox.ensureIndexIsVisible(visibleIndex < domains.length ? visibleIndex : domains.length - 1);
 
 		window.document.getElementById("newDomainTextbox").value = "";
 		window.document.getElementById("newDomainTextboxGrey").value = "";

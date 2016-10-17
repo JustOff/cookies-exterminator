@@ -107,19 +107,20 @@ let Utils = function() {
 
 		let whitelistedDomains = window.document.getElementById(domains);
 
+		let sortedDomains = [];
 		if (whitelistedDomains.value != "") {
 			let separatedDomains = whitelistedDomains.value.split(';');
-			let tmpDomains = [];
-
+			
 			for (let domain of separatedDomains) {
-				tmpDomains.push(this.ACEtoUTF8(domain));
+				sortedDomains.push(this.ACEtoUTF8(domain));
 			}
 
-			tmpDomains.sort();
+			sortedDomains.sort();
 
-			for (let domain of tmpDomains) {
+			for (let domain of sortedDomains) {
 				domainsListbox.appendItem(domain, domain);
 			}
 		}
+		return sortedDomains;
 	};
 };
