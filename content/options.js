@@ -57,6 +57,10 @@ function onAddDomain(domListbox, domTextbox, listedDomains) {
 
 	if (newDomainTextbox.value != "") {
 		let domainToAdd = Utils.UTF8toACE(newDomainTextbox.value);
+		let separatedDomains =  window.document.getElementById(listedDomains).value.split(';');
+		if (separatedDomains.indexOf(domainToAdd) != -1) {
+			return;
+		}
 		window.document.getElementById(listedDomains).value += ";" + domainToAdd;
 		Utils.updateDomainsListbox(window, domListbox, listedDomains);
 		separatedDomains = Utils.updateDomainsListbox(window, domListbox, listedDomains);
@@ -110,9 +114,6 @@ function onRemoveDomain(domListbox, domTextbox, listedDomains) {
 		window.document.getElementById(listedDomains).value = domains.join(';');
 		Utils.updateDomainsListbox(window, domListbox, listedDomains);
 		domainsListbox.ensureIndexIsVisible(visibleIndex < domains.length ? visibleIndex : domains.length - 1);
-
-		window.document.getElementById("newDomainTextbox").value = "";
-		window.document.getElementById("newDomainTextboxGrey").value = "";
 	}
 }
 
