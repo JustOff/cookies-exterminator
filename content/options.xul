@@ -12,7 +12,7 @@
 			ondialogextra2="onReset();"
 			defaultButton="extra1"
 			title="Cookies Exterminator preferences" 
-			style="min-width: 385px; min-height: 340px;"
+			style="min-width: 385px; min-height: 360px;"
 			windowtype="cookextermPrefsWindow">
 
   <prefpane id="general-pane" label="Cookies Exterminator preferences" flex="1">
@@ -82,7 +82,7 @@
 					<textbox id="newDomainTextbox" width="150"/>
 					<button label="Add" oncommand="onAddDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Update" oncommand="onEditDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+					<button label="Replace" oncommand="onEditDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
 					<button label="Remove" oncommand="onRemoveDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');"/>
 				</hbox>
 			</vbox>
@@ -95,7 +95,7 @@
 					<textbox id="newDomainTextboxGrey" width="150"/>
 					<button label="Add" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Update" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+					<button label="Replace" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
 					<button label="Remove" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');"/>
 				</hbox>
 			</vbox>
