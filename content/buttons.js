@@ -232,6 +232,9 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let domain;
 			try {
 				domain = window.gBrowser.contentDocument.domain;
+				if (window.privateTab && window.privateTab.isTabPrivate(window.gBrowser.selectedTab)) {
+					domain = null;
+				}
 			} catch(e) {}
 
 			if (domain) {
@@ -427,6 +430,9 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		if (button) {
 			try {
 				domain = Utils.UTF8toACE(window.gBrowser.contentDocument.domain);
+				if (window.privateTab && window.privateTab.isTabPrivate(window.gBrowser.selectedTab)) {
+					domain = null;
+				}
 			} catch(e) {}
 
 			if (!Prefs.getValue("enableProcessing")) {

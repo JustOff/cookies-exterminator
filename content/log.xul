@@ -4,7 +4,7 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		id="cookextermLog"
-		persist="width height"
+		persist="screenX screenY width height"
 		title="Cookies Exterminator cleanup log" 
 		style="width: 400px; height: 300px; min-width: 200px; min-height: 200px;"
 		windowtype="cookextermLogWindow">
