@@ -1,6 +1,6 @@
 let EXPORTED_SYMBOLS = ["Whitelist"];
 
-let Whitelist = function(Prefs) {
+let Whitelist = function(Prefs, Notifications) {
 	this.domains = {};
 	this.domainsTemp = {};
 
@@ -45,6 +45,10 @@ let Whitelist = function(Prefs) {
 		whitelistedDomains = whitelistedDomains.slice(0, -1);
 
 		Prefs.setValue(prefname, whitelistedDomains);
+		if (prefname == "whitelistedDomains" && whitelistedDomains == "") {
+			Prefs.setValue("enableProcessing", false);
+			Notifications.notifyDisabled();
+		}
 		Prefs.save();
 	};
 
@@ -59,12 +63,12 @@ let Whitelist = function(Prefs) {
 	};
 
 	this.removeDomain = function(domain) {
-		this.domains[domain] = undefined;
+		delete this.domains[domain];
 		this.saveToPrefs(this.domains, "whitelistedDomains");
 	};
 
 	this.removeDomainTemp = function(domain) {
-		this.domainsTemp[domain] = undefined;
+		delete this.domainsTemp[domain];
 		this.saveToPrefs(this.domainsTemp, "whitelistedDomainsTemp");
 	};
 

@@ -35,8 +35,10 @@ function onReset() {
 } 
 
 function onApply() {
-	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Apply");
-	window.close();
+	if (checkWhitelistEmpty()) {
+		Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Apply");
+		window.close();
+	}
 }
 
 function onSelect(domainsListbox) {
@@ -169,4 +171,14 @@ function addToList(domListbox, listedDomains) {
 	window.document.getElementById(listedDomains).value = hosts.join(';');
 	Utils.updateDomainsListbox(window, domListbox, listedDomains);
 	loadRedlist();
+}
+
+function checkWhitelistEmpty() {
+	let enabledBox = window.document.getElementById("enableProcessing");
+	if (enabledBox.checked && window.document.getElementById("whitelistedDomains").value == "") {
+		enabledBox.removeAttribute("checked");
+		Utils.alert("Cleanup was disabled because Whitelist is empty");
+		return false;
+	}
+	return true;
 }

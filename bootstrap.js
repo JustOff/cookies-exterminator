@@ -54,10 +54,10 @@ function startup(data, reason) {
 
 	// create new objects from module symbols with passed dependencies
 	Prefs = new Imports.Prefs(extName, appInfo, Utils);
-	Whitelist = new Imports.Whitelist(Prefs);
+	let Notifications = new Imports.Notifications(extName, Prefs, Utils);
+	Whitelist = new Imports.Whitelist(Prefs, Notifications);
 	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs);
-	let Notifications = new Imports.Notifications(extName, Prefs, Utils);
 	Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
 	Tabs = new Imports.Tabs(Crusher, Buttons);
 	Windows = new Imports.Windows(Tabs, Buttons, Crusher, Prefs);
@@ -72,10 +72,16 @@ function startup(data, reason) {
 	for (let i in addons) {
 		let addon = addons[i].split(":")[0];
 		if (INCOMPATIBLE[addon]) {
-			Notifications.incompat(INCOMPATIBLE[addon]);
+			Notifications.notifyIncompat(INCOMPATIBLE[addon]);
 			compat = false;
 			return;
 		}
+	}
+
+	if (Prefs.getValue("enableProcessing") && Prefs.getValue("whitelistedDomains") == "") {
+		Prefs.setValue("enableProcessing", false);
+		Prefs.save();
+		Notifications.notifyDisabled();
 	}
 
 	Whitelist.init();

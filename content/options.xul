@@ -30,7 +30,7 @@
 				<caption label="Main"/>
 				<spacer flex="0" height="5"/>
 				<hbox flex="0" align="center">
-					<checkbox id="enableProcessing" label="Enable"/>
+					<checkbox id="enableProcessing" oncommand="checkWhitelistEmpty();" label="Enable"/>
 				</hbox>
 				<hbox flex="0" align="center">
 					<label value="Cleaning delay in seconds"/>

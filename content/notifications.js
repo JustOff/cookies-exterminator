@@ -11,8 +11,9 @@ let Notifications = function(extName, Prefs, Utils) {
 
 	this.alertName = "cookextermNotification";
 	this.alertTitle = "Cleaned cookies/storage from";
+	this.alertTitle2 = "Cookies Exterminator Alert";
 	this.conflictMessage = "Cookies Exterminator was NOT enabled because of conflicting add-on: ";
-	this.conflictTitle = "Cookies Exterminator Alert";
+	this.disabledMessage = "Cleanup mode was disabled because Whitelist is empty";
 	
 	this.notify = function(crushedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && crushedDomainsString) {
@@ -22,14 +23,26 @@ let Notifications = function(extName, Prefs, Utils) {
 		}
 	};
 
-	this.incompat = function(addon) {
+	this.notifyIncompat = function(addon) {
 		try {
 			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-												this.conflictTitle, this.conflictMessage + addon,
+												this.alertTitle2, this.conflictMessage + addon,
 												false, "", null, this.alertName);
 			let mrw = Services.wm.getMostRecentWindow("navigator:browser");
 			let nb = mrw.gBrowser.getNotificationBox();
 			nb.appendNotification(this.conflictMessage + addon, this.alertName,
+									this.contentURL + this.iconFileName, nb.PRIORITY_WARNING_HIGH, null);
+		} catch(e) {}
+	};
+
+	this.notifyDisabled = function() {
+		try {
+			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
+												this.alertTitle2, this.disabledMessage,
+												false, "", null, this.alertName);
+			let mrw = Services.wm.getMostRecentWindow("navigator:browser");
+			let nb = mrw.gBrowser.getNotificationBox();
+			nb.appendNotification(this.disabledMessage, this.alertName,
 									this.contentURL + this.iconFileName, nb.PRIORITY_WARNING_HIGH, null);
 		} catch(e) {}
 	};

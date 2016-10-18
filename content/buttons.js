@@ -226,6 +226,11 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 			let menuitemEnable = document.getElementById(Buttons.menuitemIds.enable);
 			menuitemEnable.setAttribute("checked", Prefs.getValue("enableProcessing") ? true : false);
+			if (Prefs.getValue("whitelistedDomains") == "") {
+				menuitemEnable.setAttribute("disabled", "true");
+			} else {
+				menuitemEnable.removeAttribute("disabled");
+			}
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
@@ -247,10 +252,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				} else {
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
 				}
-				menuitemWhiteList.setAttribute("disabled", "false");
+				menuitemWhiteList.removeAttribute("disabled");
 				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + Utils.ACEtoUTF8(baseDomain));
-				menuitemCleanOnWinClose.setAttribute("disabled", "false");
-				menuitemCleanOnTabsClose.setAttribute("disabled", "false");
+				menuitemCleanOnWinClose.removeAttribute("disabled");
+				menuitemCleanOnTabsClose.removeAttribute("disabled");
 			} else {
 				menuitemWhiteList.setAttribute("disabled", "true");
 				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList);
