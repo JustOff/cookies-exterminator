@@ -54,6 +54,10 @@ let Log = function(Prefs, Utils) {
 					logListbox.removeItemAt(0);
 				}
 
+				if (this.Log.loggedMessages.length == 0) {
+					return;
+				}
+
 				let loggedHosts = this.Log.loggedMessages.join(", ").split(/(\s\-\s|,\s)/);
 				let loaded = [];
 				for (let i = loggedHosts.length; i-- > 0; ) {
