@@ -23,6 +23,7 @@
 		<tab id="whitelistTab" label="Whitelist"/>
 		<tab id="greylistTab" label="Greylist"/>
 		<tab id="redlistTab" label="Redlist"/>
+		<tab id="logTab" label="Log"/>
 	  </tabs>
 	  <tabpanels flex="1">
 		<tabpanel id="generalTabpanel" orient="vertical">
@@ -106,11 +107,23 @@
 			<vbox flex="1">
 				<listbox id="redListbox" height="250" onselect=""></listbox>
 				<hbox flex="1" align="center">
-					<button label="Load" oncommand="loadRedlist();" style="min-width: 50px"/>
+					<button label="Load Redlist" oncommand="loadRedlist();" style="min-width: 50px"/>
 					<spacer flex="9"/>
-					<button label="Add to Whitelist" oncommand="addToList('domainsListbox', 'whitelistedDomains');" style="min-width: 50px"/>
+					<button label="Add to Whitelist" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'redListbox');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Add to Greylist" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+					<button label="Add to Greylist" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'redListbox');" style="min-width: 50px"/>
+				</hbox>
+			</vbox>
+		</tabpanel>
+		<tabpanel id="logTabpanel">
+			<vbox flex="1">
+				<listbox id="logListbox" height="250" onselect=""></listbox>
+				<hbox flex="1" align="center">
+					<button label="Load Log" oncommand="loadLog();" style="min-width: 50px"/>
+					<spacer flex="9"/>
+					<button label="Add to Whitelist" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'logListbox');" style="min-width: 50px"/>
+					<spacer flex="1"/>
+					<button label="Add to Greylist" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'logListbox');" style="min-width: 50px"/>
 				</hbox>
 			</vbox>
 		</tabpanel>

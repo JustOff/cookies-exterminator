@@ -2,7 +2,7 @@ let EXPORTED_SYMBOLS = ["Log"];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 
-let Log = function(Prefs) {
+let Log = function(Prefs, Utils) {
 	this.loggedMessages = [];
 
 	this.log = function(crushedDomainsString, scope) {
@@ -43,6 +43,33 @@ let Log = function(Prefs) {
 				}
 			} else if (aData == "Clear") {
 				this.Log.loggedMessages = [];
+			} else if (aData == "Fetch") {
+				let window = aSubject;
+				let logListbox = window.document.getElementById("logListbox");
+				let whiteList = window.document.getElementById("whitelistedDomains").value.split(';');
+				let greyList = window.document.getElementById("whitelistedDomainsTemp").value.split(';');
+				
+				let rows = logListbox.getRowCount();
+				for (let i = 0; i < rows; i++) {
+					logListbox.removeItemAt(0);
+				}
+
+				let loggedHosts = this.Log.loggedMessages.join(", ").split(/(\s\-\s|,\s)/);
+				let loaded = [];
+				for (var i = loggedHosts.length; i-- > 0; ) {
+					let host = loggedHosts[i];
+					if (host.indexOf(" ") != -1 || host.indexOf(":") != -1) {
+						continue;
+					}
+					host = Utils.getBaseDomain(host);
+					let hostACE8 = Utils.ACEtoUTF8(host);
+					if (loaded.indexOf(host) == -1 && whiteList.indexOf(hostACE8) == -1 
+													&& greyList.indexOf(hostACE8) == -1) {
+						let item = logListbox.appendItem(host, hostACE8);
+						item.setAttribute("type", "checkbox");
+						loaded.push(host);
+					}
+				}
 			}
 		}
 	};

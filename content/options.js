@@ -156,13 +156,17 @@ function loadRedlist() {
 	}
 }
 
-function addToList(domListbox, listedDomains) {
-	let redListbox = window.document.getElementById("redListbox");
+function loadLog() {
+	Services.obs.notifyObservers(window, "cookextermLogEvent", "Fetch");
+}
+
+function addToList(domListbox, listedDomains, srcListId) {
+	let srcListbox = window.document.getElementById(srcListId);
 	let hosts = window.document.getElementById(listedDomains).value.split(';');
 
-	let rows = redListbox.getRowCount();
+	let rows = srcListbox.getRowCount();
 	for (let i = 0; i < rows; i++) {
-		let item = redListbox.getItemAtIndex(i);
+		let item = srcListbox.getItemAtIndex(i);
 		if (item.checked && hosts.indexOf(item.value) == -1) {
 			hosts.push(item.value);
 		}
@@ -170,7 +174,11 @@ function addToList(domListbox, listedDomains) {
 
 	window.document.getElementById(listedDomains).value = hosts.join(';');
 	Utils.updateDomainsListbox(window, domListbox, listedDomains);
-	loadRedlist();
+	if (srcListId == "redListbox") {
+		loadRedlist();
+	} else {
+		loadLog();
+	}
 }
 
 function checkWhitelistEmpty() {
