@@ -15,6 +15,10 @@ let Log = function(Prefs) {
 			let message = readableDate + " - " + crushedDomainsString;
 
 			this.loggedMessages.push(message);
+
+			if (this.loggedMessages.length > 100) {
+				this.loggedMessages.shift();
+			}
 			
 			let logWindow = Services.wm.getMostRecentWindow("cookextermLogWindow");
 			if (logWindow) {
@@ -34,9 +38,7 @@ let Log = function(Prefs) {
 				let window = aSubject;
 				let logTextbox = window.document.getElementById("logTextbox");
 				if (logTextbox) {
-					for (let message of this.Log.loggedMessages) {
-						logTextbox.value += message + "\n\n";
-					}
+					logTextbox.value = this.Log.loggedMessages.join("\n\n") + "\n\n";
 					logTextbox.selectionStart = logTextbox.value.length;
 				}
 			} else if (aData == "Clear") {
