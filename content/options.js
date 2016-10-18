@@ -55,10 +55,10 @@ function onSelect(domainsListbox) {
 
 function onAddDomain(domListbox, domTextbox, listedDomains) {
 	let domainsListbox = window.document.getElementById(domListbox);
-	let newDomainTextbox = window.document.getElementById(domTextbox);
+	let domainToAdd = window.document.getElementById(domTextbox).value.trim();
 
-	if (newDomainTextbox.value != "") {
-		let domainToAdd = Utils.UTF8toACE(newDomainTextbox.value);
+	if (domainToAdd != "") {
+		domainToAdd = Utils.UTF8toACE(domainToAdd);
 		let separatedDomains = window.document.getElementById(listedDomains).value.split(';');
 		if (separatedDomains.indexOf(domainToAdd) != -1) {
 			return;
@@ -81,11 +81,11 @@ function onAddDomain(domListbox, domTextbox, listedDomains) {
 function onEditDomain(domListbox, domTextbox, listedDomains) {
 	let domainsListbox = window.document.getElementById(domListbox);
 	let selectedDomain = domainsListbox.getSelectedItem(0);
-	let newDomainTextbox = window.document.getElementById(domTextbox);
+	let domainToAdd = window.document.getElementById(domTextbox).value.trim();
 
-	if (selectedDomain && newDomainTextbox.value != "") {
+	if (selectedDomain && domainToAdd != "") {
 		let domainToRemove = Utils.UTF8toACE(selectedDomain.value);
-		let domainToAdd = Utils.UTF8toACE(newDomainTextbox.value);
+		domainToAdd = Utils.UTF8toACE(domainToAdd);
 		let separatedDomains =  window.document.getElementById(listedDomains).value.split(';');
 		let domains = [];
 		for (let domain of separatedDomains) {
