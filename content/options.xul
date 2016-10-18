@@ -11,17 +11,18 @@
 			buttonlabelextra2="Reset"
 			ondialogextra2="onReset();"
 			defaultButton="extra1"
-			title="Cookies Exterminator preferences" 
+			title="Cookies Exterminator" 
 			style="min-width: 385px; min-height: 360px;"
 			windowtype="cookextermPrefsWindow">
 
-  <prefpane id="general-pane" label="Cookies Exterminator preferences" flex="1">
+  <prefpane id="general-pane" label="Cookies Exterminator" flex="1">
 	<spacer flex="1"/>
 	<tabbox id="tabbox" flex="1">
 	  <tabs>
 		<tab id="generalTab" label="Options"/>
 		<tab id="whitelistTab" label="Whitelist"/>
 		<tab id="greylistTab" label="Greylist"/>
+		<tab id="redlistTab" label="Redlist"/>
 	  </tabs>
 	  <tabpanels flex="1">
 		<tabpanel id="generalTabpanel" orient="vertical">
@@ -100,6 +101,18 @@
 				</hbox>
 			</vbox>
 			<textbox id="whitelistedDomainsTemp" hidden="true"/>
+		</tabpanel>
+		<tabpanel id="redlistTabpanel">
+			<vbox flex="1">
+				<listbox id="redListbox" height="250" onselect=""></listbox>
+				<hbox flex="1" align="center">
+					<button label="Load" oncommand="loadRedlist();" style="min-width: 50px"/>
+					<spacer flex="9"/>
+					<button label="Add to Whitelist" oncommand="addToList('domainsListbox', 'whitelistedDomains');" style="min-width: 50px"/>
+					<spacer flex="1"/>
+					<button label="Add to Greylist" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+				</hbox>
+			</vbox>
 		</tabpanel>
 	  </tabpanels>
 	</tabbox>

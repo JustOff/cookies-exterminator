@@ -124,3 +124,49 @@ function exportData() {
 function importData() {
 	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Import");
 }
+
+function loadRedlist() {
+	let redListbox = window.document.getElementById("redListbox");
+
+	let rows = redListbox.getRowCount();
+	for (let i = 0; i < rows; i++) {
+		redListbox.removeItemAt(0);
+	}
+	
+	let whiteList = window.document.getElementById("whitelistedDomains").value.split(';');
+	let greyList = window.document.getElementById("whitelistedDomainsTemp").value.split(';');
+	
+	let hosts = [];
+	let cookiesEnumerator = Services.cookies.enumerator;
+	while (cookiesEnumerator.hasMoreElements()) {
+		let cookie = cookiesEnumerator.getNext().QueryInterface(Components.interfaces.nsICookie2);
+		let host = Utils.getBaseDomain(cookie.rawHost);
+		if (hosts.indexOf(host) == -1 && whiteList.indexOf(host) == -1 && greyList.indexOf(host) == -1) {
+			hosts.push(host);
+		}
+	}
+
+	hosts.sort();
+
+	for (let host of hosts) {
+		let item = redListbox.appendItem(Utils.ACEtoUTF8(host), host);
+		item.setAttribute("type", "checkbox");
+	}
+}
+
+function addToList(domListbox, listedDomains) {
+	let redListbox = window.document.getElementById("redListbox");
+	let hosts = window.document.getElementById(listedDomains).value.split(';');
+
+	let rows = redListbox.getRowCount();
+	for (let i = 0; i < rows; i++) {
+		let item = redListbox.getItemAtIndex(i);
+		if (item.checked && hosts.indexOf(item.value) == -1) {
+			hosts.push(item.value);
+		}
+	}
+
+	window.document.getElementById(listedDomains).value = hosts.join(';');
+	Utils.updateDomainsListbox(window, domListbox, listedDomains);
+	loadRedlist();
+}
