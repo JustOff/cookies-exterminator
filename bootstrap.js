@@ -107,6 +107,15 @@ function startup(data, reason) {
 }
 
 function shutdown(data, reason) {
+	let logWindow = Services.wm.getMostRecentWindow("cookextermLogWindow");
+	if (logWindow) {
+		logWindow.close();
+	}
+	let prefWindow = Services.wm.getMostRecentWindow("cookextermPrefsWindow");
+	if (prefWindow) {
+		prefWindow.close();
+	}
+
 	if (compat) {
 		if(reason == APP_SHUTDOWN) {
 			Windows.clear(true);
