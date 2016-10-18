@@ -56,7 +56,7 @@ let Log = function(Prefs, Utils) {
 
 				let loggedHosts = this.Log.loggedMessages.join(", ").split(/(\s\-\s|,\s)/);
 				let loaded = [];
-				for (var i = loggedHosts.length; i-- > 0; ) {
+				for (let i = loggedHosts.length; i-- > 0; ) {
 					let host = loggedHosts[i];
 					if (host.indexOf(" ") != -1 || host.indexOf(":") != -1) {
 						continue;

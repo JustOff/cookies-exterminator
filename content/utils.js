@@ -10,7 +10,11 @@ let IDNService = Cc["@mozilla.org/network/idn-service;1"].getService(Ci.nsIIDNSe
 
 let Utils = function() {
 	this.getBaseDomain = function(fullDomain) {
-		return eTLDService.getBaseDomainFromHost(fullDomain);
+		try {
+			return eTLDService.getBaseDomainFromHost(fullDomain);
+		} catch(e) {
+			return fullDomain;
+		}
 	};
 
 	this.ACEtoUTF8 = function(domain) {

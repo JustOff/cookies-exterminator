@@ -29,10 +29,12 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				// cleared
 			} else if (aSubject.oldValue == null) {
 				// added
-				let uri = ioService.newURI(aSubject.url, null, null);
-				let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
-				Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
+				try {
+					let uri = ioService.newURI(aSubject.url, null, null);
+					let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
+					Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
+				} catch(e) {}
 			}
 		}
 	};
