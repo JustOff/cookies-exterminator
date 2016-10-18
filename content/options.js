@@ -59,11 +59,16 @@ function onAddDomain(domListbox, domTextbox, listedDomains) {
 
 	if (newDomainTextbox.value != "") {
 		let domainToAdd = Utils.UTF8toACE(newDomainTextbox.value);
-		let separatedDomains =  window.document.getElementById(listedDomains).value.split(';');
+		let separatedDomains = window.document.getElementById(listedDomains).value.split(';');
 		if (separatedDomains.indexOf(domainToAdd) != -1) {
 			return;
 		}
-		window.document.getElementById(listedDomains).value += ";" + domainToAdd;
+		let domString = window.document.getElementById(listedDomains).value;
+		if (domString == "") {
+			window.document.getElementById(listedDomains).value = domainToAdd;
+		} else {
+			window.document.getElementById(listedDomains).value = domString + ";" + domainToAdd;
+		}
 		Utils.updateDomainsListbox(window, domListbox, listedDomains);
 		separatedDomains = Utils.updateDomainsListbox(window, domListbox, listedDomains);
 		domainsListbox.ensureIndexIsVisible(separatedDomains.indexOf(domainToAdd));
@@ -162,7 +167,11 @@ function loadLog() {
 
 function addToList(domListbox, listedDomains, srcListId) {
 	let srcListbox = window.document.getElementById(srcListId);
-	let hosts = window.document.getElementById(listedDomains).value.split(';');
+	let hosts = [];
+	let domString = window.document.getElementById(listedDomains).value;
+	if (domString != "") {
+		hosts = domString.split(';');
+	}
 
 	let rows = srcListbox.getRowCount();
 	for (let i = 0; i < rows; i++) {
