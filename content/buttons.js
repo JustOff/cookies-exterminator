@@ -32,14 +32,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	};
 
 	this.buttonId = "cookextermButton";
-	this.buttonLabel = "Cookies Exterminator";
-
-	this.tooltipTexts = {
-		initial: "No cookies were cleaned yet",
-		suspended: "Suspended",
-		crushed: "Recently cleaned cookies from ",
-		notCrushed: "Previously cleaned cookies from "
-	};
 
 	this.menuitemIds = {
 		enable: "cookextermEnable",
@@ -49,16 +41,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		whiteList: "cookextermWhiteList",
 		cleanOnWinClose: "cookextermCleanOnWinClose",
 		cleanOnTabsClose: "cookextermCleanOnTabsClose"
-	};
-
-	this.menuitemLabels = {
-		enable: "Active mode enabled",
-		log: "Display cleanup log",
-		manageCookies: "Remove individual cookies",
-		manageWhitelist: "Manage domain exceptions",
-		whiteList: "Whitelist ",
-		cleanOnWinClose: "Keep until browser exit",
-		cleanOnTabsClose: "Clean as soon as possible"
 	};
 
 	this.menupopupId = "cookextermMenupopup";
@@ -75,10 +57,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		// create button element
 		let button = document.createElement("toolbarbutton");
 		button.setAttribute("id", this.buttonId);
-		button.setAttribute("label", "Cookies Exterminator");
+		button.setAttribute("label", Utils.translate("Name"));
 		button.setAttribute("type", "menu");
 		button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
-		button.setAttribute("tooltiptext", this.tooltipTexts.initial);
+		button.setAttribute("tooltiptext", Utils.translate("TTinitial"));
 		button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
 		button.style.MozBoxOrient = "inherit";
 
@@ -88,7 +70,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		let menuitemEnable = document.createElement("menuitem");
 		menuitemEnable.setAttribute("id", this.menuitemIds.enable);
 		menuitemEnable.setAttribute("type", "checkbox");
-		menuitemEnable.setAttribute("label", this.menuitemLabels.enable);
+		menuitemEnable.setAttribute("label", Utils.translate("MLenable"));
 		menuitemEnable.addEventListener("command", function(event) {
 			if (Prefs.getValue("enableProcessing")) {
 				Prefs.setValue("enableProcessing", false);
@@ -125,7 +107,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let menuitemCleanOnWinClose = document.createElement("menuitem");
 		menuitemCleanOnWinClose.setAttribute("id", this.menuitemIds.cleanOnWinClose);
-		menuitemCleanOnWinClose.setAttribute("label", this.menuitemLabels.cleanOnWinClose);
+		menuitemCleanOnWinClose.setAttribute("label", Utils.translate("MLcleanOnWinClose"));
 		menuitemCleanOnWinClose.setAttribute("type", "radio");
 		menuitemCleanOnWinClose.setAttribute("name", "clean");
 		menuitemCleanOnWinClose.addEventListener("command", function(event) {
@@ -149,7 +131,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let menuitemCleanOnTabsClose = document.createElement("menuitem");
 		menuitemCleanOnTabsClose.setAttribute("id", this.menuitemIds.cleanOnTabsClose);
-		menuitemCleanOnTabsClose.setAttribute("label", this.menuitemLabels.cleanOnTabsClose);
+		menuitemCleanOnTabsClose.setAttribute("label", Utils.translate("MLcleanOnTabsClose"));
 		menuitemCleanOnTabsClose.setAttribute("type", "radio");
 		menuitemCleanOnTabsClose.setAttribute("name", "clean");
 		menuitemCleanOnTabsClose.addEventListener("command", function(event) {
@@ -172,7 +154,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let menuitemManageCookies = document.createElement("menuitem");
 		menuitemManageCookies.setAttribute("id", this.menuitemIds.manageCookies);
-		menuitemManageCookies.setAttribute("label", this.menuitemLabels.manageCookies);
+		menuitemManageCookies.setAttribute("label", Utils.translate("MLmanageCookies"));
 		menuitemManageCookies.addEventListener("command", function(event) {
 			if (appInfo == "SeaMonkey") {
 				Services.wm.getMostRecentWindow("navigator:browser").toDataManager();
@@ -189,7 +171,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let menuitemManageWhitelist = document.createElement("menuitem");
 		menuitemManageWhitelist.setAttribute("id", this.menuitemIds.manageWhitelist);
-		menuitemManageWhitelist.setAttribute("label", this.menuitemLabels.manageWhitelist);
+		menuitemManageWhitelist.setAttribute("label", Utils.translate("MLmanageWhitelist"));
 		menuitemManageWhitelist.addEventListener("command", function(event) {
 			let existingWindow = Services.wm.getMostRecentWindow("cookextermPrefsWindow");
 			if (existingWindow) {
@@ -202,7 +184,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let menuitemViewLog = document.createElement("menuitem");
 		menuitemViewLog.setAttribute("id", this.menuitemIds.viewLog);
-		menuitemViewLog.setAttribute("label", this.menuitemLabels.log);
+		menuitemViewLog.setAttribute("label", Utils.translate("MLlog"));
 		menuitemViewLog.addEventListener("command", function(event) {
 			let existingWindow = Services.wm.getMostRecentWindow("cookextermLogWindow");
 			if (existingWindow) {
@@ -253,12 +235,12 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
 				}
 				menuitemWhiteList.removeAttribute("disabled");
-				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList + Utils.ACEtoUTF8(baseDomain));
+				menuitemWhiteList.setAttribute("label", Utils.translate("MLwhiteList") + " " + Utils.ACEtoUTF8(baseDomain));
 				menuitemCleanOnWinClose.removeAttribute("disabled");
 				menuitemCleanOnTabsClose.removeAttribute("disabled");
 			} else {
 				menuitemWhiteList.setAttribute("disabled", "true");
-				menuitemWhiteList.setAttribute("label", Buttons.menuitemLabels.whiteList);
+				menuitemWhiteList.setAttribute("label", Utils.translate("MLwhiteList"));
 				menuitemCleanOnWinClose.setAttribute("disabled", "true");
 				menuitemCleanOnTabsClose.setAttribute("disabled", "true");
 				menuitemCleanOnTabsClose.setAttribute("checked", "true");
@@ -390,22 +372,12 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let Buttons = this;
 
 			if (crushedDomainsString) {
-				button.setAttribute("tooltiptext", this.tooltipTexts.crushed + crushedDomainsString);
+				button.setAttribute("tooltiptext", Utils.translate("TTcrushed") + " " + crushedDomainsString);
 				button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.crushed + ")";
 
 				Utils.setTimeout(function() {
 					Buttons.refresh(window);
 				}, Buttons.notificationIconTimeout);
-			} else {
-				let buttonOldTooltipText = button.getAttribute("tooltiptext");
-
-				// old tooltip text started with "Recently", change it to "Previously (...)";
-				if (buttonOldTooltipText.substr(0, 1) == "R") {
-					button.setAttribute("tooltiptext", this.tooltipTexts.notCrushed +
-													   buttonOldTooltipText
-													   .substr(this.tooltipTexts.crushed.length,
-															   buttonOldTooltipText.length));
-				}
 			}
 		}
 	};
@@ -441,7 +413,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			} catch(e) {}
 
 			if (!Prefs.getValue("enableProcessing")) {
-				button.setAttribute("tooltiptext", this.tooltipTexts.suspended);
+				button.setAttribute("tooltiptext", Utils.translate("TTsuspended"));
 				if (!domain) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
 				} else if (Whitelist.isWhitelisted(domain)) {
@@ -461,11 +433,8 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				} else {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
 				}
-
-				let buttonOldTooltipText = button.getAttribute("tooltiptext");
-
-				if (buttonOldTooltipText.substr(0, 1) == "S") {
-					button.setAttribute("tooltiptext", this.tooltipTexts.initial);
+				if (button.getAttribute("tooltiptext") == Utils.translate("TTsuspended")) {
+					button.setAttribute("tooltiptext", Utils.translate("TTinitial"));
 				}
 			}
 		}

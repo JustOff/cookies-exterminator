@@ -39,6 +39,14 @@ let Utils = function() {
 		return prompts.alert(mrw, "Cookies Exterminator", message);
 	};
 
+	this.translate = function(key) {
+		if (!this.bundle) {
+			this.bundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService)
+				.createBundle("chrome://cookies-xtrm/locale/cookies-xtrm.properties" + "?" + Math.random());
+		}
+		return this.bundle.GetStringFromName(key);
+	};
+
 	this.chooseFile = function(mode, filters, name) {
 		let fp = Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
 		let mrw = Services.wm.getMostRecentWindow("navigator:browser");
