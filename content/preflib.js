@@ -146,9 +146,9 @@ let Prefs = function(extName, appInfo, Utils) {
 			NetUtil.asyncCopy(istream, ostream, function(status) {
 				try {
 					if (!Components.isSuccessCode(status)) {
-						throw "File error!";
+						throw Utils.translate("FileError");
 					}
-					Utils.alert("Settings exported successfully!");
+					Utils.alert(Utils.translate("ExportOK"));
 				} catch(e) {
 					Utils.alert(e);
 				}
@@ -163,7 +163,7 @@ let Prefs = function(extName, appInfo, Utils) {
 			NetUtil.asyncFetch(file, function(istream, status) {
 				try {
 					if (!Components.isSuccessCode(status)) {
-						throw "File error!";
+						throw Utils.translate("FileError");
 					}
 					let data = NetUtil.readInputStreamToString(istream, istream.available(), {charset:"UTF-8"});
 					let datahash = data.slice(0,32);
@@ -190,7 +190,7 @@ let Prefs = function(extName, appInfo, Utils) {
 					}
 					Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
 					Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
-					Utils.alert("Settings imported successfully!");
+					Utils.alert(Utils.translate("ImportOK"));
 				} catch(e) {
 					Utils.alert(e);
 				}

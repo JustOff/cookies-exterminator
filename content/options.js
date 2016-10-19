@@ -194,7 +194,7 @@ function checkWhitelistEmpty() {
 	let enabledBox = window.document.getElementById("enableProcessing");
 	if (enabledBox.checked && window.document.getElementById("whitelistedDomains").value == "") {
 		enabledBox.removeAttribute("checked");
-		Utils.alert("Active mode was disabled because Whitelist is empty");
+		Utils.alert(Utils.translate("AModeOff"));
 		return false;
 	}
 	return true;
