@@ -10,15 +10,11 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.iconFileName = "icon.png";
 
 	this.alertName = "cookextermNotification";
-	this.alertTitle = "Cleaned cookies/storage from";
-	this.alertTitle2 = "Cookies Exterminator Alert";
-	this.conflictMessage = "Cookies Exterminator was NOT enabled because of conflicting add-on: ";
-	this.disabledMessage = "Cookies Exterminator was switched to passive mode because Whitelist is empty";
 	
 	this.notify = function(crushedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && crushedDomainsString) {
 			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-												this.alertTitle, crushedDomainsString, 
+												Utils.translate("AlertTitle"), crushedDomainsString, 
 												false, "", null, this.alertName);
 		}
 	};
@@ -26,11 +22,11 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.notifyIncompat = function(addon) {
 		try {
 			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-												this.alertTitle2, this.conflictMessage + addon,
+												Utils.translate("AlertTitle2"), Utils.translate("ConflictMessage") + " " + addon,
 												false, "", null, this.alertName);
 			let mrw = Services.wm.getMostRecentWindow("navigator:browser");
 			let nb = mrw.gBrowser.getNotificationBox();
-			nb.appendNotification(this.conflictMessage + addon, this.alertName,
+			nb.appendNotification(Utils.translate("ConflictMessage") + " " + addon, this.alertName,
 									this.contentURL + this.iconFileName, nb.PRIORITY_WARNING_HIGH, null);
 		} catch(e) {}
 	};
@@ -38,11 +34,11 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.notifyDisabled = function() {
 		try {
 			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-												this.alertTitle2, this.disabledMessage,
+												Utils.translate("AlertTitle2"), Utils.translate("DisabledMessage"),
 												false, "", null, this.alertName);
 			let mrw = Services.wm.getMostRecentWindow("navigator:browser");
 			let nb = mrw.gBrowser.getNotificationBox();
-			nb.appendNotification(this.disabledMessage, this.alertName,
+			nb.appendNotification(Utils.translate("DisabledMessage"), this.alertName,
 									this.contentURL + this.iconFileName, nb.PRIORITY_WARNING_HIGH, null);
 		} catch(e) {}
 	};

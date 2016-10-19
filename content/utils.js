@@ -36,7 +36,7 @@ let Utils = function() {
 	this.alert = function(message) {
 		let prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService);
 		let mrw = Services.wm.getMostRecentWindow("navigator:browser");
-		return prompts.alert(mrw, "Cookies Exterminator", message);
+		return prompts.alert(mrw, this.translate("Name"), message);
 	};
 
 	this.translate = function(key) {
