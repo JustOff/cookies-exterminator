@@ -1,0 +1,36 @@
+<!ENTITY cookies-xtrm.Name "Cookies Exterminator">
+
+<!ENTITY cookies-xtrm.Accept "Применить">
+<!ENTITY cookies-xtrm.Cancel "Отменить">
+<!ENTITY cookies-xtrm.Reset "Сбросить">
+
+<!ENTITY cookies-xtrm.Options "Настройки">
+<!ENTITY cookies-xtrm.Whitelist "Белый список">
+<!ENTITY cookies-xtrm.Greylist "Серый список">
+<!ENTITY cookies-xtrm.Redlist "Красный список">
+<!ENTITY cookies-xtrm.Log "Журнал">
+
+<!ENTITY cookies-xtrm.Main "Основные">
+<!ENTITY cookies-xtrm.Enable "Включить активный режим">
+<!ENTITY cookies-xtrm.Delay "Задержка перед очисткой в секундах">
+<!ENTITY cookies-xtrm.Session "Удалять сессионные куки">
+<!ENTITY cookies-xtrm.Storage "Чистить DOM-хранилище">
+<!ENTITY cookies-xtrm.DoLog "Вести журнал активности">
+<!ENTITY cookies-xtrm.Notifications "Использовать всплывающие уведомления">
+<!ENTITY cookies-xtrm.Backup "Резервная копия">
+<!ENTITY cookies-xtrm.Settings "Настройки">
+<!ENTITY cookies-xtrm.Export "Сохранить">
+<!ENTITY cookies-xtrm.Import "Загрузить">
+
+<!ENTITY cookies-xtrm.Add "Добавить">
+<!ENTITY cookies-xtrm.Replace "Заменить">
+<!ENTITY cookies-xtrm.Remove "Удалить">
+
+<!ENTITY cookies-xtrm.LRedlist "Загрузить">
+<!ENTITY cookies-xtrm.ToWhitelist "Добавить в белый список">
+<!ENTITY cookies-xtrm.ToGreylist "Добавить в серый список">
+<!ENTITY cookies-xtrm.LLog "Загрузить">
+
+<!ENTITY cookies-xtrm.LogTitle "Cookies Exterminator журнал удаления">
+<!ENTITY cookies-xtrm.CLog "Очистить журнал">
+<!ENTITY cookies-xtrm.Close "Закрыть">

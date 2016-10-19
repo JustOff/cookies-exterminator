@@ -13,7 +13,7 @@
 			ondialogextra2="onReset();"
 			defaultButton="extra1"
 			title="&cookies-xtrm.Name;"
-			style="min-width: 385px; min-height: 360px;"
+			style="min-width: 400px; min-height: 360px;"
 			windowtype="cookextermPrefsWindow">
 
   <prefpane id="general-pane" label="&cookies-xtrm.Name;" flex="1">
