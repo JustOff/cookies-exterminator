@@ -12,7 +12,8 @@
 
 <!ENTITY cookies-xtrm.Main "Main">
 <!ENTITY cookies-xtrm.Enable "Enable active mode">
-<!ENTITY cookies-xtrm.Delay "Cleaning delay in seconds">
+<!ENTITY cookies-xtrm.Delay "Delay before cleaning">
+<!ENTITY cookies-xtrm.Seconds "seconds">
 <!ENTITY cookies-xtrm.Session "Clean session cookies">
 <!ENTITY cookies-xtrm.Storage "Clean storage objects">
 <!ENTITY cookies-xtrm.DoLog "Log all activity">
