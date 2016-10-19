@@ -29,12 +29,18 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				// cleared
 			} else if (aSubject.oldValue == null) {
 				// added
+				if (aSubject.url == "") {
+					return;
+				}
+				let uri;
 				try {
-					let uri = ioService.newURI(aSubject.url, null, null);
-					let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
-					Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
+					uri = ioService.newURI(aSubject.url, null, null);
+				} catch(e) {
+					return;
+				}
+				let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
+				Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
-				} catch(e) {}
 			}
 		}
 	};
@@ -110,8 +116,17 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 
 		if (cleanup || cleanAll) {
-			for (let url in this.storageTracker) {
-				let uri = ioService.newURI(url, null, null);
+			loop: for (let url in this.storageTracker) {
+				let uri;
+				try {
+					if (url.indexOf(":file") == -1) {
+						uri = ioService.newURI(url, null, null);
+					} else {
+						continue loop;
+					}
+				} catch(e) {
+					continue loop;
+				}
 				if (this.mayBeCrushedStorage(uri.host, cleanup)) {
 					if (clearStorage(uri)) {
 						delete this.storageTracker[url];
@@ -265,9 +280,11 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				try {
 					for (let row = aResultSet.getNextRow(); row; row = aResultSet.getNextRow()) {
 						[host, scheme, port] = row.getResultByName("scope").split(":");
-						rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
-						if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
-						Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
+						if (scheme != "file") {
+							rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
+							if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
+							Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
+						}
 //Cu.reportError("[i] " + scheme + "://" + rhost + ":" + port);
 					}
 				} catch (e) {}
