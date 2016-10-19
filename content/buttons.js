@@ -207,7 +207,13 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let document = window.document;
 
 			let menuitemEnable = document.getElementById(Buttons.menuitemIds.enable);
-			menuitemEnable.setAttribute("checked", Prefs.getValue("enableProcessing") ? true : false);
+			if (Prefs.getValue("enableProcessing")) {
+				menuitemEnable.setAttribute("checked", true);
+				menuitemEnable.setAttribute("label", Utils.translate("MLenable"));
+			} else {
+				menuitemEnable.removeAttribute("checked");
+				menuitemEnable.setAttribute("label", Utils.translate("MLdisable"));
+			}
 			if (Prefs.getValue("whitelistedDomains") == "") {
 				menuitemEnable.setAttribute("disabled", "true");
 			} else {
