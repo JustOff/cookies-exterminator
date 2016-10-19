@@ -2,7 +2,7 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
 	<em:id>CookiesExterminator@Off.JustOff</em:id>
-	<em:version>2.7.0b1</em:version>
+	<em:version>2.7.0b2</em:version>
 	<em:type>2</em:type>
 	<em:bootstrap>true</em:bootstrap>
 	<em:name>Cookies Exterminator</em:name>
@@ -12,8 +12,14 @@
 	<em:contributor>Ove Sörensen &lt;sdc@elektro-eel.org&gt;</em:contributor>
 	<em:contributor>Creative Stall from Noun Project</em:contributor>
 	<em:homepageURL>https://addons.mozilla.org/addon/cookies-xtrm/</em:homepageURL>
-	<em:updateURL>https://localhost/update.xml</em:updateURL>
 	<em:optionsURL>chrome://cookies-xtrm/content/options.xul</em:optionsURL>
+	<em:localized>
+		<Description>
+			<em:locale>ru</em:locale>
+			<em:name>Cookies Exterminator</em:name>
+			<em:description>Автоматическое удаление кук и объектов веб-хранилища, как только они становятся не нужны</em:description>
+		</Description>
+	</em:localized>
 	<em:targetApplication>
 	  <Description>
 		<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
