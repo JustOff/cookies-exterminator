@@ -31,7 +31,7 @@
 				<caption label="Main"/>
 				<spacer flex="0" height="5"/>
 				<hbox flex="0" align="center">
-					<checkbox id="enableProcessing" oncommand="checkWhitelistEmpty();" label="Enable"/>
+					<checkbox id="enableProcessing" oncommand="checkWhitelistEmpty();" label="Enable active mode"/>
 				</hbox>
 				<hbox flex="0" align="center">
 					<label value="Cleaning delay in seconds"/>
@@ -44,7 +44,7 @@
 					<checkbox id="keepCrushingSessionCookies" label="Clean session cookies"/>
 				</hbox>
 				<hbox flex="0" align="center">
-					<checkbox id="keepCrushingLocalStorage" label="Clean LocalStorage"/>
+					<checkbox id="keepCrushingLocalStorage" label="Clean storage objects"/>
 				</hbox>
 				<spacer flex="0" height="15"/>
 				<hbox flex="0" align="center">

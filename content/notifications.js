@@ -13,7 +13,7 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.alertTitle = "Cleaned cookies/storage from";
 	this.alertTitle2 = "Cookies Exterminator Alert";
 	this.conflictMessage = "Cookies Exterminator was NOT enabled because of conflicting add-on: ";
-	this.disabledMessage = "Cleanup mode was disabled because Whitelist is empty";
+	this.disabledMessage = "Cookies Exterminator was switched to passive mode because Whitelist is empty";
 	
 	this.notify = function(crushedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && crushedDomainsString) {

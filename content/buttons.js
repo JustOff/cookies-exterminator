@@ -52,7 +52,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	};
 
 	this.menuitemLabels = {
-		enable: "Enabled",
+		enable: "Active mode enabled",
 		log: "Display cleanup log",
 		manageCookies: "Remove individual cookies",
 		manageWhitelist: "Manage domain exceptions",

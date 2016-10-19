@@ -2,11 +2,11 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
 	<em:id>CookiesExterminator@Off.JustOff</em:id>
-	<em:version>2.6.9b5</em:version>
+	<em:version>2.6.9b6</em:version>
 	<em:type>2</em:type>
 	<em:bootstrap>true</em:bootstrap>
 	<em:name>Cookies Exterminator</em:name>
-	<em:description>Auto clean unused cookies as soon as tabs closed</em:description>
+	<em:description>Auto delete cookies and storage objects as soon as they become unused</em:description>
 	<em:creator>Off JustOff &lt;Off.Just.Off@gmail.com&gt;</em:creator>
 	<em:contributor>Wojciech Stachurski (wsdfhjxc)</em:contributor>
 	<em:contributor>Ove Sörensen &lt;sdc@elektro-eel.org&gt;</em:contributor>
