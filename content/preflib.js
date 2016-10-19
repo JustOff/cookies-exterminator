@@ -169,11 +169,11 @@ let Prefs = function(extName, appInfo, Utils) {
 					let datahash = data.slice(0,32);
 					data = data.slice(32);
 					if (datahash != Utils.md5hash(data)) {
-						throw "File is corrupted!";
+						throw Utils.translate("FileCorrupt");
 					}
 					data = Utils.fromJSON(data);
 					if (data["version"] != BACKUP_VERSION) {
-						throw "Incompatible backup version!";
+						throw Utils.translate("IncompatVer");
 					}
 					for (let prefName in Prefs.currentPrefs) {
 						let prefControl = window.document.getElementById(prefName);
