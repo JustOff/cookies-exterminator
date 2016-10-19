@@ -1,62 +1,63 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-
+<!DOCTYPE window SYSTEM "chrome://cookies-xtrm/locale/cookies-xtrm.dtd">
 <prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:html="http://www.w3.org/1999/xhtml"
 			id="cookextermPrefs"
 			onload="onWindowLoad();"
 			buttons="cancel,extra1,extra2"
-			buttonlabelextra1="Accept"
+			buttonlabelcancel="&cookies-xtrm.Cancel;"
+			buttonlabelextra1="&cookies-xtrm.Accept;"
 			ondialogextra1="onApply();"
-			buttonlabelextra2="Reset"
+			buttonlabelextra2="&cookies-xtrm.Reset;"
 			ondialogextra2="onReset();"
 			defaultButton="extra1"
-			title="Cookies Exterminator" 
+			title="&cookies-xtrm.Name;"
 			style="min-width: 385px; min-height: 360px;"
 			windowtype="cookextermPrefsWindow">
 
-  <prefpane id="general-pane" label="Cookies Exterminator" flex="1">
+  <prefpane id="general-pane" label="&cookies-xtrm.Name;" flex="1">
 	<spacer flex="1"/>
 	<tabbox id="tabbox" flex="1">
 	  <tabs>
-		<tab id="generalTab" label="Options"/>
-		<tab id="whitelistTab" label="Whitelist"/>
-		<tab id="greylistTab" label="Greylist"/>
-		<tab id="redlistTab" label="Redlist"/>
-		<tab id="logTab" label="Log"/>
+		<tab id="generalTab" label="&cookies-xtrm.Options;"/>
+		<tab id="whitelistTab" label="&cookies-xtrm.Whitelist;"/>
+		<tab id="greylistTab" label="&cookies-xtrm.Greylist;"/>
+		<tab id="redlistTab" label="&cookies-xtrm.Redlist;"/>
+		<tab id="logTab" label="&cookies-xtrm.Log;"/>
 	  </tabs>
 	  <tabpanels flex="1">
 		<tabpanel id="generalTabpanel" orient="vertical">
 			<groupbox>
-				<caption label="Main"/>
+				<caption label="&cookies-xtrm.Main;"/>
 				<spacer flex="0" height="5"/>
 				<hbox flex="0" align="center">
-					<checkbox id="enableProcessing" oncommand="checkWhitelistEmpty();" label="Enable active mode"/>
+					<checkbox id="enableProcessing" oncommand="checkWhitelistEmpty();" label="&cookies-xtrm.Enable;"/>
 				</hbox>
 				<hbox flex="0" align="center">
-					<label value="Cleaning delay in seconds"/>
+					<label value="&cookies-xtrm.Delay;"/>
 					<spacer flex="1"/>
 					<textbox id="crushingDelay" type="number" width="40" min="10" max="600"/>
 					<spacer flex="10"/>
 				</hbox>
 				<spacer flex="0" height="15"/>
 				<hbox flex="0" align="center">
-					<checkbox id="keepCrushingSessionCookies" label="Clean session cookies"/>
+					<checkbox id="keepCrushingSessionCookies" label="&cookies-xtrm.Session;"/>
 				</hbox>
 				<hbox flex="0" align="center">
-					<checkbox id="keepCrushingLocalStorage" label="Clean storage objects"/>
+					<checkbox id="keepCrushingLocalStorage" label="&cookies-xtrm.Storage;"/>
 				</hbox>
 				<spacer flex="0" height="15"/>
 				<hbox flex="0" align="center">
-					<checkbox id="enableLogging" label="Log all activity"/>
+					<checkbox id="enableLogging" label="&cookies-xtrm.DoLog;"/>
 				</hbox>
 				<hbox flex="0" align="center">
-					<checkbox id="enableNotifications" label="Use pop-up notifications"/>
+					<checkbox id="enableNotifications" label="&cookies-xtrm.Notifications;"/>
 				</hbox>
 				<spacer flex="0" height="10"/>
 			</groupbox>
 			<groupbox>
-				<caption label="Backup"/>
+				<caption label="&cookies-xtrm.Backup;"/>
 				<grid>
 					<columns>
 						<column flex="1"/>
@@ -64,11 +65,11 @@
 					</columns>
 					<rows>
 					  <row align="center">
-						<label control="browse" flex="1">Settings</label>
+						<label control="browse" flex="1">&cookies-xtrm.Settings;</label>
 						<hbox>
-							<button class="browse" label="Export"
+							<button class="browse" label="&cookies-xtrm.Export;"
 									oncommand="exportData();"/>
-							<button class="browse" label="Import"
+							<button class="browse" label="&cookies-xtrm.Import;"
 									oncommand="importData();"/>
 						</hbox>
 					  </row>
@@ -82,10 +83,10 @@
 				<listbox id="domainsListbox" height="250" onselect="onSelect(this);"></listbox>
 				<hbox flex="1" align="center">
 					<textbox id="newDomainTextbox" width="150"/>
-					<button label="Add" oncommand="onAddDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Add;" oncommand="onAddDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Replace" oncommand="onEditDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
-					<button label="Remove" oncommand="onRemoveDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');"/>
+					<button label="&cookies-xtrm.Replace;" oncommand="onEditDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Remove;" oncommand="onRemoveDomain('domainsListbox', 'newDomainTextbox', 'whitelistedDomains');"/>
 				</hbox>
 			</vbox>
 			<textbox id="whitelistedDomains" hidden="true"/>
@@ -95,10 +96,10 @@
 				<listbox id="domainsListboxTemp" height="250" onselect="onSelect(this);"></listbox>
 				<hbox flex="1" align="center">
 					<textbox id="newDomainTextboxGrey" width="150"/>
-					<button label="Add" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Add;" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Replace" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
-					<button label="Remove" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');"/>
+					<button label="&cookies-xtrm.Replace;" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Remove;" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');"/>
 				</hbox>
 			</vbox>
 			<textbox id="whitelistedDomainsTemp" hidden="true"/>
@@ -107,11 +108,11 @@
 			<vbox flex="1">
 				<listbox id="redListbox" height="250" onselect=""></listbox>
 				<hbox flex="1" align="center">
-					<button label="Load Redlist" oncommand="loadRedlist();" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.LRedlist;" oncommand="loadRedlist();" style="min-width: 50px"/>
 					<spacer flex="9"/>
-					<button label="Add to Whitelist" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'redListbox');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.ToWhitelist;" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'redListbox');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Add to Greylist" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'redListbox');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.ToGreylist;" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'redListbox');" style="min-width: 50px"/>
 				</hbox>
 			</vbox>
 		</tabpanel>
@@ -119,11 +120,11 @@
 			<vbox flex="1">
 				<listbox id="logListbox" height="250" onselect=""></listbox>
 				<hbox flex="1" align="center">
-					<button label="Load Log" oncommand="loadLog();" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.LLog;" oncommand="loadLog();" style="min-width: 50px"/>
 					<spacer flex="9"/>
-					<button label="Add to Whitelist" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'logListbox');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.ToWhitelist;" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'logListbox');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="Add to Greylist" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'logListbox');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.ToGreylist;" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'logListbox');" style="min-width: 50px"/>
 				</hbox>
 			</vbox>
 		</tabpanel>

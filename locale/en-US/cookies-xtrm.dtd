@@ -1,0 +1,36 @@
+<!ENTITY cookies-xtrm.Name "Cookies Exterminator">
+
+<!ENTITY cookies-xtrm.Accept "Accept">
+<!ENTITY cookies-xtrm.Cancel "Cancel">
+<!ENTITY cookies-xtrm.Reset "Reset">
+
+<!ENTITY cookies-xtrm.Options "Options">
+<!ENTITY cookies-xtrm.Whitelist "Whitelist">
+<!ENTITY cookies-xtrm.Greylist "Greylist">
+<!ENTITY cookies-xtrm.Redlist "Redlist">
+<!ENTITY cookies-xtrm.Log "Log">
+
+<!ENTITY cookies-xtrm.Main "Main">
+<!ENTITY cookies-xtrm.Enable "Enable active mode">
+<!ENTITY cookies-xtrm.Delay "Cleaning delay in seconds">
+<!ENTITY cookies-xtrm.Session "Clean session cookies">
+<!ENTITY cookies-xtrm.Storage "Clean storage objects">
+<!ENTITY cookies-xtrm.DoLog "Log all activity">
+<!ENTITY cookies-xtrm.Notifications "Use pop-up notifications">
+<!ENTITY cookies-xtrm.Backup "Backup">
+<!ENTITY cookies-xtrm.Settings "Settings">
+<!ENTITY cookies-xtrm.Export "Export">
+<!ENTITY cookies-xtrm.Import "Import">
+
+<!ENTITY cookies-xtrm.Add "Add">
+<!ENTITY cookies-xtrm.Replace "Replace">
+<!ENTITY cookies-xtrm.Remove "Remove">
+
+<!ENTITY cookies-xtrm.LRedlist "Load Redlist">
+<!ENTITY cookies-xtrm.ToWhitelist "Add to Whitelist">
+<!ENTITY cookies-xtrm.ToGreylist "Add to Greylist">
+<!ENTITY cookies-xtrm.LLog "Load Log">
+
+<!ENTITY cookies-xtrm.LogTitle "Cookies Exterminator cleanup log">
+<!ENTITY cookies-xtrm.CLog "Clear log">
+<!ENTITY cookies-xtrm.Close "Close">
