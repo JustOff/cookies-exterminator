@@ -35,6 +35,10 @@ let Log = function(Prefs, Utils) {
 		Log: this,
 		observe: function(aSubject, aTopic, aData) {
 			if (aData == "Open") {
+				if (this.Log.loggedMessages.length == 0) {
+					return;
+				}
+
 				let window = aSubject;
 				let logTextbox = window.document.getElementById("logTextbox");
 				if (logTextbox) {
