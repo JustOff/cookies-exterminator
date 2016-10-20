@@ -117,8 +117,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 					continue loop;
 				}
 				if (this.mayBeCrushedStorage(uri.host, cleanup)) {
+					delete this.storageTracker[url];
 					if (clearStorage(uri)) {
-						delete this.storageTracker[url];
 						crushedDomains[uri.host] = true;
 						crushedSomething = true;
 //Cu.reportError("[" + this.jobID + "s][-] " + url);
@@ -298,11 +298,10 @@ function clearStorage(uri) {
 		let storage = getLocalStorage(uri);
 		if (storage) {
 			storage.clear();
+			return true;
 		}
-		return true;
-	} catch(e) {
-		return false;
-	}
+	} catch(e) {}
+	return false;
 };
 
 function getLocalStorage(uri) {
