@@ -15,7 +15,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.storageTracker = {};
 	
 	this.handleCookieChanged = function(aSubject, aTopic, aData) {
-		if (aData == "added" && aSubject instanceof Ci.nsICookie) {
+		if (aData == "added" && aSubject instanceof Ci.nsICookie2) {
 			Crusher.prepare(aSubject);
 		}
 	};
