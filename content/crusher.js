@@ -15,33 +15,22 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.storageTracker = {};
 	
 	this.handleCookieChanged = function(aSubject, aTopic, aData) {
-		switch (aData) {
-			case "added":
-				let cookie = aSubject.QueryInterface(Ci.nsICookie2);
-				Crusher.prepare(cookie);
-				break;
+		if (aData == "added" && aSubject instanceof Ci.nsICookie) {
+			Crusher.prepare(aSubject);
 		}
 	};
 
 	this.handleDomStorageChanged = function(aSubject, aTopic, aData) {
-		if (aTopic == "dom-storage2-changed") {
-			if (aSubject.key == null) {
-				// cleared
-			} else if (aSubject.oldValue == null) {
-				// added
-				if (aSubject.url == "") {
-					return;
-				}
-				let uri;
-				try {
-					uri = ioService.newURI(aSubject.url, null, null);
-				} catch(e) {
-					return;
-				}
-				let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
-				Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
-//Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
+		if (aSubject.key != null && aSubject.oldValue == null && aSubject.url != "") {
+			let uri;
+			try {
+				uri = ioService.newURI(aSubject.url, null, null);
+			} catch(e) {
+				return;
 			}
+			let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
+			Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
+//Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
 		}
 	};
 
