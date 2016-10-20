@@ -199,8 +199,9 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 //Cu.reportError("[" + this.jobID + "][?] " + cookie.host + " : " + cookie.name + " ? " + domain);
 					domain = Utils.UTF8toACE(domain);
 
-					if (cookie.rawHost == domain ||
-							cookie.isDomain && cookie.rawHost == domain.substring(domain.indexOf(".") + 1)) {
+					if (cookie.rawHost == domain
+							|| cookie.isDomain && cookie.rawHost == domain.substring(domain.indexOf(".") + 1)
+							|| Utils.getBaseDomain(cookie.rawHost) == Utils.getBaseDomain(domain)) {
 						return false;
 					}
 				}
@@ -247,7 +248,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 //Cu.reportError("[" + this.jobIDs + "s][?] " + host + " ? " + domain);
 					domain = Utils.UTF8toACE(domain);
 
-					if (host == domain) {
+					if (host == domain || Utils.getBaseDomain(host) == Utils.getBaseDomain(domain)) {
 						return false;
 					}
 				}
