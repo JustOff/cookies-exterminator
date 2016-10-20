@@ -30,7 +30,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			}
 			let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
 			Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
-//Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port);
+//Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port + " - " + (aData ? aData : "unknown"));
 		}
 	};
 
