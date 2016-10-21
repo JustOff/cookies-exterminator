@@ -106,7 +106,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			}
 		}
 
-		if (cleanup || cleanAll) {
+		if (Prefs.getValue("keepCrushingLocalStorage") && (cleanup || cleanAll)) {
 			loop: for (let url in this.storageTracker) {
 				let uri;
 				try {
