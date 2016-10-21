@@ -14,8 +14,8 @@
 <!ENTITY cookies-xtrm.Enable "Enable active mode">
 <!ENTITY cookies-xtrm.Delay "Delay before cleaning">
 <!ENTITY cookies-xtrm.Seconds "seconds">
-<!ENTITY cookies-xtrm.Session "Clean session cookies">
-<!ENTITY cookies-xtrm.Storage "Clean localStorage">
+<!ENTITY cookies-xtrm.Session "Clear session cookies">
+<!ENTITY cookies-xtrm.Storage "Clear localStorage">
 <!ENTITY cookies-xtrm.DoLog "Log all activity">
 <!ENTITY cookies-xtrm.Notifications "Use pop-up notifications">
 <!ENTITY cookies-xtrm.Backup "Backup">
