@@ -15,7 +15,7 @@
 <!ENTITY cookies-xtrm.Delay "Задержка перед очисткой">
 <!ENTITY cookies-xtrm.Seconds "секунд">
 <!ENTITY cookies-xtrm.Session "Удалять сессионные куки">
-<!ENTITY cookies-xtrm.Storage "Чистить веб-хранилище">
+<!ENTITY cookies-xtrm.Storage "Чистить локальное хранилище">
 <!ENTITY cookies-xtrm.DoLog "Вести журнал активности">
 <!ENTITY cookies-xtrm.Notifications "Использовать всплывающие уведомления">
 <!ENTITY cookies-xtrm.Backup "Резервная копия">
