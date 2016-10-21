@@ -8,7 +8,7 @@ function onWindowLoad() {
 	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Load");
 
 	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
-	Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
+	Utils.updateDomainsListbox(window, "domainsListboxTemp", "greylistedDomains");
 
 	let tabbox = window.document.getElementById("tabbox");
 
@@ -31,7 +31,7 @@ function onReset() {
 	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Load");
 
 	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
-	Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
+	Utils.updateDomainsListbox(window, "domainsListboxTemp", "greylistedDomains");
 } 
 
 function onApply() {
@@ -141,7 +141,7 @@ function loadRedlist() {
 	}
 	
 	let whiteList = window.document.getElementById("whitelistedDomains").value.split(';');
-	let greyList = window.document.getElementById("whitelistedDomainsTemp").value.split(';');
+	let greyList = window.document.getElementById("greylistedDomains").value.split(';');
 	
 	let hosts = [];
 	let cookiesEnumerator = Services.cookies.enumerator;

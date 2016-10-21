@@ -95,13 +95,13 @@
 				<listbox id="domainsListboxTemp" height="250" onselect="onSelect(this);"></listbox>
 				<hbox flex="1" align="center">
 					<textbox id="newDomainTextboxGrey" width="150"/>
-					<button label="&cookies-xtrm.Add;" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Add;" oncommand="onAddDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'greylistedDomains');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="&cookies-xtrm.Replace;" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');" style="min-width: 50px"/>
-					<button label="&cookies-xtrm.Remove;" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'whitelistedDomainsTemp');"/>
+					<button label="&cookies-xtrm.Replace;" oncommand="onEditDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'greylistedDomains');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Remove;" oncommand="onRemoveDomain('domainsListboxTemp', 'newDomainTextboxGrey', 'greylistedDomains');"/>
 				</hbox>
 			</vbox>
-			<textbox id="whitelistedDomainsTemp" hidden="true"/>
+			<textbox id="greylistedDomains" hidden="true"/>
 		</tabpanel>
 		<tabpanel id="redlistTabpanel">
 			<vbox flex="1">
@@ -111,7 +111,7 @@
 					<spacer flex="9"/>
 					<button label="&cookies-xtrm.ToWhitelist;" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'redListbox');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="&cookies-xtrm.ToGreylist;" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'redListbox');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.ToGreylist;" oncommand="addToList('domainsListboxTemp', 'greylistedDomains', 'redListbox');" style="min-width: 50px"/>
 				</hbox>
 			</vbox>
 		</tabpanel>
@@ -123,7 +123,7 @@
 					<spacer flex="9"/>
 					<button label="&cookies-xtrm.ToWhitelist;" oncommand="addToList('domainsListbox', 'whitelistedDomains', 'logListbox');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="&cookies-xtrm.ToGreylist;" oncommand="addToList('domainsListboxTemp', 'whitelistedDomainsTemp', 'logListbox');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.ToGreylist;" oncommand="addToList('domainsListboxTemp', 'greylistedDomains', 'logListbox');" style="min-width: 50px"/>
 				</hbox>
 			</vbox>
 		</tabpanel>

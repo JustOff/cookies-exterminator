@@ -51,7 +51,7 @@ let Log = function(Prefs, Utils) {
 				let window = aSubject;
 				let logListbox = window.document.getElementById("logListbox");
 				let whiteList = window.document.getElementById("whitelistedDomains").value.split(';');
-				let greyList = window.document.getElementById("whitelistedDomainsTemp").value.split(';');
+				let greyList = window.document.getElementById("greylistedDomains").value.split(';');
 				
 				let rows = logListbox.getRowCount();
 				for (let i = 0; i < rows; i++) {

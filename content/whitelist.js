@@ -22,10 +22,10 @@ let Whitelist = function(Prefs, Notifications) {
 			}
 		}
 
-		let whitelistedDomainsTemp = Prefs.getValue("whitelistedDomainsTemp");
+		let greylistedDomains = Prefs.getValue("greylistedDomains");
 
-		if (whitelistedDomainsTemp != "") {
-			let separatedDomainsTemp = whitelistedDomainsTemp.split(';');
+		if (greylistedDomains != "") {
+			let separatedDomainsTemp = greylistedDomains.split(';');
 
 			for (let domain of separatedDomainsTemp) {
 				this.domainsTemp[domain] = true;
@@ -59,7 +59,7 @@ let Whitelist = function(Prefs, Notifications) {
 
 	this.addDomainTemp = function(domain) {
 		this.domainsTemp[domain] = true;
-		this.saveToPrefs(this.domainsTemp, "whitelistedDomainsTemp");
+		this.saveToPrefs(this.domainsTemp, "greylistedDomains");
 	};
 
 	this.removeDomain = function(domain) {
@@ -69,7 +69,7 @@ let Whitelist = function(Prefs, Notifications) {
 
 	this.removeDomainTemp = function(domain) {
 		delete this.domainsTemp[domain];
-		this.saveToPrefs(this.domainsTemp, "whitelistedDomainsTemp");
+		this.saveToPrefs(this.domainsTemp, "greylistedDomains");
 	};
 
 	this.isWhitelisted = function(domain) {

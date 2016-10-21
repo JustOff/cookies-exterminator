@@ -17,7 +17,7 @@ let Prefs = function(extName, appInfo, Utils) {
 		cleanLocalStorage: true,
 		cleanDelay: 10,
 		whitelistedDomains: "",
-		whitelistedDomainsTemp: "",
+		greylistedDomains: "",
 		toolbarButtonPlaceId: "nav-bar",
 		toolbarButtonNextItemId: ""
 	};
@@ -189,7 +189,7 @@ let Prefs = function(extName, appInfo, Utils) {
 						}
 					}
 					Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
-					Utils.updateDomainsListbox(window, "domainsListboxTemp", "whitelistedDomainsTemp");
+					Utils.updateDomainsListbox(window, "domainsListboxTemp", "greylistedDomains");
 					Utils.alert(Utils.translate("ImportOK"));
 				} catch(e) {
 					Utils.alert(e);
@@ -231,7 +231,7 @@ let Prefs = function(extName, appInfo, Utils) {
 	};
 
 	this.importFromPermissions = function() {
-		if (this.getValue("whitelistedDomains") != "" || this.getValue("whitelistedDomainsTemp") != "") {
+		if (this.getValue("whitelistedDomains") != "" || this.getValue("greylistedDomains") != "") {
 			return;
 		}
 		let white = [], grey = [];
@@ -255,7 +255,7 @@ let Prefs = function(extName, appInfo, Utils) {
 			this.setValue("whitelistedDomains", white.join(";"));
 		}
 		if (grey.length > 0) {
-			this.setValue("whitelistedDomainsTemp", grey.join(";"));
+			this.setValue("greylistedDomains", grey.join(";"));
 		}
 		if (white.length > 0 || grey.length > 0) {
 			this.save();
