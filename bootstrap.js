@@ -44,7 +44,7 @@ function startup(data, reason) {
 	Cu.import(extJSPath + "buttons.js", Imports);
 	Cu.import(extJSPath + "whitelist.js", Imports);
 	Cu.import(extJSPath + "log.js", Imports);
-	Cu.import(extJSPath + "crusher.js", Imports);
+	Cu.import(extJSPath + "cleaner.js", Imports);
 	Cu.import(extJSPath + "tabs.js", Imports);
 	Cu.import(extJSPath + "windows.js", Imports);
 	Cu.import(extJSPath + "notifications.js", Imports);
@@ -142,7 +142,7 @@ function shutdown(data, reason) {
 	Cu.unload(extJSPath + "buttons.js");
 	Cu.unload(extJSPath + "whitelist.js");
 	Cu.unload(extJSPath + "log.js");
-	Cu.unload(extJSPath + "crusher.js");
+	Cu.unload(extJSPath + "cleaner.js");
 	Cu.unload(extJSPath + "tabs.js");
 	Cu.unload(extJSPath + "windows.js");
 	Cu.unload(extJSPath + "notifications.js");

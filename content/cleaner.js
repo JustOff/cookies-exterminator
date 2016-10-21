@@ -73,8 +73,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 //this.jobID = 0;
 	this.execute = function(anycookies) {
 		let cookies = [];
-		let crushedDomains = {};
-		let crushedSomething = false;
+		let cleanedDomains = {};
+		let cleanedSomething = false;
 
 		let cleanup = anycookies === "Cleanup";
 		let cleanAll = anycookies === "CleanAll";
@@ -98,8 +98,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} else {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
 				}
-				crushedSomething = true;
-				crushedDomains[cookie.rawHost] = true;
+				cleanedSomething = true;
+				cleanedDomains[cookie.rawHost] = true;
 //Cu.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
 			} else {
 //Cu.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
@@ -121,8 +121,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				if (this.mayBeCleaned(uri.host, false, baseDomainsInTabs, cleanup, false)) {
 					delete this.storageTracker[url];
 					if (clearStorage(uri)) {
-						crushedDomains[uri.host] = true;
-						crushedSomething = true;
+						cleanedDomains[uri.host] = true;
+						cleanedSomething = true;
 //Cu.reportError("[" + this.jobID + "s][-] " + url);
 					}
 				} else {
@@ -135,18 +135,18 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			return;
 		}
 
-		if (crushedSomething) {
-			let crushedDomainsString = "";
+		if (cleanedSomething) {
+			let cleanedDomainsString = "";
 
-			for (let domain in crushedDomains) {
-				crushedDomainsString += domain + ", ";
+			for (let domain in cleanedDomains) {
+				cleanedDomainsString += domain + ", ";
 			}
 
-			crushedDomainsString = crushedDomainsString.slice(0, -2);
+			cleanedDomainsString = cleanedDomainsString.slice(0, -2);
 
-			Notifications.notify(crushedDomainsString);
-			Buttons.notify(crushedDomainsString);
-			Log.log(crushedDomainsString, "cookies/storage");
+			Notifications.notify(cleanedDomainsString);
+			Buttons.notify(cleanedDomainsString);
+			Log.log(cleanedDomainsString, "cookies/storage");
 		} else {
 			Buttons.notify();
 		}
