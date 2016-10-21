@@ -159,7 +159,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		if (cleanup) {
 			return true;
 		}
-		if (Whitelist.isWhitelistedTemp(host)
+		if (Whitelist.isGreylisted(host)
 					|| (isSession && !Prefs.getValue("cleanSessionCookies"))) {
 			return false;
 		}

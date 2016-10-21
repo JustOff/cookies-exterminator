@@ -94,10 +94,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
 				if (!(Whitelist.isWhitelisted(baseDomain) === true)) {
-					Whitelist.addDomain(baseDomain);
+					Whitelist.addToWhitelist(baseDomain);
 
-					if (Whitelist.isWhitelistedTemp(baseDomain) === true) {
-						Whitelist.removeDomainTemp(baseDomain);
+					if (Whitelist.isGreylisted(baseDomain) === true) {
+						Whitelist.removeFromGreylist(baseDomain);
 					}
 
 					Buttons.refresh();
@@ -117,11 +117,11 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
-				if (!(Whitelist.isWhitelistedTemp(baseDomain) === true)) {
-					Whitelist.addDomainTemp(baseDomain);
+				if (!(Whitelist.isGreylisted(baseDomain) === true)) {
+					Whitelist.addToGreylist(baseDomain);
 
 					if (Whitelist.isWhitelisted(baseDomain) === true) {
-						Whitelist.removeDomain(baseDomain);
+						Whitelist.removeFromWhitelist(baseDomain);
 					}
 
 					Buttons.refresh();
@@ -142,10 +142,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
 				if (Whitelist.isWhitelisted(baseDomain) === true 
-						|| Whitelist.isWhitelistedTemp(baseDomain) === true) {
+						|| Whitelist.isGreylisted(baseDomain) === true) {
 
-					Whitelist.removeDomain(baseDomain);
-					Whitelist.removeDomainTemp(baseDomain);
+					Whitelist.removeFromWhitelist(baseDomain);
+					Whitelist.removeFromGreylist(baseDomain);
 
 					Buttons.refresh();
 				}
@@ -235,7 +235,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 				if (Whitelist.isWhitelisted(baseDomain) === true) {
 					menuitemWhiteList.setAttribute("checked", "true");
-				} else if (Whitelist.isWhitelistedTemp(baseDomain) === true) {
+				} else if (Whitelist.isGreylisted(baseDomain) === true) {
 					menuitemCleanOnWinClose.setAttribute("checked", "true");
 				} else {
 					menuitemCleanOnTabsClose.setAttribute("checked", "true");
@@ -424,7 +424,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.suspended + ")";
 				} else if (Whitelist.isWhitelisted(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.whitelisted_s + ")";
-				} else if (Whitelist.isWhitelistedTemp(domain)) {
+				} else if (Whitelist.isGreylisted(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted_s + ")";
 				} else {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal_s + ")";
@@ -434,7 +434,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.unknown + ")";
 				} else if (Whitelist.isWhitelisted(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.whitelisted + ")";
-				} else if (Whitelist.isWhitelistedTemp(domain)) {
+				} else if (Whitelist.isGreylisted(domain)) {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.greylisted + ")";
 				} else {
 					button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";

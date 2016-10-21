@@ -1,16 +1,16 @@
 let EXPORTED_SYMBOLS = ["Whitelist"];
 
 let Whitelist = function(Prefs, Notifications) {
-	this.domains = {};
-	this.domainsTemp = {};
+	this.whiteList = {};
+	this.greyList = {};
 
 	this.init = function() {
 		this.loadFromPrefs();
 	};
 
 	this.loadFromPrefs = function() {
-		this.domains = {};
-		this.domainsTemp = {};
+		this.whiteList = {};
+		this.greyList = {};
 
 		let whitelistedDomains = Prefs.getValue("whitelistedDomains");
 
@@ -18,17 +18,17 @@ let Whitelist = function(Prefs, Notifications) {
 			let separatedDomains = whitelistedDomains.split(';');
 			
 			for (let domain of separatedDomains) {
-				this.domains[domain] = true;
+				this.whiteList[domain] = true;
 			}
 		}
 
 		let greylistedDomains = Prefs.getValue("greylistedDomains");
 
 		if (greylistedDomains != "") {
-			let separatedDomainsTemp = greylistedDomains.split(';');
+			let separatedDomains = greylistedDomains.split(';');
 
-			for (let domain of separatedDomainsTemp) {
-				this.domainsTemp[domain] = true;
+			for (let domain of separatedDomains) {
+				this.greyList[domain] = true;
 			}
 		}
 	};
@@ -52,32 +52,32 @@ let Whitelist = function(Prefs, Notifications) {
 		Prefs.save();
 	};
 
-	this.addDomain = function(domain) {
-		this.domains[domain] = true;
-		this.saveToPrefs(this.domains, "whitelistedDomains");
+	this.addToWhitelist = function(domain) {
+		this.whiteList[domain] = true;
+		this.saveToPrefs(this.whiteList, "whitelistedDomains");
 	};
 
-	this.addDomainTemp = function(domain) {
-		this.domainsTemp[domain] = true;
-		this.saveToPrefs(this.domainsTemp, "greylistedDomains");
+	this.addToGreylist = function(domain) {
+		this.greyList[domain] = true;
+		this.saveToPrefs(this.greyList, "greylistedDomains");
 	};
 
-	this.removeDomain = function(domain) {
-		delete this.domains[domain];
-		this.saveToPrefs(this.domains, "whitelistedDomains");
+	this.removeFromWhitelist = function(domain) {
+		delete this.whiteList[domain];
+		this.saveToPrefs(this.whiteList, "whitelistedDomains");
 	};
 
-	this.removeDomainTemp = function(domain) {
-		delete this.domainsTemp[domain];
-		this.saveToPrefs(this.domainsTemp, "greylistedDomains");
+	this.removeFromGreylist = function(domain) {
+		delete this.greyList[domain];
+		this.saveToPrefs(this.greyList, "greylistedDomains");
 	};
 
 	this.isWhitelisted = function(domain) {
-		return this.domains[domain] || this.checkForWildcard(domain, this.domains);
+		return this.whiteList[domain] || this.checkForWildcard(domain, this.whiteList);
 	};
 
-	this.isWhitelistedTemp = function(domain) {
-		return this.domainsTemp[domain] || this.checkForWildcard(domain, this.domainsTemp);
+	this.isGreylisted = function(domain) {
+		return this.greyList[domain] || this.checkForWildcard(domain, this.greyList);
 	};
 
 	this.checkForWildcard = function(domain, domains) {
