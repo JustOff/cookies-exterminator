@@ -3,7 +3,7 @@ let EXPORTED_SYMBOLS = ["Windows"];
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-let Windows = function(Tabs, Buttons, Crusher, Prefs) {
+let Windows = function(Tabs, Buttons, Cleaner, Prefs) {
 	this.windowListener = {
 		onOpenWindow: function(nsIObj) {
 			let domWindow = nsIObj.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
@@ -38,7 +38,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 				}
 
 				if (windowsCounter > 1) {
-					Crusher.prepare();
+					Cleaner.prepare();
 				}
 
 				Tabs.clear(domWindow);
@@ -64,7 +64,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 
 	this.clear = function(shutdown) {
 		if (shutdown) {
-			Crusher.prepare("Cleanup");
+			Cleaner.prepare("Cleanup");
 			return;
 		}
 

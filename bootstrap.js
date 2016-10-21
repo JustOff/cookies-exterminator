@@ -58,9 +58,9 @@ function startup(data, reason) {
 	Whitelist = new Imports.Whitelist(Prefs, Notifications);
 	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs, Utils);
-	Crusher = new Imports.Crusher(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
-	Tabs = new Imports.Tabs(Crusher, Buttons);
-	Windows = new Imports.Windows(Tabs, Buttons, Crusher, Prefs);
+	Cleaner = new Imports.Cleaner(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
+	Tabs = new Imports.Tabs(Cleaner, Buttons);
+	Windows = new Imports.Windows(Tabs, Buttons, Cleaner, Prefs);
 
 	// initialize
 	Prefs.init();
@@ -85,7 +85,7 @@ function startup(data, reason) {
 	}
 
 	Whitelist.init();
-	Utils.setTimeout(Crusher.getScopesFromDB.bind(this, null), 10);
+	Utils.setTimeout(Cleaner.getScopesFromDB.bind(this, null), 10);
 	Windows.init(); // this will do the rest
 
 	// add preferences and log windows event observers
@@ -108,8 +108,8 @@ function startup(data, reason) {
 
 	Services.obs.addObserver(onPrefsEvent, "cookextermPrefsEvent", false);
 	Services.obs.addObserver(Log.onEvent, "cookextermLogEvent", false);
-	Services.obs.addObserver(Crusher.handleCookieChanged, "cookie-changed", false);
-	Services.obs.addObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed", false);
+	Services.obs.addObserver(Cleaner.handleCookieChanged, "cookie-changed", false);
+	Services.obs.addObserver(Cleaner.handleDomStorageChanged, "dom-storage2-changed", false);
 }
 
 function shutdown(data, reason) {
@@ -133,8 +133,8 @@ function shutdown(data, reason) {
 		// remove preferences and log windows event observers
 		Services.obs.removeObserver(onPrefsEvent, "cookextermPrefsEvent");
 		Services.obs.removeObserver(Log.onEvent, "cookextermLogEvent");
-		Services.obs.removeObserver(Crusher.handleCookieChanged, "cookie-changed");
-		Services.obs.removeObserver(Crusher.handleDomStorageChanged, "dom-storage2-changed");
+		Services.obs.removeObserver(Cleaner.handleCookieChanged, "cookie-changed");
+		Services.obs.removeObserver(Cleaner.handleDomStorageChanged, "dom-storage2-changed");
 	}
 
 	// unload own modules

@@ -1,6 +1,6 @@
 let EXPORTED_SYMBOLS = ["Tabs"];
 
-let Tabs = function(Crusher, Buttons) {
+let Tabs = function(Cleaner, Buttons) {
 	this.onClose = function(event) {
 		let tab = event.target;
 		let browser = tab.linkedBrowser;
@@ -11,7 +11,7 @@ let Tabs = function(Crusher, Buttons) {
 		} catch(e) {}
 
 		if (domain) {
-			Crusher.prepare();
+			Cleaner.prepare();
 		}
 	};
 
@@ -25,7 +25,7 @@ let Tabs = function(Crusher, Buttons) {
 				if (domain) {
 					let previousDomain = aBrowser.previousDomain;
 					if (previousDomain && previousDomain != domain) {
-						Crusher.prepare();
+						Cleaner.prepare();
 					}
 
 					aBrowser["previousDomain"] = domain;

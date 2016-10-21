@@ -1,4 +1,4 @@
-let EXPORTED_SYMBOLS = ["Crusher"];
+let EXPORTED_SYMBOLS = ["Cleaner"];
 
 let Cc = Components.classes, Ci = Components.interfaces, Cu = Components.utils;
 
@@ -9,14 +9,14 @@ let ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOServi
 let securityManager = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
 let domStorageManager = Cc["@mozilla.org/dom/storagemanager;1"].getService(Ci.nsIDOMStorageManager);
 
-let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
-	let Crusher = this;
+let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
+	let Cleaner = this;
 
 	this.storageTracker = {};
 	
 	this.handleCookieChanged = function(aSubject, aTopic, aData) {
 		if (aData == "added" && aSubject instanceof Ci.nsICookie2) {
-			Crusher.prepare(aSubject);
+			Cleaner.prepare(aSubject);
 		}
 	};
 
@@ -29,7 +29,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				return;
 			}
 			let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
-			Crusher.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
+			Cleaner.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port + " - " + (aData ? aData : "unknown"));
 		}
 	};
@@ -226,7 +226,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 						if (scheme != "file") {
 							rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
 							if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
-							Crusher.storageTracker[scheme + "://" + rhost + ":" + port] = true;
+							Cleaner.storageTracker[scheme + "://" + rhost + ":" + port] = true;
 						}
 //Cu.reportError("[i] " + scheme + "://" + rhost + ":" + port);
 					}
