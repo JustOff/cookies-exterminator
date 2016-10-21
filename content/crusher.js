@@ -87,10 +87,12 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			}
 		} else {
 			cookies = anycookies;
-		} 
+		}
+
+		let baseDomainsInTabs = this.getBaseDomainsInTabs();
 
 		for (let cookie of cookies) {
-			if (this.mayBeCrushedCookie(cookie, cleanup)) {
+			if (this.mayBeCleaned(cookie.rawHost, cookie.isSession, baseDomainsInTabs, cleanup, cookie)) {
 				if (typeof cookie.originAttributes === "object") {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false, cookie.originAttributes);
 				} else {
@@ -116,7 +118,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} catch(e) {
 					continue loop;
 				}
-				if (this.mayBeCrushedStorage(uri.host, cleanup)) {
+				if (this.mayBeCleaned(uri.host, false, baseDomainsInTabs, cleanup, false)) {
 					delete this.storageTracker[url];
 					if (clearStorage(uri)) {
 						crushedDomains[uri.host] = true;
@@ -150,29 +152,35 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 	};
 	
-	this.mayBeCrushedCookie = function(cookie, cleanup) {
-		if (Whitelist.isWhitelisted(cookie.rawHost)) {
+	this.mayBeCleaned = function(host, isSession, baseDomainsInTabs, cleanup, cookie) {
+		if (Whitelist.isWhitelisted(host)) {
 			return false;
 		}
-
 		if (cleanup) {
 			return true;
 		}
-
-		if (Whitelist.isWhitelistedTemp(cookie.rawHost) ||
-			(!Prefs.getValue("keepCrushingSessionCookies") && cookie.isSession)) {
+		if (Whitelist.isWhitelistedTemp(host)
+					|| (isSession && !Prefs.getValue("keepCrushingSessionCookies"))) {
 			return false;
 		}
+		for (let domain in baseDomainsInTabs) {
+//if (cookie) { Cu.reportError("[" + this.jobID + "][?] " + cookie.host + " : " + cookie.name + " ? " + domain); }
+//if (!cookie) { Cu.reportError("[" + this.jobIDs + "s][?] " + host + " ? " + domain); }
+			if (Utils.getBaseDomain(host) == domain) {
+				return false;
+			}
+		}
+		return true;
+	};
 
+	this.getBaseDomainsInTabs = function() {
+		let domainsInTabs = {};
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
-
 		loop1: while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
-
 			if (PrivateBrowsingUtils.isWindowPrivate(window)) {
 				continue loop1;
 			}
-
 			let tabBrowser = window.gBrowser;
 			loop2: for (let tab of tabBrowser.tabs) {
 //Cu.reportError(tab.linkedBrowser.currentURI.spec);
@@ -185,66 +193,11 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} catch(e) {}
 
 				if (domain) {
-//Cu.reportError("[" + this.jobID + "][?] " + cookie.host + " : " + cookie.name + " ? " + domain);
-					domain = Utils.UTF8toACE(domain);
-
-					if (cookie.rawHost == domain
-							|| cookie.isDomain && cookie.rawHost == domain.substring(domain.indexOf(".") + 1)
-							|| Utils.getBaseDomain(cookie.rawHost) == Utils.getBaseDomain(domain)) {
-						return false;
-					}
+					domainsInTabs[Utils.getBaseDomain(Utils.UTF8toACE(domain))] = true;
 				}
 			}
 		}
-
-		return true;
-	};
-
-	this.mayBeCrushedStorage = function(host, cleanup) {
-		if (Whitelist.isWhitelisted(host)) {
-			return false;
-		}
-
-		if (cleanup) {
-			return true;
-		}
-
-		if (Whitelist.isWhitelistedTemp(host)) {
-			return false;
-		}
-
-		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
-
-		loop1: while (windowsEnumerator.hasMoreElements()) {
-			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
-
-			if (PrivateBrowsingUtils.isWindowPrivate(window)) {
-				continue loop1;
-			}
-
-			let tabBrowser = window.gBrowser;
-
-			loop2: for (let tab of tabBrowser.tabs) {
-				if (window.privateTab && window.privateTab.isTabPrivate(tab)) {
-					continue loop2;
-				}
-				let domain;
-				try {
-					domain = tab.linkedBrowser.contentDocument.domain;
-				} catch(e) {}
-
-				if (domain) {
-//Cu.reportError("[" + this.jobIDs + "s][?] " + host + " ? " + domain);
-					domain = Utils.UTF8toACE(domain);
-
-					if (host == domain || Utils.getBaseDomain(host) == Utils.getBaseDomain(domain)) {
-						return false;
-					}
-				}
-			}
-		}
-
-		return true;
+		return domainsInTabs;
 	};
 
 	this.getScopesFromDB = function() {
