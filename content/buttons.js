@@ -19,7 +19,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		normal_s: "icon_default_s.png",
 		unknown: "icon_unknown.png",
 		suspended: "icon_suspended.png",
-		crushed: "icon_crushed.png",
+		cleaned: "icon_cleaned.png",
 		greylisted: "icon_greylisted.png",
 		greylisted_s: "icon_greylisted_s.png",
 		whitelisted: "icon_whitelisted.png",
@@ -360,7 +360,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		Prefs.save();
 	};
 
-	this.notify = function(crushedDomainsString) {
+	this.notify = function(cleanedDomainsString) {
 		if (Prefs.getValue("toolbarButtonPlaceId") == "") {
 			return;
 		}
@@ -377,9 +377,9 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 			let Buttons = this;
 
-			if (crushedDomainsString) {
-				button.setAttribute("tooltiptext", Utils.translate("TTcrushed") + " " + crushedDomainsString);
-				button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.crushed + ")";
+			if (cleanedDomainsString) {
+				button.setAttribute("tooltiptext", Utils.translate("TTcleaned") + " " + cleanedDomainsString);
+				button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.cleaned + ")";
 
 				Utils.setTimeout(function() {
 					Buttons.refresh(window);

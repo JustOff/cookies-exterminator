@@ -5,14 +5,14 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 let Log = function(Prefs, Utils) {
 	this.loggedMessages = [];
 
-	this.log = function(crushedDomainsString, scope) {
-		if (Prefs.getValue("enableLogging") && crushedDomainsString) {
+	this.log = function(cleanedDomainsString, scope) {
+		if (Prefs.getValue("enableLogging") && cleanedDomainsString) {
 			let date = new Date();
 			let readableDate = date.getHours() + ":" +
 							   ("0" + date.getMinutes()).slice(-2) + ":" +
 							   ("0" + date.getSeconds()).slice(-2);
 
-			let message = readableDate + " - " + crushedDomainsString;
+			let message = readableDate + " - " + cleanedDomainsString;
 
 			this.loggedMessages.push(message);
 

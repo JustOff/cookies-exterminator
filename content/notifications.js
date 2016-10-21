@@ -11,10 +11,10 @@ let Notifications = function(extName, Prefs, Utils) {
 
 	this.alertName = "cookextermNotification";
 	
-	this.notify = function(crushedDomainsString) {
-		if (Prefs.getValue("enableNotifications") && crushedDomainsString) {
+	this.notify = function(cleanedDomainsString) {
+		if (Prefs.getValue("enableNotifications") && cleanedDomainsString) {
 			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-												Utils.translate("AlertTitle"), crushedDomainsString, 
+												Utils.translate("AlertTitle"), cleanedDomainsString, 
 												false, "", null, this.alertName);
 		}
 	};
