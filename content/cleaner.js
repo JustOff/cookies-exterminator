@@ -21,7 +21,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	};
 
 	this.handleDomStorageChanged = function(aSubject, aTopic, aData) {
-		if (aSubject.key != null && aSubject.oldValue == null && aSubject.url != "") {
+		if (aSubject.key != null && aSubject.oldValue == null && aSubject.url != "" && aData != "sessionStorage") {
 			let uri;
 			try {
 				uri = ioService.newURI(aSubject.url, null, null);
