@@ -48,11 +48,11 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 					if (this.cookiesCleanAll) {
 						this.cookiesCleanAll = false;
 						this.cookiesToClean = [];
-						Utils.setTimeout(this.execute.bind(this, "CleanAll"), Prefs.getValue("crushingDelay") - 3);
+						Utils.setTimeout(this.execute.bind(this, "CleanAll"), Prefs.getValue("cleanDelay") - 3);
 					} else {
 						let cookies = this.cookiesToClean;
 						this.cookiesToClean = [];
-						Utils.setTimeout(this.execute.bind(this, cookies), Prefs.getValue("crushingDelay") - 3);
+						Utils.setTimeout(this.execute.bind(this, cookies), Prefs.getValue("cleanDelay") - 3);
 					}
 				} else {
 					master = !this.cookiesCleanAll && this.cookiesToClean.length == 0;
@@ -106,7 +106,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			}
 		}
 
-		if (Prefs.getValue("keepCrushingLocalStorage") && (cleanup || cleanAll)) {
+		if (Prefs.getValue("cleanLocalStorage") && (cleanup || cleanAll)) {
 			loop: for (let url in this.storageTracker) {
 				let uri;
 				try {
@@ -160,7 +160,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			return true;
 		}
 		if (Whitelist.isWhitelistedTemp(host)
-					|| (isSession && !Prefs.getValue("keepCrushingSessionCookies"))) {
+					|| (isSession && !Prefs.getValue("cleanSessionCookies"))) {
 			return false;
 		}
 		for (let domain in baseDomainsInTabs) {

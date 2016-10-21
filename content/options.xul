@@ -36,15 +36,15 @@
 				</hbox>
 				<hbox flex="0" align="center">
 					<label value="&cookies-xtrm.Delay;"/>
-					<textbox id="crushingDelay" type="number" width="40" min="10" max="600"/>
+					<textbox id="cleanDelay" type="number" width="40" min="10" max="600"/>
 					<label value="&cookies-xtrm.Seconds;"/>
 				</hbox>
 				<spacer flex="0" height="15"/>
 				<hbox flex="0" align="center">
-					<checkbox id="keepCrushingSessionCookies" label="&cookies-xtrm.Session;"/>
+					<checkbox id="cleanSessionCookies" label="&cookies-xtrm.Session;"/>
 				</hbox>
 				<hbox flex="0" align="center">
-					<checkbox id="keepCrushingLocalStorage" label="&cookies-xtrm.Storage;"/>
+					<checkbox id="cleanLocalStorage" label="&cookies-xtrm.Storage;"/>
 				</hbox>
 				<spacer flex="0" height="15"/>
 				<hbox flex="0" align="center">
