@@ -41,8 +41,8 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.prepare = function(cookie) {
 		let master = false;
 		if (Prefs.getValue("enableProcessing")) {
-			if (cookie === true) {
-				this.execute(true);
+			if (cookie === "Cleanup") {
+				this.execute("Cleanup");
 			} else {
 				if (cookie === "@") {
 					if (this.cookiesCleanAll) {
@@ -76,7 +76,7 @@ let Crusher = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		let crushedDomains = {};
 		let crushedSomething = false;
 
-		let cleanup = anycookies === true;
+		let cleanup = anycookies === "Cleanup";
 		let cleanAll = anycookies === "CleanAll";
 //this.jobID++;
 

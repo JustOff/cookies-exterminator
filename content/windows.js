@@ -64,7 +64,7 @@ let Windows = function(Tabs, Buttons, Crusher, Prefs) {
 
 	this.clear = function(shutdown) {
 		if (shutdown) {
-			Crusher.prepare(true);
+			Crusher.prepare("Cleanup");
 			return;
 		}
 
