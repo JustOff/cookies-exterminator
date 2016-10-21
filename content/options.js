@@ -7,8 +7,8 @@ let Utils = new Imports.Utils();
 function onWindowLoad() {
 	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Load");
 
-	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
-	Utils.updateDomainsListbox(window, "domainsListboxTemp", "greylistedDomains");
+	Utils.updateDomainsListbox(window, "domainsWhitelistBox", "whitelistedDomains");
+	Utils.updateDomainsListbox(window, "domainsGreylistBox", "greylistedDomains");
 
 	let tabbox = window.document.getElementById("tabbox");
 
@@ -30,8 +30,8 @@ function onWindowLoad() {
 function onReset() {
 	Services.obs.notifyObservers(window, "cookextermPrefsEvent", "Load");
 
-	Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
-	Utils.updateDomainsListbox(window, "domainsListboxTemp", "greylistedDomains");
+	Utils.updateDomainsListbox(window, "domainsWhitelistBox", "whitelistedDomains");
+	Utils.updateDomainsListbox(window, "domainsGreylistBox", "greylistedDomains");
 } 
 
 function onApply() {

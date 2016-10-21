@@ -188,8 +188,8 @@ let Prefs = function(extName, appInfo, Utils) {
 							}
 						}
 					}
-					Utils.updateDomainsListbox(window, "domainsListbox", "whitelistedDomains");
-					Utils.updateDomainsListbox(window, "domainsListboxTemp", "greylistedDomains");
+					Utils.updateDomainsListbox(window, "domainsWhitelistBox", "whitelistedDomains");
+					Utils.updateDomainsListbox(window, "domainsGreylistBox", "greylistedDomains");
 					Utils.alert(Utils.translate("ImportOK"));
 				} catch(e) {
 					Utils.alert(e);
