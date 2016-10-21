@@ -45,10 +45,10 @@ function onSelect(domainsListbox) {
 	let selectedDomain = domainsListbox.getSelectedItem(0);
 
 	if (selectedDomain) {
-		let newDomainTextbox = window.document.getElementById("newDomainTextbox");
+		let newDomainTextboxWhite = window.document.getElementById("newDomainTextboxWhite");
 		let newDomainTextboxGrey = window.document.getElementById("newDomainTextboxGrey");
 
-		newDomainTextbox.value = selectedDomain.value;
+		newDomainTextboxWhite.value = selectedDomain.value;
 		newDomainTextboxGrey.value = selectedDomain.value;
 	}
 }
@@ -73,7 +73,7 @@ function onAddDomain(domListbox, domTextbox, listedDomains) {
 		separatedDomains = Utils.updateDomainsListbox(window, domListbox, listedDomains);
 		domainsListbox.ensureIndexIsVisible(separatedDomains.indexOf(domainToAdd));
 
-		window.document.getElementById("newDomainTextbox").value = "";
+		window.document.getElementById("newDomainTextboxWhite").value = "";
 		window.document.getElementById("newDomainTextboxGrey").value = "";
 	}
 }
@@ -99,7 +99,7 @@ function onEditDomain(domListbox, domTextbox, listedDomains) {
 		separatedDomains = Utils.updateDomainsListbox(window, domListbox, listedDomains);
 		domainsListbox.ensureIndexIsVisible(separatedDomains.indexOf(domainToAdd));
 
-		window.document.getElementById("newDomainTextbox").value = "";
+		window.document.getElementById("newDomainTextboxWhite").value = "";
 		window.document.getElementById("newDomainTextboxGrey").value = "";
 	}
 }

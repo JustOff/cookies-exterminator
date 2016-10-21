@@ -81,11 +81,11 @@
 			<vbox flex="1">
 				<listbox id="domainsWhitelistBox" height="250" onselect="onSelect(this);"></listbox>
 				<hbox flex="1" align="center">
-					<textbox id="newDomainTextbox" width="150"/>
-					<button label="&cookies-xtrm.Add;" oncommand="onAddDomain('domainsWhitelistBox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
+					<textbox id="newDomainTextboxWhite" width="150"/>
+					<button label="&cookies-xtrm.Add;" oncommand="onAddDomain('domainsWhitelistBox', 'newDomainTextboxWhite', 'whitelistedDomains');" style="min-width: 50px"/>
 					<spacer flex="1"/>
-					<button label="&cookies-xtrm.Replace;" oncommand="onEditDomain('domainsWhitelistBox', 'newDomainTextbox', 'whitelistedDomains');" style="min-width: 50px"/>
-					<button label="&cookies-xtrm.Remove;" oncommand="onRemoveDomain('domainsWhitelistBox', 'newDomainTextbox', 'whitelistedDomains');"/>
+					<button label="&cookies-xtrm.Replace;" oncommand="onEditDomain('domainsWhitelistBox', 'newDomainTextboxWhite', 'whitelistedDomains');" style="min-width: 50px"/>
+					<button label="&cookies-xtrm.Remove;" oncommand="onRemoveDomain('domainsWhitelistBox', 'newDomainTextboxWhite', 'whitelistedDomains');"/>
 				</hbox>
 			</vbox>
 			<textbox id="whitelistedDomains" hidden="true"/>
