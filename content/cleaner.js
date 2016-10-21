@@ -165,7 +165,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 		}
 		for (let domain in baseDomainsInTabs) {
 //if (cookie) { Cu.reportError("[" + this.jobID + "][?] " + cookie.host + " : " + cookie.name + " ? " + domain); }
-//if (!cookie) { Cu.reportError("[" + this.jobIDs + "s][?] " + host + " ? " + domain); }
+//if (!cookie) { Cu.reportError("[" + this.jobID + "s][?] " + host + " : " + domain); }
 			if (Utils.getBaseDomain(host) == domain) {
 				return false;
 			}
