@@ -159,11 +159,18 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			if (appInfo == "SeaMonkey") {
 				Services.wm.getMostRecentWindow("navigator:browser").toDataManager();
 			} else {
+				let window = Services.wm.getMostRecentWindow("navigator:browser");
+				let domain = window.gBrowser.contentDocument.domain;
+				let params = null;
+				if (domain) {
+					params = { filterString: Utils.getBaseDomain(domain) };
+				}
 				let existingWindow = Services.wm.getMostRecentWindow("Browser:Cookies");
 				if (!existingWindow) {
 					let features = "chrome,centerscreen," + Services.prefs.getBoolPref("browser.preferences.instantApply") ? "dialog=no" : "modal";
 					existingWindow = Services.wm.getMostRecentWindow(null)
-						.openDialog("chrome://browser/content/preferences/cookies.xul", "Browser:Cookies", features, null);
+						.openDialog("chrome://browser/content/preferences/cookies.xul",
+									"Browser:Cookies", features, params);
 				}
 				existingWindow.focus();
 			}
