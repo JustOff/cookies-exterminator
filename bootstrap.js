@@ -13,9 +13,8 @@ const INCOMPATIBLE = {
 
 // future global references of module symbols
 let Prefs = null;
-let Whitelist = null;
-let Buttons = null;
 let Log = null;
+let Cleaner = null;
 let Windows = null;
 
 let onPrefsApply = null;
@@ -55,10 +54,10 @@ function startup(data, reason) {
 	// create new objects from module symbols with passed dependencies
 	Prefs = new Imports.Prefs(extName, appInfo, Utils);
 	let Notifications = new Imports.Notifications(extName, Prefs, Utils);
-	Whitelist = new Imports.Whitelist(Prefs, Notifications);
-	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
+	let Whitelist = new Imports.Whitelist(Prefs, Notifications);
+	let Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs, Utils);
-	let Cleaner = new Imports.Cleaner(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
+	Cleaner = new Imports.Cleaner(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
 	let Tabs = new Imports.Tabs(Cleaner, Buttons);
 	Windows = new Imports.Windows(Tabs, Buttons, Cleaner, Prefs);
 
