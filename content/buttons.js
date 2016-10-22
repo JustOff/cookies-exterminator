@@ -88,7 +88,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemWhiteList.setAttribute("name", "clean");
 		menuitemWhiteList.addEventListener("command", function(event) {
 			let window = Services.wm.getMostRecentWindow("navigator:browser");
-			let domain = window.gBrowser.contentDocument.domain;
+			let domain;
+			try {
+				domain = window.gBrowser.contentDocument.domain;
+			} catch(e) {}
 
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
@@ -112,7 +115,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemCleanOnWinClose.setAttribute("name", "clean");
 		menuitemCleanOnWinClose.addEventListener("command", function(event) {
 			let window = Services.wm.getMostRecentWindow("navigator:browser");
-			let domain = window.gBrowser.contentDocument.domain;
+			let domain;
+			try {
+				domain = window.gBrowser.contentDocument.domain;
+			} catch(e) {}
 
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
@@ -136,7 +142,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemCleanOnTabsClose.setAttribute("name", "clean");
 		menuitemCleanOnTabsClose.addEventListener("command", function(event) {
 			let window = Services.wm.getMostRecentWindow("navigator:browser");
-			let domain = window.gBrowser.contentDocument.domain;
+			let domain;
+			try {
+				domain = window.gBrowser.contentDocument.domain;
+			} catch(e) {}
 
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
@@ -160,11 +169,16 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				Services.wm.getMostRecentWindow("navigator:browser").toDataManager();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
-				let domain = window.gBrowser.contentDocument.domain;
+				let domain;
+				try {
+					domain = window.gBrowser.contentDocument.domain;
+				} catch(e) {}
+
 				let params = null;
 				if (domain) {
 					params = { filterString: Utils.getBaseDomain(domain) };
 				}
+
 				let existingWindow = Services.wm.getMostRecentWindow("Browser:Cookies");
 				if (existingWindow) {
 					existingWindow.focus();
