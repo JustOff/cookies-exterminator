@@ -101,8 +101,10 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} else {
 					Services.cookies.remove(cookie.host, cookie.name, cookie.path, false);
 				}
-				cleanedSomething = true;
-				cleanedDomains[cookie.rawHost] = true;
+				if (cookie.rawHost != "") {
+					cleanedSomething = true;
+					cleanedDomains[cookie.rawHost] = true;
+				}
 //Cu.reportError("[" + this.jobID + "][-] " + cookie.host + " : " + cookie.name);
 			} else {
 //Cu.reportError("[" + this.jobID + "][*] " + cookie.host + " : " + cookie.name);
