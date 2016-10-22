@@ -169,7 +169,8 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				if (existingWindow) {
 					existingWindow.focus();
 				} else {
-					window.openDialog("chrome://browser/content/preferences/cookies.xul", "Browser:Cookies", "", params);
+					window.openDialog("chrome://browser/content/preferences/cookies.xul",
+										"Browser:Cookies", "", params);
 				}
 			}
 		}, false);
@@ -183,7 +184,8 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				existingWindow.focus();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
-				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs, "", "minimizable,centerscreen,modal", "whitelist");
+				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.prefs,
+									"", "minimizable,centerscreen,modal", "whitelist");
 			}
 		}, false);
 
@@ -196,7 +198,8 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				existingWindow.focus();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
-				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log, "", "minimizable,centerscreen,resizable");
+				window.openDialog(Buttons.contentURL + Buttons.xulDocFileNames.log,
+									"", "minimizable,centerscreen,resizable");
 			}
 		}, false);
 
