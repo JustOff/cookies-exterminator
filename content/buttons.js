@@ -166,13 +166,11 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					params = { filterString: Utils.getBaseDomain(domain) };
 				}
 				let existingWindow = Services.wm.getMostRecentWindow("Browser:Cookies");
-				if (!existingWindow) {
-					let features = "chrome,centerscreen," + Services.prefs.getBoolPref("browser.preferences.instantApply") ? "dialog=no" : "modal";
-					existingWindow = Services.wm.getMostRecentWindow(null)
-						.openDialog("chrome://browser/content/preferences/cookies.xul",
-									"Browser:Cookies", features, params);
+				if (existingWindow) {
+					existingWindow.focus();
+				} else {
+					window.openDialog("chrome://browser/content/preferences/cookies.xul", "Browser:Cookies", "", params);
 				}
-				existingWindow.focus();
 			}
 		}, false);
 
