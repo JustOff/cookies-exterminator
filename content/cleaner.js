@@ -28,6 +28,9 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			} catch(e) {
 				return;
 			}
+			if (uri.scheme == "file") {
+				return;
+			}
 			let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
 			Cleaner.storageTracker[uri.scheme + "://" + uri.host + ":" + port] = true;
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port + " - " + (aData ? aData : "unknown"));
@@ -110,11 +113,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			loop: for (let url in this.storageTracker) {
 				let uri;
 				try {
-					if (url.indexOf(":file") == -1) {
-						uri = ioService.newURI(url, null, null);
-					} else {
-						continue loop;
-					}
+					uri = ioService.newURI(url, null, null);
 				} catch(e) {
 					continue loop;
 				}
@@ -223,7 +222,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				try {
 					for (let row = aResultSet.getNextRow(); row; row = aResultSet.getNextRow()) {
 						[host, scheme, port] = row.getResultByName("scope").split(":");
-						if (scheme != "file") {
+						if (port != "file") {
 							rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
 							if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
 							Cleaner.storageTracker[scheme + "://" + rhost + ":" + port] = true;
