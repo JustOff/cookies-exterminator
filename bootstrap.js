@@ -58,8 +58,8 @@ function startup(data, reason) {
 	Whitelist = new Imports.Whitelist(Prefs, Notifications);
 	Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs, Utils);
-	Cleaner = new Imports.Cleaner(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
-	Tabs = new Imports.Tabs(Cleaner, Buttons);
+	let Cleaner = new Imports.Cleaner(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
+	let Tabs = new Imports.Tabs(Cleaner, Buttons);
 	Windows = new Imports.Windows(Tabs, Buttons, Cleaner, Prefs);
 
 	// initialize
