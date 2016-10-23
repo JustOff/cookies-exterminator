@@ -11,11 +11,24 @@ let Notifications = function(extName, Prefs, Utils) {
 
 	this.alertName = "cookextermNotification";
 	
+	this.suppress = false;
+	this.lastMessage = "";
+
 	this.notify = function(cleanedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && cleanedDomainsString) {
-			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, 
-												Utils.translate("AlertTitle"), cleanedDomainsString, 
-												false, "", null, this.alertName);
+			let title;
+			if (cleanedDomainsString == this.lastMessage && !this.suppress) {
+				title = Utils.translate("AlertSuppress");
+				this.suppress = true;
+			} else if (cleanedDomainsString == this.lastMessage && this.suppress) {
+				return;
+			} else {
+				title = Utils.translate("AlertTitle");
+				this.lastMessage = cleanedDomainsString;
+				this.suppress = false;
+			}
+			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, title,
+												cleanedDomainsString, false, "", null, this.alertName);
 		}
 	};
 
