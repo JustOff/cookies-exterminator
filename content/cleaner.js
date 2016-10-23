@@ -140,7 +140,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			let cleanedDomainsString = "";
 
 			for (let domain in cleanedDomains) {
-				cleanedDomainsString += domain + ", ";
+				cleanedDomainsString += Utils.ACEtoUTF8(domain) + ", ";
 			}
 
 			cleanedDomainsString = cleanedDomainsString.slice(0, -2);
