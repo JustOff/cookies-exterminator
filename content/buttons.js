@@ -468,26 +468,13 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	};
 
 	this.clear = function(window) {
-		let button = window.document.getElementById(this.buttonId);
+		window.removeEventListener("customizationchange", this.onCustomization, false);
+		window.removeEventListener("aftercustomization", this.afterCustomization, false);
 
+		let button = window.document.getElementById(this.buttonId);
 		if (button) {
 			button.parentNode.removeChild(button);
 		}
-
-		let navigatorToolbox = window.document.getElementById("navigator-toolbox");
-
-		// customization palette seems to be beyond DOM document
-		// so just try to remove it the hard way
-		for (let nodeIndex in navigatorToolbox.palette.childNodes) {
-			let childNode = navigatorToolbox.palette.childNodes[nodeIndex];
-
-			if (childNode && childNode.id == this.buttonId) {
-				navigatorToolbox.palette.removeChild(childNode);
-			}
-		}
-
-		window.removeEventListener("customizationchange", this.onCustomization, false);
-		window.removeEventListener("aftercustomization", this.afterCustomization, false);
 	};
 
 	this.onPrefsApply = function() {
