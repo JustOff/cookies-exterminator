@@ -62,7 +62,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
 		button.setAttribute("tooltiptext", Utils.translate("TTinitial"));
 		button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
-		button.style.MozBoxOrient = "inherit";
 
 		let Buttons = this;
 
