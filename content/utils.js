@@ -13,7 +13,7 @@ let Utils = function() {
 		try {
 			return eTLDService.getBaseDomainFromHost(fullDomain);
 		} catch(e) {
-			return fullDomain;
+			return this.UTF8toACE(fullDomain);
 		}
 	};
 

@@ -70,10 +70,9 @@ let Log = function(Prefs, Utils) {
 						continue;
 					}
 					host = Utils.getBaseDomain(host);
-					let hostACE8 = Utils.ACEtoUTF8(host);
-					if (loaded.indexOf(host) == -1 && whiteList.indexOf(hostACE8) == -1 
-													&& greyList.indexOf(hostACE8) == -1) {
-						let item = logListbox.appendItem(host, hostACE8);
+					if (loaded.indexOf(host) == -1 && whiteList.indexOf(host) == -1 
+													&& greyList.indexOf(host) == -1) {
+						let item = logListbox.appendItem(Utils.ACEtoUTF8(host), host);
 						item.setAttribute("type", "checkbox");
 						loaded.push(host);
 					}

@@ -194,7 +194,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				} catch(e) {}
 
 				if (domain) {
-					domainsInTabs[Utils.getBaseDomain(Utils.UTF8toACE(domain))] = true;
+					domainsInTabs[Utils.getBaseDomain(domain)] = true;
 				}
 			}
 		}
