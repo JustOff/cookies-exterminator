@@ -51,10 +51,9 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		let document = window.document;
 
 		if (document.getElementById(this.buttonId)) {
-			return; // button already exists
+			return;
 		}
 
-		// create button element
 		let button = document.createElement("toolbarbutton");
 		button.setAttribute("id", this.buttonId);
 		button.setAttribute("label", Utils.translate("Name"));
@@ -65,7 +64,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let Buttons = this;
 
-		// create menuitems
 		let menuitemEnable = document.createElement("menuitem");
 		menuitemEnable.setAttribute("id", this.menuitemIds.enable);
 		menuitemEnable.setAttribute("type", "checkbox");
@@ -220,7 +218,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		let menuitemSeparator2 = document.createElement("menuseparator");
 		let menuitemSeparator3 = document.createElement("menuseparator");
 
-		// create menupopup element
 		let menupopup = document.createElement("menupopup");
 		menupopup.setAttribute("id", this.menupopupId);
 		menupopup.addEventListener("popupshowing", function(event) {
@@ -277,7 +274,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			menuitemViewLog.setAttribute("disabled", !Prefs.getValue("enableLogging"));
 		}, false);
 
-		// append menuitems to the menupopup
 		if (Prefs.getValue("toolbarButtonPlaceId") == "nav-bar") {
 			menupopup.appendChild(menuitemCleanOnTabsClose);
 			menupopup.appendChild(menuitemCleanOnWinClose);
@@ -302,7 +298,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			menupopup.appendChild(menuitemCleanOnTabsClose);
 		}
 
-		// append menupopup to the button
 		button.appendChild(menupopup);
 
 		let toolbox = $(document, "navigator-toolbox");

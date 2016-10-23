@@ -11,7 +11,6 @@ const INCOMPATIBLE = {
 	"john%40velvetcache.org": "Beef Taco"
 };
 
-// future global references of module symbols
 let Prefs = null;
 let Log = null;
 let Cleaner = null;
@@ -35,10 +34,7 @@ function startup(data, reason) {
 			break;
 	}
 	
-	// object as a scope for imports
 	let Imports = {};
-
-	// import own modules
 	Cu.import(extJSPath + "preflib.js", Imports);
 	Cu.import(extJSPath + "buttons.js", Imports);
 	Cu.import(extJSPath + "whitelist.js", Imports);
@@ -50,8 +46,6 @@ function startup(data, reason) {
 	Cu.import(extJSPath + "utils.js", Imports);
 
 	let Utils = new Imports.Utils();
-
-	// create new objects from module symbols with passed dependencies
 	Prefs = new Imports.Prefs(extName, appInfo, Utils);
 	let Notifications = new Imports.Notifications(extName, Prefs, Utils);
 	let Whitelist = new Imports.Whitelist(Prefs, Notifications);
@@ -61,7 +55,6 @@ function startup(data, reason) {
 	let Tabs = new Imports.Tabs(Cleaner, Buttons);
 	Windows = new Imports.Windows(Tabs, Buttons, Cleaner, Prefs);
 
-	// initialize
 	Prefs.init();
 	if (reason == ADDON_INSTALL) {
 		Prefs.importFromPermissions();
@@ -85,9 +78,7 @@ function startup(data, reason) {
 
 	Whitelist.init();
 	Utils.setTimeout(Cleaner.getScopesFromDB.bind(this, null), 10);
-	Windows.init(); // this will do the rest
-
-	// add preferences and log windows event observers
+	Windows.init();
 
 	onPrefsEvent = {
 		observe: function(aSubject, aTopic, aData) {
@@ -129,14 +120,12 @@ function shutdown(data, reason) {
 			Windows.clear();
 		}
 
-		// remove preferences and log windows event observers
 		Services.obs.removeObserver(onPrefsEvent, "cookextermPrefsEvent");
 		Services.obs.removeObserver(Log.onEvent, "cookextermLogEvent");
 		Services.obs.removeObserver(Cleaner.handleCookieChanged, "cookie-changed");
 		Services.obs.removeObserver(Cleaner.handleDomStorageChanged, "dom-storage2-changed");
 	}
 
-	// unload own modules
 	Cu.unload(extJSPath + "preflib.js");
 	Cu.unload(extJSPath + "buttons.js");
 	Cu.unload(extJSPath + "whitelist.js");
