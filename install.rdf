@@ -2,7 +2,7 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
 	<em:id>CookiesExterminator@Off.JustOff</em:id>
-	<em:version>2.7.2b9</em:version>
+	<em:version>2.7.4</em:version>
 	<em:type>2</em:type>
 	<em:bootstrap>true</em:bootstrap>
 	<em:name>Cookies Exterminator</em:name>
@@ -11,7 +11,7 @@
 	<em:contributor>Wojciech Stachurski (wsdfhjxc)</em:contributor>
 	<em:contributor>Ove Sörensen &lt;sdc@elektro-eel.org&gt;</em:contributor>
 	<em:contributor>Creative Stall from Noun Project</em:contributor>
-	<em:homepageURL>https://addons.mozilla.org/addon/cookies-xtrm/</em:homepageURL>
+	<em:homepageURL>https://addons.mozilla.org/addon/cookies-exterminator/</em:homepageURL>
 	<em:optionsURL>chrome://cookies-xtrm/content/options.xul</em:optionsURL>
 	<em:localized>
 		<Description>
