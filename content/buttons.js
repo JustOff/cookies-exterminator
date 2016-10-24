@@ -59,6 +59,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		button.setAttribute("label", Utils.translate("Name"));
 		button.setAttribute("type", "menu");
 		button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
+		button.setAttribute("orient", "horizontal");
 		button.setAttribute("tooltiptext", Utils.translate("TTinitial"));
 		button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
 
