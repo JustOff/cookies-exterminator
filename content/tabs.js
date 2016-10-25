@@ -1,14 +1,8 @@
 let EXPORTED_SYMBOLS = ["Tabs"];
 
-let Tabs = function(Cleaner, Buttons) {
+let Tabs = function(Cleaner, Buttons, Utils) {
 	this.onClose = function(event) {
-		let tab = event.target;
-		let browser = tab.linkedBrowser;
-		let domain;
-		
-		try {
-			domain = browser.contentDocument.domain;
-		} catch(e) {}
+		let domain = Utils.getHostFromTab(event.target);
 
 		if (domain) {
 			Cleaner.prepare();

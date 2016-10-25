@@ -52,7 +52,7 @@ function startup(data, reason) {
 	let Buttons = new Imports.Buttons(extName, appInfo, Prefs, Whitelist, Utils);
 	Log = new Imports.Log(Prefs, Utils);
 	Cleaner = new Imports.Cleaner(Prefs, Buttons, Whitelist, Log, Notifications, Utils);
-	let Tabs = new Imports.Tabs(Cleaner, Buttons);
+	let Tabs = new Imports.Tabs(Cleaner, Buttons, Utils);
 	Windows = new Imports.Windows(Tabs, Buttons, Cleaner, Prefs);
 
 	Prefs.init();

@@ -177,22 +177,13 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	this.getBaseDomainsInTabs = function() {
 		let domainsInTabs = {};
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
-		loop1: while (windowsEnumerator.hasMoreElements()) {
+		loop: while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);
 			if (PrivateBrowsingUtils.isWindowPrivate(window)) {
-				continue loop1;
+				continue loop;
 			}
-			let tabBrowser = window.gBrowser;
-			loop2: for (let tab of tabBrowser.tabs) {
-//Cu.reportError(tab.linkedBrowser.currentURI.spec);
-				if (window.privateTab && window.privateTab.isTabPrivate(tab)) {
-					continue loop2;
-				}
-				let domain;
-				try {
-					domain = tab.linkedBrowser.contentDocument.domain;
-				} catch(e) {}
-
+			for (let tab of window.gBrowser.tabs) {
+				let domain = Utils.getHostFromTab(tab, window);
 				if (domain) {
 					domainsInTabs[Utils.getBaseDomain(domain)] = true;
 				}

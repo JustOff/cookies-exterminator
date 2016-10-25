@@ -86,11 +86,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemWhiteList.setAttribute("name", "clean");
 		menuitemWhiteList.addEventListener("command", function(event) {
 			let window = Services.wm.getMostRecentWindow("navigator:browser");
-			let domain;
-			try {
-				domain = window.gBrowser.contentDocument.domain;
-			} catch(e) {}
-
+			let domain = Utils.getHostFromTab(window.gBrowser.selectedTab);
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
@@ -113,11 +109,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemCleanOnWinClose.setAttribute("name", "clean");
 		menuitemCleanOnWinClose.addEventListener("command", function(event) {
 			let window = Services.wm.getMostRecentWindow("navigator:browser");
-			let domain;
-			try {
-				domain = window.gBrowser.contentDocument.domain;
-			} catch(e) {}
-
+			let domain = Utils.getHostFromTab(window.gBrowser.selectedTab);
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
@@ -140,11 +132,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemCleanOnTabsClose.setAttribute("name", "clean");
 		menuitemCleanOnTabsClose.addEventListener("command", function(event) {
 			let window = Services.wm.getMostRecentWindow("navigator:browser");
-			let domain;
-			try {
-				domain = window.gBrowser.contentDocument.domain;
-			} catch(e) {}
-
+			let domain = Utils.getHostFromTab(window.gBrowser.selectedTab);
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
@@ -167,10 +155,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				Services.wm.getMostRecentWindow("navigator:browser").toDataManager();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
-				let domain;
-				try {
-					domain = window.gBrowser.contentDocument.domain;
-				} catch(e) {}
+				let domain = Utils.getHostFromTab(window.gBrowser.selectedTab);
 
 				let params = null;
 				if (domain) {
@@ -241,14 +226,8 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			let menuitemWhiteList = document.getElementById(Buttons.menuitemIds.whiteList);
 			let menuitemCleanOnWinClose = document.getElementById(Buttons.menuitemIds.cleanOnWinClose);
 			let menuitemCleanOnTabsClose = document.getElementById(Buttons.menuitemIds.cleanOnTabsClose);
-			let domain;
-			try {
-				domain = window.gBrowser.contentDocument.domain;
-				if (window.privateTab && window.privateTab.isTabPrivate(window.gBrowser.selectedTab)) {
-					domain = null;
-				}
-			} catch(e) {}
 
+			let domain = Utils.getHostFromTab(window.gBrowser.selectedTab, window);
 			if (domain) {
 				let baseDomain = Utils.getBaseDomain(domain);
 
@@ -425,15 +404,9 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 	this.refreshForWindow = function(window) {
 		let button = window.document.getElementById(this.buttonId);
-		let domain;
 
 		if (button) {
-			try {
-				domain = Utils.UTF8toACE(window.gBrowser.contentDocument.domain);
-				if (window.privateTab && window.privateTab.isTabPrivate(window.gBrowser.selectedTab)) {
-					domain = null;
-				}
-			} catch(e) {}
+			let domain = Utils.UTF8toACE(Utils.getHostFromTab(window.gBrowser.selectedTab, window));
 
 			if (!Prefs.getValue("enableProcessing")) {
 				button.setAttribute("tooltiptext", Utils.translate("TTsuspended"));

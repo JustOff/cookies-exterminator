@@ -9,6 +9,18 @@ let eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"].getService(
 let IDNService = Cc["@mozilla.org/network/idn-service;1"].getService(Ci.nsIIDNService);
 
 let Utils = function() {
+	this.getHostFromTab = function(tab, window) {
+		if (window && window.privateTab && window.privateTab.isTabPrivate(tab)) {
+			return null;
+		}
+		try {
+			return (tab.linkedBrowser.currentURI.scheme == "http" || tab.linkedBrowser.currentURI.scheme == "https") ?
+					tab.linkedBrowser.currentURI.host : null;
+		} catch(e) {
+			return null;
+		}
+	}
+
 	this.getBaseDomain = function(fullDomain) {
 		try {
 			return eTLDService.getBaseDomainFromHost(fullDomain);
