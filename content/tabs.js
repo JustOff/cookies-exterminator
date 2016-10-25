@@ -15,7 +15,7 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 				return;
 			}
 			try {
-				let domain = aBrowser.contentDocument.domain;
+				let domain = aURI.host;
 				if (domain) {
 					let previousDomain = aBrowser.previousDomain;
 					if (previousDomain && previousDomain != domain) {
