@@ -14,13 +14,11 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 				return;
 			}
 			try {
-				let domain = aURI.host;
-				if (domain) {
-					let previousDomain = aBrowser.previousDomain;
-					if (previousDomain && previousDomain != domain) {
+				if (aURI.host && aURI.scheme && (aURI.scheme == "http" || aURI.scheme == "https")) {
+					if (aBrowser.previousDomain && aBrowser.previousDomain != aURI.host) {
 						Cleaner.prepare();
 					}
-					aBrowser["previousDomain"] = domain;
+					aBrowser["previousDomain"] = aURI.host;
 				}
 			} catch(e) {}
 		}
