@@ -36,7 +36,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	this.menuitemIds = {
 		enable: "cookextermEnable",
 		viewLog: "cookextermViewLog",
-		menuitemManageCookies: "cookextermManageCookies",
+		manageCookies: "cookextermManageCookies",
 		manageWhitelist: "cookextermManageWhitelist",
 		whiteList: "cookextermWhiteList",
 		cleanOnWinClose: "cookextermCleanOnWinClose",

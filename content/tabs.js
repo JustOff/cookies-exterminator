@@ -10,7 +10,7 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 
 	this.onTabProgress = {	
 		onLocationChange: function(aBrowser, aWebProgress, aRequest, aURI, aFlag) {
-			if (aFlag & Components.interfaces.nsIWebProgress.LOCATION_CHANGE_SAME_DOCUMENT) {
+			if (aFlag & Components.interfaces.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT) {
 				return;
 			}
 			try {
@@ -26,7 +26,7 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 
 	this.onProgress = {
 		onLocationChange: function(aWebProgress, aRequest, aLocation, aFlag) {
-			if (aFlag & Components.interfaces.nsIWebProgress.LOCATION_CHANGE_SAME_DOCUMENT) {
+			if (aFlag & Components.interfaces.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT) {
 				return;
 			}
 			try {

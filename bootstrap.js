@@ -16,7 +16,7 @@ let Log = null;
 let Cleaner = null;
 let Windows = null;
 
-let onPrefsApply = null;
+let onPrefsEvent = null;
 let appInfo = null;
 let compat = true;
 
