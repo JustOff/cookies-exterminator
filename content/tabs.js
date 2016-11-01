@@ -26,9 +26,6 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 
 	this.onProgress = {
 		onLocationChange: function(aWebProgress, aRequest, aLocation, aFlag) {
-			if (aFlag & Components.interfaces.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT) {
-				return;
-			}
 			try {
 				Buttons.refresh();
 			} catch(e) {}
