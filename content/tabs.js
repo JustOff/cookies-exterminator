@@ -4,7 +4,7 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 	this.onClose = function(event) {
 		let domain = Utils.getHostFromTab(event.target);
 		if (domain) {
-			Cleaner.prepare();
+			Cleaner.trackTabs(domain);
 		}
 	};
 
@@ -16,7 +16,7 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 			try {
 				if (aURI.host && aURI.scheme && (aURI.scheme == "http" || aURI.scheme == "https")) {
 					if (aBrowser.previousDomain && aBrowser.previousDomain != aURI.host) {
-						Cleaner.prepare();
+						Cleaner.trackTabs(aBrowser.previousDomain);
 					}
 					aBrowser["previousDomain"] = aURI.host;
 				}

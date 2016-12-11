@@ -36,6 +36,13 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port + " - " + (aData ? aData : "unknown"));
 		}
 	};
+	
+	this.tabsTracker = {};
+	
+	this.trackTabs = function(domain) {
+		this.tabsTracker[Utils.getBaseDomain(domain)] = Date.now() + (Prefs.getValue("cleanDelay") - 3) * 1000;
+		Cleaner.prepare();
+	};
 
 	this.cookiesToClean = [];
 
@@ -176,6 +183,14 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 	this.getBaseDomainsInTabs = function() {
 		let domainsInTabs = {};
+		let now = Date.now();
+		for (let domain in this.tabsTracker) {
+			if (this.tabsTracker[domain] > now) {
+				domainsInTabs[domain] = true;
+			} else {
+				delete this.tabsTracker[domain];
+			}
+		}
 		let windowsEnumerator = Services.wm.getEnumerator("navigator:browser");
 		loop: while (windowsEnumerator.hasMoreElements()) {
 			let window = windowsEnumerator.getNext().QueryInterface(Ci.nsIDOMWindow);

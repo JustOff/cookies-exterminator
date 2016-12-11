@@ -12,7 +12,7 @@
 
 <!ENTITY cookies-xtrm.Main "Основные">
 <!ENTITY cookies-xtrm.Enable "Включить активный режим">
-<!ENTITY cookies-xtrm.Delay "Максимальная задержка перед очисткой">
+<!ENTITY cookies-xtrm.Delay "Задержка перед очисткой">
 <!ENTITY cookies-xtrm.Seconds "секунд">
 <!ENTITY cookies-xtrm.Session "Удалять сессионные куки">
 <!ENTITY cookies-xtrm.Storage "Чистить локальное хранилище">
