@@ -1,0 +1,37 @@
+<!ENTITY cookies-xtrm.Name "Cookies Exterminator">
+
+<!ENTITY cookies-xtrm.Accept "Aceitar">
+<!ENTITY cookies-xtrm.Cancel "Cancelar">
+<!ENTITY cookies-xtrm.Reset "Repor">
+
+<!ENTITY cookies-xtrm.Options "Opções">
+<!ENTITY cookies-xtrm.Whitelist "Lista branca">
+<!ENTITY cookies-xtrm.Greylist "Lista cinzenta">
+<!ENTITY cookies-xtrm.Redlist "Lista vermelha">
+<!ENTITY cookies-xtrm.Log "Registos">
+
+<!ENTITY cookies-xtrm.Main "Principal">
+<!ENTITY cookies-xtrm.Enable "Ativar modo ativo">
+<!ENTITY cookies-xtrm.Delay "Atraso antes de limpar">
+<!ENTITY cookies-xtrm.Seconds "segundos">
+<!ENTITY cookies-xtrm.Session "Limpar cookies da sessão">
+<!ENTITY cookies-xtrm.Storage "Limpar LocalStorage">
+<!ENTITY cookies-xtrm.DoLog "Registar todas as atividades">
+<!ENTITY cookies-xtrm.Notifications "Utilizar notificações">
+<!ENTITY cookies-xtrm.Backup "Backup">
+<!ENTITY cookies-xtrm.Settings "Definições">
+<!ENTITY cookies-xtrm.Export "Exportar">
+<!ENTITY cookies-xtrm.Import "Importar">
+
+<!ENTITY cookies-xtrm.Add "Adicionar">
+<!ENTITY cookies-xtrm.Replace "Substituir">
+<!ENTITY cookies-xtrm.Remove "Remover">
+
+<!ENTITY cookies-xtrm.LRedlist "Carregar lista">
+<!ENTITY cookies-xtrm.ToWhitelist "Adicionar à lista branca">
+<!ENTITY cookies-xtrm.ToGreylist "Adicionar à lista cinzenta">
+<!ENTITY cookies-xtrm.LLog "Carregar registo">
+
+<!ENTITY cookies-xtrm.LogTitle "Limpeza dos registos do Cookies Exterminator">
+<!ENTITY cookies-xtrm.CLog "Limpar registo">
+<!ENTITY cookies-xtrm.Close "Fechar">
