@@ -5,6 +5,7 @@ Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 const extName = "cookies-xtrm";
 const extJSPath = "chrome://" + extName + "/content/";
+const buttonCSS = "chrome://" + extName + "/skin/button.css";
 
 const INCOMPATIBLE = {
 	"trackerblock%40privacychoice.org": "TrackerBlock",
@@ -12,6 +13,8 @@ const INCOMPATIBLE = {
 	"john%40velvetcache.org": "Beef Taco"
 };
 
+let styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
+let styleSheetURI = Services.io.newURI(buttonCSS, null, null);
 let Prefs, Log, Buttons, Cleaner, Tabs, gWindowListener, onPrefsEvent, appInfo;
 let compat = true;
 
@@ -70,7 +73,11 @@ function startup(data, reason) {
 			appInfo = "SeaMonkey";
 			break;
 	}
-	
+
+	if (!styleSheetService.sheetRegistered(styleSheetURI, styleSheetService.USER_SHEET)) {
+		styleSheetService.loadAndRegisterSheet(styleSheetURI, styleSheetService.USER_SHEET);
+	}
+
 	let Imports = {};
 	Cu.import(extJSPath + "preflib.js", Imports);
 	Cu.import(extJSPath + "buttons.js", Imports);
@@ -184,6 +191,10 @@ function shutdown(data, reason) {
 	Cu.unload(extJSPath + "tabs.js");
 	Cu.unload(extJSPath + "notifications.js");
 	Cu.unload(extJSPath + "utils.js");
+
+	if (styleSheetService.sheetRegistered(styleSheetURI, styleSheetService.USER_SHEET)) {
+		styleSheetService.unregisterSheet(styleSheetURI, styleSheetService.USER_SHEET);
+	}
 }
 
 function install() {}

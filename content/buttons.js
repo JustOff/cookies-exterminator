@@ -59,7 +59,6 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		button.setAttribute("label", Utils.translate("Name"));
 		button.setAttribute("type", "menu");
 		button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
-		button.setAttribute("orient", "horizontal");
 		button.setAttribute("tooltiptext", Utils.translate("TTinitial"));
 		button.style.listStyleImage = "url(" + this.skinURL + this.iconFileNames.normal + ")";
 
@@ -285,7 +284,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let toolbarId = Prefs.getValue("toolbarButtonPlaceId"),
 			nextItemId = Prefs.getValue("toolbarButtonNextItemId"),
-			toolbar = toolbarId && $(document, toolbarId),
+			toolbar = toolbarId && toolbarId != "PanelUI" && $(document, toolbarId),
 			nextItem = toolbar && nextItemId != "" && $(document, nextItemId);
 		
 		if (toolbar) {
@@ -322,6 +321,9 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 			if ((/\"nav\-bar\"\:\[.*?\"cookextermButton\".*?\]/).test(ucs)) {
 				Prefs.setValue("toolbarButtonPlaceId", "nav-bar");
 				Prefs.save();
+			} else if ((/\"cookextermButton\"/).test(ucs)) {
+				Prefs.setValue("toolbarButtonPlaceId", "PanelUI");
+				Prefs.save();
 			} else {
 				this.setPrefs(null, null);
 			}
@@ -346,6 +348,13 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					mnp.appendChild(mnp.childNodes[i]);
 				}
 			}
+		} else {
+			try {
+				let ucs = Services.prefs.getCharPref("browser.uiCustomization.state");
+				if ((/\"cookextermButton\"/).test(ucs)) {
+					toolbarId = "PanelUI";
+				}
+			} catch(e) {}
 		}
 		this.setPrefs(toolbarId, nextItemId);
 	};
