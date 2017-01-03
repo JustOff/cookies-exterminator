@@ -15,15 +15,15 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	this.skinURL = "chrome://" + extName + "/skin/";
 
 	this.iconFileNames = {
-		normal: "icon_default.png",
-		normal_s: "icon_default_s.png",
-		unknown: "icon_unknown.png",
-		suspended: "icon_suspended.png",
-		cleaned: "icon_cleaned.png",
-		greylisted: "icon_greylisted.png",
-		greylisted_s: "icon_greylisted_s.png",
-		whitelisted: "icon_whitelisted.png",
-		whitelisted_s: "icon_whitelisted_s.png"
+		normal: "default.png",
+		normal_s: "default_s.png",
+		unknown: "unknown.png",
+		suspended: "suspended.png",
+		cleaned: "cleaned.png",
+		greylisted: "greylisted.png",
+		greylisted_s: "greylisted_s.png",
+		whitelisted: "whitelisted.png",
+		whitelisted_s: "whitelisted_s.png"
 	};
 
 	this.xulDocFileNames = {
@@ -312,7 +312,13 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		window.addEventListener("customizationchange", this.onCustomization, false);
 		window.addEventListener("aftercustomization", this.afterCustomization, false);
 
-		this.refresh();
+		if (toolbarId == "PanelUI" && window.PanelUI) {
+			window.PanelUI.ensureReady().then(() => {
+				Buttons.refresh();
+			}).catch();
+		} else {
+			this.refresh();
+		}
 	};
 
 	this.onCustomization = function(event) {

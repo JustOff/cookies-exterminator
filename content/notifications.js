@@ -7,7 +7,7 @@ let AlertsService = Components.classes["@mozilla.org/alerts-service;1"]
 
 let Notifications = function(extName, Prefs, Utils) {
 	this.contentURL = "chrome://" + extName + "/skin/";
-	this.iconFileName = "icon.png";
+	this.iconFileName = "notification.png";
 
 	this.alertName = "cookextermNotification";
 	
