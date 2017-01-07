@@ -25,7 +25,15 @@
 			<em:locale>de</em:locale>
 			<em:name>Cookies Exterminator</em:name>
 			<em:description>Automatisch Cookies und lokalen Speicher löschen, sobald sie unbenutzt sind</em:description>
-			<em:translator>ravenGER</em:translator>
+			<em:translator>Mirko Bressler</em:translator>
+		</Description>
+	</em:localized>
+	<em:localized>
+		<Description>
+			<em:locale>fr</em:locale>
+			<em:name>Cookies Exterminator</em:name>
+			<em:description>Suppression automatique des cookies et des objets localStorage dès qu'ils sont inutilisés</em:description>
+			<em:translator>TMTisFree</em:translator>
 		</Description>
 	</em:localized>
 	<em:localized>
