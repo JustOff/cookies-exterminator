@@ -301,7 +301,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				}
 				toolbar.insertItem(this.buttonId, nextItem);
 			}
-			if (appInfo != "SeaMonkey") {
+			if (toolbar.getAttribute("collapsed") == "true" && appInfo != "SeaMonkey") {
 				window.setToolbarVisibility(toolbar, true);
 			}
 		}
