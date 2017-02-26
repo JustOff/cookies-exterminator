@@ -1,0 +1,37 @@
+<!ENTITY cookies-xtrm.Name "Cookies Exterminator">
+
+<!ENTITY cookies-xtrm.Accept "Acceptera">
+<!ENTITY cookies-xtrm.Cancel "Avbryt">
+<!ENTITY cookies-xtrm.Reset "Återställ">
+
+<!ENTITY cookies-xtrm.Options "Alternativ">
+<!ENTITY cookies-xtrm.Whitelist "Vitlista">
+<!ENTITY cookies-xtrm.Greylist "Grålista">
+<!ENTITY cookies-xtrm.Redlist "Rödlista">
+<!ENTITY cookies-xtrm.Log "Logg">
+
+<!ENTITY cookies-xtrm.Main "Allmänt">
+<!ENTITY cookies-xtrm.Enable "Aktivera aktivt läge">
+<!ENTITY cookies-xtrm.Delay "Fördröjning innan rensning">
+<!ENTITY cookies-xtrm.Seconds "sekunder">
+<!ENTITY cookies-xtrm.Session "Rensa sessions-cookies">
+<!ENTITY cookies-xtrm.Storage "Rensa lokalt lagrat webbinnehåll">
+<!ENTITY cookies-xtrm.DoLog "Logga all aktivitet">
+<!ENTITY cookies-xtrm.Notifications "Använd popup-aviseringar">
+<!ENTITY cookies-xtrm.Backup "Säkerhetskopia">
+<!ENTITY cookies-xtrm.Settings "Inställningar">
+<!ENTITY cookies-xtrm.Export "Exportera">
+<!ENTITY cookies-xtrm.Import "Importera">
+
+<!ENTITY cookies-xtrm.Add "Lägg till">
+<!ENTITY cookies-xtrm.Replace "Ersätt">
+<!ENTITY cookies-xtrm.Remove "Ta bort">
+
+<!ENTITY cookies-xtrm.LRedlist "Läs in rödlistan">
+<!ENTITY cookies-xtrm.ToWhitelist "Lägg till i vitlistan">
+<!ENTITY cookies-xtrm.ToGreylist "Lägg till i grålistan">
+<!ENTITY cookies-xtrm.LLog "Läs in loggen">
+
+<!ENTITY cookies-xtrm.LogTitle "Cookies Exterminator rensningslogg">
+<!ENTITY cookies-xtrm.CLog "Rensa loggen">
+<!ENTITY cookies-xtrm.Close "Stäng">
