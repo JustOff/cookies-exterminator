@@ -33,7 +33,7 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 	};
 
 	this.init = function(window) {
-		let tabBrowser = window.gBrowser;
+		let tabBrowser = window.gBrowser || window.getBrowser();
 		tabBrowser.tabContainer.addEventListener("TabClose", this.onClose, false);
 		tabBrowser.addTabsProgressListener(this.onTabProgress);
 		tabBrowser.addProgressListener(this.onProgress);
