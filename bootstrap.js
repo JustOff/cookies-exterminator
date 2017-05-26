@@ -102,15 +102,17 @@ function startup(data, reason) {
 		Prefs.importFromPermissions();
 	}
 
-	let addons = Services.prefs.getCharPref("extensions.enabledAddons").split(",");
-	for (let i in addons) {
-		let addon = addons[i].split(":")[0];
-		if (INCOMPATIBLE[addon]) {
-			Notifications.notifyIncompat(INCOMPATIBLE[addon]);
-			compat = false;
-			return;
+	try { // See https://bugzilla.mozilla.org/show_bug.cgi?id=1358846
+		let addons = Services.prefs.getCharPref("extensions.enabledAddons").split(",");
+		for (let i in addons) {
+			let addon = addons[i].split(":")[0];
+			if (INCOMPATIBLE[addon]) {
+				Notifications.notifyIncompat(INCOMPATIBLE[addon]);
+				compat = false;
+				return;
+			}
 		}
-	}
+	} catch(e) {}
 
 	if (Prefs.getValue("enableProcessing") && Prefs.getValue("whitelistedDomains") == "") {
 		Prefs.setValue("enableProcessing", false);
