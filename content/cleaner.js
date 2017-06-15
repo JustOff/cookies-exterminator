@@ -28,7 +28,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			} catch(e) {
 				return;
 			}
-			if (uri.scheme == "file") {
+			if (uri.scheme != "http" && uri.scheme != "https") {
 				return;
 			}
 			let port = uri.port == -1 ? (uri.scheme == "https" ? 443: 80) : uri.port;
@@ -124,6 +124,9 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				try {
 					uri = ioService.newURI(url, null, null);
 				} catch(e) {
+					continue loop;
+				}
+				if (uri.scheme != "http" && uri.scheme != "https") {
 					continue loop;
 				}
 				if (this.mayBeCleaned(uri.host, false, baseDomainsInTabs, cleanup, false)) {
@@ -230,7 +233,7 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				try {
 					for (let row = aResultSet.getNextRow(); row; row = aResultSet.getNextRow()) {
 						[host, scheme, port] = row.getResultByName("scope").split(":");
-						if (port != "file") {
+						if (scheme == "http" || scheme == "https") {
 							rhost = ""; for (let i = host.length - 1; i >= 0; ) { rhost += host[i--]; }
 							if (rhost.startsWith(".")) { rhost = rhost.substr(1); }
 							Cleaner.storageTracker[scheme + "://" + rhost + ":" + port] = true;
