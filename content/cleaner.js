@@ -267,7 +267,7 @@ function clearStorage(uri) {
 function getLocalStorage(uri) {
 	let principal, storage;
 	try {
-		principal = securityManager.getNoAppCodebasePrincipal(uri);
+		principal = securityManager.getCodebasePrincipal(uri);
 		storage = domStorageManager.getLocalStorageForPrincipal(principal, null);
 	} catch (e) {
 		return null;
