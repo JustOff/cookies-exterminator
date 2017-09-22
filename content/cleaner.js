@@ -73,16 +73,16 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 
 	this.trackTabs = function(uri) {
 		this.tabsTracker[Utils.getBaseDomain(uri.host)] = Date.now() + (Prefs.getValue("cleanDelay") - 3) * 1000;
-		try {
-			if (Prefs.getValue("cleanIndexedDB")) {
+		if (Prefs.getValue("cleanIndexedDB")) {
+			try {
 				if (typeof quotaManager.getUsageForURI === "function") {
 					quotaManager.getUsageForURI(uri, Cleaner.quotaCallback);
 				} else {
 					let principal = securityManager.getCodebasePrincipal(uri);
 					quotaManager.getUsageForPrincipal(principal, Cleaner.quotaCallback);
 				}
-			}
-		} catch(e) {}
+			} catch(e) {}
+		}
 		Cleaner.prepare();
 	};
 
