@@ -62,6 +62,11 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 				if (aURIorRequest.result.usage > 0) {
 					Cleaner.trackIndexedDB(aURIorRequest.principal.URI.host);
 				}
+			} else if (typeof aURIorRequest.usage != "undefined") {
+//Cu.reportError("[+q] " + aURIorRequest.principal.URI.host + ":" + aURIorRequest.usage);
+				if (aURIorRequest.usage > 0) {
+					Cleaner.trackIndexedDB(aURIorRequest.principal.URI.host);
+				}
 			}
 		}
 	};
