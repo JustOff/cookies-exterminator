@@ -122,6 +122,7 @@ function startup(data, reason) {
 
 	Whitelist.init();
 	Utils.setTimeout(Cleaner.getScopesFromDB.bind(this, null), 10);
+	Utils.setTimeout(Cleaner.preloadIndexedDB.bind(this, null), 20);
 
 	onPrefsEvent = {
 		observe: function(aSubject, aTopic, aData) {

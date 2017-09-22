@@ -16,6 +16,7 @@
 <!ENTITY cookies-xtrm.Seconds "secondes">
 <!ENTITY cookies-xtrm.Session "Effacer les cookies de session">
 <!ENTITY cookies-xtrm.Storage "Effacer LocalStorage">
+<!ENTITY cookies-xtrm.IndexedDB "Effacer IndexedDB">
 <!ENTITY cookies-xtrm.DoLog "Journaliser toutes les activités">
 <!ENTITY cookies-xtrm.Notifications "Utiliser des notifications contextuelles (Popup)">
 <!ENTITY cookies-xtrm.Backup "Sauvegarde">

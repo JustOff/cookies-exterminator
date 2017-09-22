@@ -2,9 +2,9 @@ let EXPORTED_SYMBOLS = ["Tabs"];
 
 let Tabs = function(Cleaner, Buttons, Utils) {
 	this.onClose = function(event) {
-		let domain = Utils.getHostFromTab(event.target);
-		if (domain) {
-			Cleaner.trackTabs(domain);
+		let uri = Utils.getURIFromTab(event.target);
+		if (uri) {
+			Cleaner.trackTabs(uri);
 		}
 	};
 
@@ -15,10 +15,10 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 			}
 			try {
 				if (aURI.host && aURI.scheme && (aURI.scheme == "http" || aURI.scheme == "https")) {
-					if (aBrowser.previousDomain && aBrowser.previousDomain != aURI.host) {
-						Cleaner.trackTabs(aBrowser.previousDomain);
+					if (aBrowser.previousURI && aBrowser.previousURI.host != aURI.host) {
+						Cleaner.trackTabs(aBrowser.previousURI);
 					}
-					aBrowser["previousDomain"] = aURI.host;
+					aBrowser["previousURI"] = aURI;
 				}
 			} catch(e) {}
 		}

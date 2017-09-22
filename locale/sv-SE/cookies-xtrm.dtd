@@ -16,6 +16,7 @@
 <!ENTITY cookies-xtrm.Seconds "sekunder">
 <!ENTITY cookies-xtrm.Session "Rensa sessions-cookies">
 <!ENTITY cookies-xtrm.Storage "Rensa lokalt lagrat webbinnehåll">
+<!ENTITY cookies-xtrm.IndexedDB "Rensa IndexedDB">
 <!ENTITY cookies-xtrm.DoLog "Logga all aktivitet">
 <!ENTITY cookies-xtrm.Notifications "Använd popup-aviseringar">
 <!ENTITY cookies-xtrm.Backup "Säkerhetskopia">

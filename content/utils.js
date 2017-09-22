@@ -10,16 +10,21 @@ let IDNService = Cc["@mozilla.org/network/idn-service;1"].getService(Ci.nsIIDNSe
 
 let Utils = function() {
 	this.getHostFromTab = function(tab, window) {
+		let URI = this.getURIFromTab(tab, window);
+		return URI ? URI.host : null;
+	};
+
+	this.getURIFromTab = function(tab, window) {
 		if (window && window.privateTab && window.privateTab.isTabPrivate(tab)) {
 			return null;
 		}
 		try {
 			return (tab.linkedBrowser.currentURI.scheme == "http" || tab.linkedBrowser.currentURI.scheme == "https") ?
-					tab.linkedBrowser.currentURI.host : null;
+					tab.linkedBrowser.currentURI : null;
 		} catch(e) {
 			return null;
 		}
-	}
+	};
 
 	this.getBaseDomain = function(fullDomain) {
 		try {

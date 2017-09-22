@@ -13,7 +13,7 @@
 			ondialogextra2="onReset();"
 			defaultButton="extra1"
 			title="&cookies-xtrm.Name;"
-			style="min-width: 420px; min-height: 370px;"
+			style="min-width: 420px; min-height: 390px;"
 			windowtype="cookextermPrefsWindow">
 
   <prefpane id="general-pane" label="&cookies-xtrm.Name;" flex="1">
@@ -45,6 +45,9 @@
 				</hbox>
 				<hbox flex="0" align="center">
 					<checkbox id="cleanLocalStorage" label="&cookies-xtrm.Storage;"/>
+				</hbox>
+				<hbox flex="0" align="center">
+					<checkbox id="cleanIndexedDB" label="&cookies-xtrm.IndexedDB;"/>
 				</hbox>
 				<spacer flex="0" height="15"/>
 				<hbox flex="0" align="center">

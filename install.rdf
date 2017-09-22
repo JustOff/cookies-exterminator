@@ -6,7 +6,7 @@
 	<em:type>2</em:type>
 	<em:bootstrap>true</em:bootstrap>
 	<em:name>Cookies Exterminator</em:name>
-	<em:description>Auto delete cookies and localStorage objects as soon as they become unused</em:description>
+	<em:description>Auto delete cookies, localStorage and IndexedDB objects as soon as they become unused</em:description>
 	<em:creator>Off JustOff &lt;Off.Just.Off@gmail.com&gt;</em:creator>
 	<em:contributor>Wojciech Stachurski (wsdfhjxc)</em:contributor>
 	<em:contributor>Ove Sörensen &lt;sdc@elektro-eel.org&gt;</em:contributor>
@@ -17,7 +17,7 @@
 		<Description>
 			<em:locale>ru</em:locale>
 			<em:name>Cookies Exterminator</em:name>
-			<em:description>Автоматическое удаление кук и объектов локального хранилища, как только они становятся не нужны</em:description>
+			<em:description>Автоматическое удаление кук, объектов локального хранилища и IndexedDB, как только они становятся не нужны</em:description>
 		</Description>
 	</em:localized>
 	<em:localized>
@@ -63,7 +63,7 @@
 	  <Description>
 		<em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
 		<em:minVersion>24.0</em:minVersion>
-		<em:maxVersion>*</em:maxVersion>
+		<em:maxVersion>27.*</em:maxVersion>
 	  </Description>
 	</em:targetApplication>
 	<em:targetApplication>

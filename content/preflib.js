@@ -15,6 +15,7 @@ let Prefs = function(extName, appInfo, Utils) {
 		enableNotifications: true,
 		cleanSessionCookies: true,
 		cleanLocalStorage: true,
+		cleanIndexedDB: true,
 		cleanDelay: 10,
 		whitelistedDomains: "",
 		greylistedDomains: "",

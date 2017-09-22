@@ -8,12 +8,18 @@ Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 let ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 let securityManager = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
 let domStorageManager = Cc["@mozilla.org/dom/storagemanager;1"].getService(Ci.nsIDOMStorageManager);
+let quotaManager;
+try {
+	quotaManager = Cc["@mozilla.org/dom/quota/manager;1"].getService(Ci.nsIQuotaManager);
+} catch (e) {
+	quotaManager = Cc["@mozilla.org/dom/quota-manager-service;1"].getService(Ci.nsIQuotaManagerService);
+}
 
 let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 	let Cleaner = this;
 
 	this.storageTracker = {};
-	
+
 	this.handleCookieChanged = function(aSubject, aTopic, aData) {
 		if (aData == "added" && aSubject instanceof Ci.nsICookie2) {
 			Cleaner.prepare(aSubject);
@@ -36,11 +42,42 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 //Cu.reportError("[+s] " + uri.scheme + "://" + uri.host + ":" + port + " - " + (aData ? aData : "unknown"));
 		}
 	};
-	
+
 	this.tabsTracker = {};
-	
-	this.trackTabs = function(domain) {
-		this.tabsTracker[Utils.getBaseDomain(domain)] = Date.now() + (Prefs.getValue("cleanDelay") - 3) * 1000;
+	this.indexedDBTracker = {};
+
+	this.trackIndexedDB = function(domain) {
+		this.indexedDBTracker[domain] = Date.now() + (Prefs.getValue("cleanDelay") - 3) * 1000;
+	}
+
+	this.quotaCallback = {
+		onUsageResult: function(aURIorRequest, aUsage, aFileUsage, aAppId, aInMozBrowserOnly) {
+			if (typeof aURIorRequest.host != "undefined") {
+//Cu.reportError("[+q] " + aURIorRequest.host + ":" + aUsage);
+				if (aUsage > 0) {
+					Cleaner.trackIndexedDB(aURIorRequest.host);
+				}
+			} else if (typeof aURIorRequest.result != "undefined") {
+//Cu.reportError("[+q] " + aURIorRequest.principal.URI.host + ":" + aURIorRequest.result.usage);
+				if (aURIorRequest.result.usage > 0) {
+					Cleaner.trackIndexedDB(aURIorRequest.principal.URI.host);
+				}
+			}
+		}
+	};
+
+	this.trackTabs = function(uri) {
+		this.tabsTracker[Utils.getBaseDomain(uri.host)] = Date.now() + (Prefs.getValue("cleanDelay") - 3) * 1000;
+		try {
+			if (Prefs.getValue("cleanIndexedDB")) {
+				if (typeof quotaManager.getUsageForURI === "function") {
+					quotaManager.getUsageForURI(uri, Cleaner.quotaCallback);
+				} else {
+					let principal = securityManager.getCodebasePrincipal(uri);
+					quotaManager.getUsageForPrincipal(principal, Cleaner.quotaCallback);
+				}
+			}
+		} catch(e) {}
 		Cleaner.prepare();
 	};
 
@@ -138,6 +175,21 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 					}
 				} else {
 //Cu.reportError("[" + this.jobID + "s][*] " + url);
+				}
+			}
+		}
+
+		if (Prefs.getValue("cleanIndexedDB") && (cleanup || cleanAll)) {
+			loop: for (let url in this.indexedDBTracker) {
+				if (this.mayBeCleaned(url, false, baseDomainsInTabs, cleanup, false)) {
+					delete this.indexedDBTracker[url];
+					if (clearIndexedDB(url)) {
+						cleanedDomains[Utils.getBaseDomain(url)] = true;
+						cleanedSomething = true;
+//Cu.reportError("[" + this.jobID + "i][-] " + url);
+					}
+				} else {
+//Cu.reportError("[" + this.jobID + "i][*] " + url);
 				}
 			}
 		}
@@ -254,6 +306,27 @@ let Cleaner = function(Prefs, Buttons, Whitelist, Log, Notifications, Utils) {
 			}
 		});
 	};
+
+	this.preloadIndexedDB = function() {
+		var stord = Services.dirsvc.get("ProfD", Ci.nsIFile);
+		stord.append("storage");
+		if (stord.exists() && stord.isDirectory()) {
+			for (var stor of ["default", "permanent", "temporary"]) {
+				var storsubd = stord.clone();
+				storsubd.append(stor);
+				if (storsubd.exists() && storsubd.isDirectory()) {
+					var entries = storsubd.directoryEntries;
+					while(entries.hasMoreElements()) {
+						var host, entry = entries.getNext();
+						entry.QueryInterface(Ci.nsIFile);
+						if ((host = /^https?\+\+\+(.+)$/.exec(entry.leafName)) !== null) {
+							Cleaner.trackIndexedDB(host[1]);
+						}
+					}
+				}
+			}
+		}
+	};
 };
 
 function clearStorage(uri) {
@@ -278,4 +351,20 @@ function getLocalStorage(uri) {
 
 	if (!storage || storage.length < 1) return null;
 	return storage;
+};
+
+function clearIndexedDB(url) {
+	try {
+		for (let scheme of ["http", "https"]) {
+			let uri = ioService.newURI(scheme + "://" + url, null, null);
+			if (typeof quotaManager.clearStoragesForURI === "function") {
+				quotaManager.clearStoragesForURI(uri);
+			} else {
+				let principal = securityManager.getCodebasePrincipal(uri);
+				quotaManager.clearStoragesForPrincipal(principal);
+			}
+		}
+		return true;
+	} catch(e) {}
+	return false;
 };
