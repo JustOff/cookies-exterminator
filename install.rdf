@@ -24,15 +24,31 @@
 		<Description>
 			<em:locale>de</em:locale>
 			<em:name>Cookies Exterminator</em:name>
-			<em:description>Automatisch Cookies und lokalen Speicher löschen, sobald sie unbenutzt sind</em:description>
+			<em:description>Automatisch Cookies, lokalen Speicher und IndexedDB löschen, sobald sie unbenutzt sind</em:description>
 			<em:translator>Mirko Bressler</em:translator>
+		</Description>
+	</em:localized>
+	<em:localized>
+		<Description>
+			<em:locale>es-AR</em:locale>
+			<em:name>Cookies Exterminator</em:name>
+			<em:description>Elimina automáticamente cookies, elementos de almacenamiento local y bases de datos indexadas tan pronto como se dejen de usar</em:description>
+			<em:translator>KNTRO</em:translator>
+		</Description>
+	</em:localized>
+	<em:localized>
+		<Description>
+			<em:locale>es-ES</em:locale>
+			<em:name>Cookies Exterminator</em:name>
+			<em:description>Elimina automáticamente cookies, elementos de almacenamiento local y bases de datos indexadas tan pronto como se dejen de usar</em:description>
+			<em:translator>KNTRO</em:translator>
 		</Description>
 	</em:localized>
 	<em:localized>
 		<Description>
 			<em:locale>fr</em:locale>
 			<em:name>Cookies Exterminator</em:name>
-			<em:description>Suppression automatique des cookies et des objets localStorage dès qu'ils sont inutilisés</em:description>
+			<em:description>Supprimer automatiquement les cookies, les objets localStorage et IndexedDB dès qu'ils sont inutilisés</em:description>
 			<em:translator>TMTisFree</em:translator>
 		</Description>
 	</em:localized>
@@ -40,7 +56,7 @@
 		<Description>
 			<em:locale>pt</em:locale>
 			<em:name>Cookies Exterminator</em:name>
-			<em:description>Apagar cookies e objetos LocalStorage assim que não sejam necessários</em:description>
+			<em:description>Apagar cookies, objetos LocalStorage e IndexedDB assim que não sejam necessários</em:description>
 			<em:translator>Sérgio Marques</em:translator>
 		</Description>
 	</em:localized>
@@ -48,7 +64,7 @@
 		<Description>
 			<em:locale>sv-SE</em:locale>
 			<em:name>Cookies Exterminator</em:name>
-			<em:description>Ta automatiskt bort cookies och nedkopplad lagring av webbinnehåll och användardata, så fort det inte används längre</em:description>
+			<em:description>Ta automatiskt bort cookies, localStorage och IndexedDB, så fort det inte används längre</em:description>
 			<em:translator>Åke Engelbrektson</em:translator>
 		</Description>
 	</em:localized>

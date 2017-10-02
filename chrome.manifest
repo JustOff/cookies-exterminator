@@ -4,6 +4,8 @@ skin cookies-xtrm classic/1.0 skin/
 
 locale cookies-xtrm en-US locale/en-US/
 locale cookies-xtrm de locale/de/
+locale cookies-xtrm es-AR locale/es-AR/
+locale cookies-xtrm es-ES locale/es-ES/
 locale cookies-xtrm fr locale/fr/
 locale cookies-xtrm pt locale/pt/
 locale cookies-xtrm sv-SE locale/sv-SE/
