@@ -8,17 +8,20 @@ let Tabs = function(Cleaner, Buttons, Utils) {
 		}
 	};
 
-	this.onTabProgress = {	
+	this.onTabProgress = {
 		onLocationChange: function(aBrowser, aWebProgress, aRequest, aURI, aFlag) {
 			if (aFlag & Components.interfaces.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT) {
 				return;
 			}
 			try {
-				if (aURI.host && aURI.scheme && (aURI.scheme == "http" || aURI.scheme == "https")) {
+				if (aURI.scheme == "http" || aURI.scheme == "https") {
 					if (aBrowser.previousURI && aBrowser.previousURI.host != aURI.host) {
 						Cleaner.trackTabs(aBrowser.previousURI);
 					}
 					aBrowser["previousURI"] = aURI;
+				} else if (aBrowser.previousURI) {
+					Cleaner.trackTabs(aBrowser.previousURI);
+					aBrowser["previousURI"] = null;
 				}
 			} catch(e) {}
 		}
