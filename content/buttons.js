@@ -347,8 +347,8 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				toolbarId = parent.id;
 				nextItemId = nextItem && nextItem.id;
 			}
-			if ((toolbarId.substring(0, 7) == "nav-bar" && b.firstChild.childNodes[0].id == this.menuitemIds.enable) 
-					|| (toolbarId.substring(0, 7) != "nav-bar" && b.firstChild.childNodes[0].id == this.menuitemIds.cleanOnTabsClose)) {
+			if ((toolbarId && toolbarId.substring(0, 7) == "nav-bar" && b.firstChild.childNodes[0].id == this.menuitemIds.enable) 
+					|| (toolbarId && toolbarId.substring(0, 7) != "nav-bar" && b.firstChild.childNodes[0].id == this.menuitemIds.cleanOnTabsClose)) {
 				let mnp = b.firstChild;
 				for (let i = mnp.childNodes.length - 2; i >= 0; i--) {
 					mnp.appendChild(mnp.childNodes[i]);
