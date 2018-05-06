@@ -11,7 +11,7 @@
 	<em:contributor>Wojciech Stachurski (wsdfhjxc)</em:contributor>
 	<em:contributor>Ove Sörensen &lt;sdc@elektro-eel.org&gt;</em:contributor>
 	<em:contributor>Creative Stall from Noun Project</em:contributor>
-	<em:homepageURL>https://addons.mozilla.org/addon/cookies-exterminator/</em:homepageURL>
+	<em:homepageURL>https://github.com/JustOff/cookies-exterminator</em:homepageURL>
 	<em:optionsURL>chrome://cookies-xtrm/content/options.xul</em:optionsURL>
 	<em:localized>
 		<Description>
@@ -72,14 +72,14 @@
 	  <Description>
 		<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
 		<em:minVersion>24.0</em:minVersion>
-		<em:maxVersion>*</em:maxVersion>
+		<em:maxVersion>56.*</em:maxVersion>
 	  </Description>
 	</em:targetApplication>
 	<em:targetApplication>
 	  <Description>
 		<em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
 		<em:minVersion>24.0</em:minVersion>
-		<em:maxVersion>27.*</em:maxVersion>
+		<em:maxVersion>28.*</em:maxVersion>
 	  </Description>
 	</em:targetApplication>
 	<em:targetApplication>
