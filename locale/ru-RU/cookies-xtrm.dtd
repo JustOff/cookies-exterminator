@@ -18,7 +18,7 @@
 <!ENTITY cookies-xtrm.Storage "Чистить локальное хранилище">
 <!ENTITY cookies-xtrm.IndexedDB "Чистить IndexedDB">
 <!ENTITY cookies-xtrm.DoLog "Вести журнал активности">
-<!ENTITY cookies-xtrm.Notifications "Использовать всплывающие уведомления">
+<!ENTITY cookies-xtrm.Notifications "Показывать всплывающие уведомления">
 <!ENTITY cookies-xtrm.Backup "Резервная копия">
 <!ENTITY cookies-xtrm.Settings "Настройки">
 <!ENTITY cookies-xtrm.Export "Сохранить">

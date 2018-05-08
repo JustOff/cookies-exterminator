@@ -13,6 +13,7 @@ let Prefs = function(extName, appInfo, Utils) {
 		enableProcessing: false,
 		enableLogging: true,
 		enableNotifications: true,
+		notificationTimeout: 3,
 		cleanSessionCookies: true,
 		cleanLocalStorage: true,
 		cleanIndexedDB: true,

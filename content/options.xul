@@ -55,6 +55,8 @@
 				</hbox>
 				<hbox flex="0" align="center">
 					<checkbox id="enableNotifications" label="&cookies-xtrm.Notifications;"/>
+					<textbox id="notificationTimeout" type="number" width="40" min="1" max="10"/>
+					<label value="&cookies-xtrm.Seconds;"/>
 				</hbox>
 				<spacer flex="0" height="10"/>
 			</groupbox>

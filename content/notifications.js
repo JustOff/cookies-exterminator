@@ -10,9 +10,10 @@ let Notifications = function(extName, Prefs, Utils) {
 	this.iconFileName = "notification.png";
 
 	this.alertName = "cookextermNotification";
-	
+
 	this.suppress = false;
 	this.lastMessage = "";
+	this.timer = null;
 
 	this.notify = function(cleanedDomainsString) {
 		if (Prefs.getValue("enableNotifications") && cleanedDomainsString) {
@@ -29,6 +30,14 @@ let Notifications = function(extName, Prefs, Utils) {
 			}
 			AlertsService.showAlertNotification(this.contentURL + this.iconFileName, title,
 												cleanedDomainsString, false, "", null, this.alertName);
+			if (this.timer) {
+				Utils.clearTimeout(this.timer);
+				this.timer = null;
+			}
+			let alertName = this.alertName;
+			this.timer = Utils.setTimeout(function() {
+				AlertsService.closeAlert(alertName);
+			}, Prefs.getValue("notificationTimeout"));
 		}
 	};
 

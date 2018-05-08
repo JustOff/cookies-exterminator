@@ -43,11 +43,15 @@ let Utils = function() {
 	};
 
 	this.setTimeout = function(method, delayInSeconds) {
-		setTimeout(function() {
+		return setTimeout(function() {
 			if (Services) {
 				method();
 			}
 		}, delayInSeconds * 1000);
+	};
+
+	this.clearTimeout = function(timer) {
+		clearTimeout(timer);
 	};
 
 	this.alert = function(message) {
