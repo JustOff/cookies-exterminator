@@ -284,10 +284,18 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 
 		let toolbarId = Prefs.getValue("toolbarButtonPlaceId"),
 			nextItemId = Prefs.getValue("toolbarButtonNextItemId"),
-			toolbar = toolbarId && toolbarId != "PanelUI" && $(document, toolbarId),
-			nextItem = toolbar && nextItemId != "" && $(document, nextItemId);
-		
+			toolbar = toolbarId && toolbarId != "PanelUI" && $(document, toolbarId);
+
 		if (toolbar) {
+			// Handle special items with dynamic ids
+			let match = /^(separator|spacer|spring)\[(\d+)\]$/.exec(nextItemId);
+			if (match !== null) {
+				let dynItems = toolbar.querySelectorAll("toolbar" + match[1]);
+				if (match[2] < dynItems.length) {
+					nextItemId = dynItems[match[2]].id;
+				}
+			}
+			let nextItem = nextItemId && $(document, nextItemId);
 			if (nextItem && nextItem.parentNode && nextItem.parentNode.id.replace("-customization-target", "") == toolbarId) {
 				toolbar.insertItem(this.buttonId, nextItem);
 			} else {
@@ -339,10 +347,10 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 	this.afterCustomization = function(event) {
 		let toolbox = event.target,
 			b = $(toolbox.parentNode, this.buttonId),
-			toolbarId, nextItemId;
+			toolbarId, nextItem, nextItemId;
 		if (b) {
-			let parent = b.parentNode,
-				nextItem = b.nextSibling;
+			let parent = b.parentNode;
+			nextItem = b.nextSibling;
 			if (parent && (parent.localName == "toolbar" || parent.classList.contains("customization-target"))) {
 				toolbarId = parent.id;
 				nextItemId = nextItem && nextItem.id;
@@ -361,6 +369,17 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 					toolbarId = "PanelUI";
 				}
 			} catch(e) {}
+		}
+		// Handle special items with dynamic ids
+		let match = /^(separator|spacer|spring)\d+$/.exec(nextItemId);
+		if (match !== null) {
+			let dynItems = nextItem.parentNode.querySelectorAll("toolbar" + match[1]);
+			for (let i = 0; i < dynItems.length; i++) {
+				if (dynItems[i].id == nextItemId) {
+					nextItemId = match[1] + "[" + i + "]";
+					break;
+				}
+			}
 		}
 		this.setPrefs(toolbarId, nextItemId);
 	};
