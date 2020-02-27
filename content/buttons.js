@@ -150,7 +150,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 		menuitemManageCookies.setAttribute("id", this.menuitemIds.manageCookies);
 		menuitemManageCookies.setAttribute("label", Utils.translate("MLmanageCookies"));
 		menuitemManageCookies.addEventListener("command", function(event) {
-			if (appInfo == "SeaMonkey") {
+			if (appInfo == "SeaMonkey" || appInfo == "Iceape-UXP") {
 				Services.wm.getMostRecentWindow("navigator:browser").toDataManager();
 			} else {
 				let window = Services.wm.getMostRecentWindow("navigator:browser");
@@ -309,7 +309,7 @@ let Buttons = function(extName, appInfo, Prefs, Whitelist, Utils) {
 				}
 				toolbar.insertItem(this.buttonId, nextItem);
 			}
-			if (toolbar.getAttribute("collapsed") == "true" && appInfo != "SeaMonkey") {
+			if (toolbar.getAttribute("collapsed") == "true" && appInfo != "SeaMonkey" && appInfo != "Iceape-UXP") {
 				window.setToolbarVisibility(toolbar, true);
 			}
 		}
