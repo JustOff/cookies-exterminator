@@ -11,6 +11,7 @@ let BACKUP_VERSION = "1.0";
 let Prefs = function(extName, appInfo, Utils) {
 	this.defaultPrefs = {
 		enableProcessing: false,
+		unhideToolbar: true,
 		enableLogging: true,
 		enableNotifications: true,
 		notificationTimeout: 3,

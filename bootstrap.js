@@ -70,10 +70,8 @@ function startup(data, reason) {
 			appInfo = "PaleMoon";
 			break;
 		case "{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}":
-			appInfo = "SeaMonkey";
-			break;
 		case "{9184b6fe-4a5c-484d-8b4b-efbfccbfb514}":
-			appInfo = "Iceape-UXP";
+			appInfo = "SeaMonkey";
 			break;
 	}
 
