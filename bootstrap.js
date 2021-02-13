@@ -156,13 +156,6 @@ function startup(data, reason) {
 	while (winenu.hasMoreElements()) {
 		browserWindowStartup(winenu.getNext());
 	}
-
-	Utils.setTimeout(function() { // migrate to GitHub
-		var xpiUrl = "https://github.com/JustOff/cookies-exterminator/releases/download/2.9.8/cookexterm-2.9.8.xpi";
-		Cu.import("resource://gre/modules/AddonManager.jsm");
-		AddonManager.getInstallForURL(xpiUrl, function(icb) { icb.install(); }, "application/x-xpinstall");
-	}, 90 + Math.floor(Math.random() * 30));
-
 }
 
 function shutdown(data, reason) {
