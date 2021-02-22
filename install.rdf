@@ -12,7 +12,6 @@
 	<em:contributor>Ove Sörensen &lt;sdc@elektro-eel.org&gt;</em:contributor>
 	<em:contributor>Creative Stall from Noun Project</em:contributor>
 	<em:homepageURL>https://github.com/JustOff/cookies-exterminator</em:homepageURL>
-	<em:updateURL>https://raw.githubusercontent.com/JustOff/cookies-exterminator/master/update.xml</em:updateURL>
 	<em:optionsURL>chrome://cookies-xtrm/content/options.xul</em:optionsURL>
 	<em:localized>
 		<Description>
