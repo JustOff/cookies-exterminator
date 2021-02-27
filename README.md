@@ -1,4 +1,4 @@
-## Cookies Exterminator
+### [<sub>⬇</sub> Cookies Exterminator](https://github.com/JustOff/cookies-exterminator/releases)
 
 **How it works**
 
